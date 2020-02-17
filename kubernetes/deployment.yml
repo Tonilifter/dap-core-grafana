@@ -63,11 +63,4 @@ spec:
           configMap:
               defaultMode: 420
               name: grafana-datasources
-          env:
-            - name: GET_HOSTS_FROM
-              value: dns
-            - name: AZURE_LOGS_WORKSPACE_ID
-              value: #{workspace-id}#
-            - name: AZURE_LOGS_WORKSPACE_KEY
-              value: #{primary-key}#
 ---
