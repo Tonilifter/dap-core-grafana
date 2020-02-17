@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: core-monitoring
+  labels:
+    name: core-monitoring
+    azure-key-vault-env-injection: disabled
+---
