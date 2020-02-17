@@ -5,24 +5,26 @@ metadata:
   name: grafana-datasources
   namespace: core-monitoring
 data:
-  azule-monitor-datasource.yml: |-
+  azure-loganalytics-workspace.yml: |-
+    apiVersion: 1
+
     datasources:
-    - name: azure-loganalytics-workspace
-      type: grafana-azure-monitor-datasource
-      access: proxy
-      typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
-      orgId: 1
-      url: /api/datasources/proxy/2
-      isDefault: true
-      jsonData:
-        cloudName: azuremonitor
-        clientId: #{adapp-grafana-id}#
-        subscriptionId: #{df-dap-subscription-id}#
-        tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-        logAnalyticsDefaultWorkspace: 13995513-51f3-4986-a18f-4c1457c3280a
-        azureLogAnalyticsSameAs: true
-        keepCookies: []
-      secureJsonData:
-        clientSecret: #{adsp-grafana-secret}#
-      editable: true
+      - name: azure-loganalytics-workspace
+        type: grafana-azure-monitor-datasource
+        access: proxy
+        typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
+        orgId: 1
+        url: /api/datasources/proxy/2
+        isDefault: true
+        jsonData:
+          cloudName: azuremonitor
+          clientId: #{adapp-grafana-id}#
+          subscriptionId: #{df-dap-subscription-id}#
+          tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsDefaultWorkspace: 13995513-51f3-4986-a18f-4c1457c3280a
+          azureLogAnalyticsSameAs: true
+          keepCookies: []
+        secureJsonData:
+          clientSecret: #{adsp-grafana-secret}#
+        editable: true
 ---
