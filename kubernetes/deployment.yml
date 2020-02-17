@@ -9,7 +9,8 @@ metadata:
     tier: monitoring
 spec:
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 3000
   selector:
     app: dap-core-grafana
@@ -35,7 +36,8 @@ spec:
     spec:
       containers:
         - name: grafana
-          image: grafana/grafana:6.6.0
+          image: docker.io/grafana/grafana:6.6.0
+          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 3000
             name: http

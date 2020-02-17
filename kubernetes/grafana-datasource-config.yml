@@ -5,7 +5,7 @@ metadata:
   name: grafana-datasources
   namespace: core-monitoring
 data:
-  azule-monitor-datasource.yaml: |-
+  azule-monitor-datasource.yml: |-
     datasources:
     - name: azure-loganalytics-workspace
       type: grafana-azure-monitor-datasource
