@@ -40,9 +40,18 @@ steps:
       OverWrite: true
 
   - task: CopyFiles@2
-    displayName: 'Copy Files (grafana configuration) to: $(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy Files (grafana datasources configuration) to: $(Build.ArtifactStagingDirectory)'
     inputs:
       SourceFolder: configuration/datasources
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+      CleanTargetFolder: false
+      FlattenFolders: true
+      OverWrite: true
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files (grafana dashboards configuration) to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: configuration/dashboards
       TargetFolder: $(Build.ArtifactStagingDirectory)
       CleanTargetFolder: false
       FlattenFolders: true

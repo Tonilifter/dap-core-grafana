@@ -69,7 +69,9 @@ spec:
         - name: grafana-storage
           emptyDir: {}
         - name: grafana-dashboards
-          emptyDir: {}
+          configMap:
+            defaultMode: 420
+            name: grafana-dashboards
         - name: grafana-datasources
           configMap:
             defaultMode: 420
