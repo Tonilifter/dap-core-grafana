@@ -55,6 +55,9 @@ spec:
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
+            - mountPath: /etc/grafana/provisioning/dashboards
+              name: grafana-dashboards
+              readOnly: true
           env:
             - name: GET_HOSTS_FROM
               value: dns
@@ -63,6 +66,10 @@ spec:
           emptyDir: {}
         - name: grafana-datasources
           configMap:
-              defaultMode: 420
-              name: grafana-datasources
+            defaultMode: 420
+            name: grafana-datasources
+        - name: grafana-dashboards
+          configMap:
+            defaultMode: 420
+            name: grafana-dashboards
 ---

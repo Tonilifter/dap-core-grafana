@@ -10,11 +10,20 @@ pool:
 
 steps:
   - task: CopyFiles@2
-    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy Files (kubernetes manifests) to: $(Build.ArtifactStagingDirectory)'
     inputs:
       SourceFolder: kubernetes
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      TargetFolder: $(Build.ArtifactStagingDirectory)
       CleanTargetFolder: true
+      OverWrite: true
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files (grafana configuration) to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: configuration
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+      CleanTargetFolder: false
+      FlattenFolders: true
       OverWrite: true
 
   - task: PublishBuildArtifacts@1
