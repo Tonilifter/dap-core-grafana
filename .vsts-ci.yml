@@ -9,6 +9,28 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+  - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+    displayName: 'Replace tokens in **/*.yml'
+    inputs:
+      rootDirectory: kubernetes
+      targetFiles: '**/*.yml'
+      verbosity: detailed
+      keepToken: true
+
+  - task: Docker@1
+    displayName: 'Build an image'
+    inputs:
+      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
+      azureContainerRegistry: daplatform0101pcr.azurecr.io
+      dockerFile: Dockerfile
+
+  - task: Docker@1
+    displayName: 'Push an image'
+    inputs:
+      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
+      azureContainerRegistry: daplatform0101pcr.azurecr.io
+      command: 'Push an image'
+
   - task: CopyFiles@2
     displayName: 'Copy Files (kubernetes manifests) to: $(Build.ArtifactStagingDirectory)'
     inputs:
@@ -20,7 +42,7 @@ steps:
   - task: CopyFiles@2
     displayName: 'Copy Files (grafana configuration) to: $(Build.ArtifactStagingDirectory)'
     inputs:
-      SourceFolder: configuration
+      SourceFolder: configuration/datasources
       TargetFolder: $(Build.ArtifactStagingDirectory)
       CleanTargetFolder: false
       FlattenFolders: true

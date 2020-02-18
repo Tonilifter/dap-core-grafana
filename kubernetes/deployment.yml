@@ -35,8 +35,8 @@ spec:
         tier: monitoring
     spec:
       containers:
-        - name: grafana
-          image: docker.io/grafana/grafana:6.6.0
+        - name: dap-core-grafana-container
+          image: daplatform0101pcr.azurecr.io/dap-core-grafana:#{Build.BuildId}#
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 3000
@@ -55,12 +55,13 @@ spec:
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
-            - mountPath: /etc/grafana/provisioning/dashboards
-              name: grafana-dashboards
-              readOnly: true
           env:
             - name: GET_HOSTS_FROM
               value: dns
+            - name: GF_SECURITY_ADMIN_USER
+              value: #{grafana-admin-user}#
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: #{grafana-admin-password}#
       volumes:
         - name: grafana-storage
           emptyDir: {}
@@ -68,8 +69,4 @@ spec:
           configMap:
             defaultMode: 420
             name: grafana-datasources
-        - name: grafana-dashboards
-          configMap:
-            defaultMode: 420
-            name: grafana-dashboards
 ---
