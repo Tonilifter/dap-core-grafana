@@ -52,6 +52,9 @@ spec:
             - mountPath: /var/lib/grafana
               name: grafana-storage
               readOnly: false
+            - mountPath: /var/lib/grafana/dashboards
+              name: grafana-storage
+              readOnly: true
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
@@ -64,6 +67,8 @@ spec:
               value: #{grafana-admin-password}#
       volumes:
         - name: grafana-storage
+          emptyDir: {}
+        - name: grafana-dashboards
           emptyDir: {}
         - name: grafana-datasources
           configMap:
