@@ -21,7 +21,7 @@ data:
           clientId: #{adapp-grafana-id}#
           subscriptionId: #{df-dap-subscription-id}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-          logAnalyticsDefaultWorkspace: 13995513-51f3-4986-a18f-4c1457c3280a
+          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
           azureLogAnalyticsSameAs: true
           keepCookies: []
         secureJsonData:
