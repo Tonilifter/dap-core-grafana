@@ -18,13 +18,13 @@ data:
         isDefault: true
         jsonData:
           cloudName: azuremonitor
-          clientId: #{adapp-grafana-id}#
+          clientId: #{adapp-lacore-id}#
           subscriptionId: #{df-dap-subscription-id}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
           logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
           azureLogAnalyticsSameAs: true
           keepCookies: []
         secureJsonData:
-          clientSecret: #{adsp-grafana-secret}#
+          clientSecret: #{adsp-lacore-secret}#
         editable: true
 ---
