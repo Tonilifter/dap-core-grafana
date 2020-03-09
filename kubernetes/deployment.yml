@@ -1,0 +1,79 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: core-monitoring
+  name: dap-core-grafana
+  labels:
+    app: dap-core-grafana
+    tier: monitoring
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  selector:
+    app: dap-core-grafana
+    tier: monitoring
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: core-monitoring
+  name: dap-core-grafana
+spec:
+  selector:
+    matchLabels:
+      app: dap-core-grafana
+      tier: monitoring
+  replicas: 1
+  template:
+    metadata:
+      namespace: core-monitoring
+      labels:
+        app: dap-core-grafana
+        tier: monitoring
+    spec:
+      containers:
+        - name: dap-core-grafana-container
+          image: daplatform0101pcr.azurecr.io/dap-core-grafana:#{Build.BuildId}#
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 3000
+            name: http
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests: 
+              memory: "1Gi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-storage
+              readOnly: false
+            - mountPath: /var/lib/grafana/dashboards
+              name: grafana-dashboards
+              readOnly: true
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: grafana-datasources
+              readOnly: false
+          env:
+            - name: GET_HOSTS_FROM
+              value: dns
+            - name: GF_SECURITY_ADMIN_USER
+              value: #{grafana-admin-user}#
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: #{grafana-admin-password}#
+      volumes:
+        - name: grafana-storage
+          emptyDir: {}
+        - name: grafana-dashboards
+          configMap:
+            defaultMode: 420
+            name: grafana-dashboards
+        - name: grafana-datasources
+          configMap:
+            defaultMode: 420
+            name: grafana-datasources
+---

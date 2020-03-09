@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: core-monitoring
+data:
+  azure-loganalytics-workspace.yml: |-
+    apiVersion: 1
+
+    datasources:
+      - name: azure-loganalytics-workspace
+        type: grafana-azure-monitor-datasource
+        access: proxy
+        typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
+        orgId: 1
+        url: /api/datasources/proxy/2
+        isDefault: true
+        jsonData:
+          cloudName: azuremonitor
+          clientId: #{adapp-lacore-id}#
+          subscriptionId: #{df-dap-subscription-id}#
+          tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
+          azureLogAnalyticsSameAs: true
+          keepCookies: []
+        secureJsonData:
+          clientSecret: #{adsp-lacore-secret}#
+        editable: true
+---
