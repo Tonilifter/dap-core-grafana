@@ -26,5 +26,6 @@ data:
           keepCookies: []
         secureJsonData:
           clientSecret: #{adsp-lacore-secret}#
+          logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
 ---
