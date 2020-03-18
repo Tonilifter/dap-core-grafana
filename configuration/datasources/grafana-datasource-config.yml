@@ -19,7 +19,7 @@ data:
         jsonData:
           cloudName: azuremonitor
           clientId: #{adapp-lacore-id}#
-          subscriptionId: #{df-dap-subscription-id}#
+          subscriptionId: #{log-analytics-subscription-id}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
           logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
           azureLogAnalyticsSameAs: true
