@@ -21,6 +21,9 @@ data:
           clientId: #{adapp-lacore-id}#
           subscriptionId: #{log-analytics-subscription-id}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsClientId: #{adapp-lacore-id}#
+          logAnalyticsSubscriptionId: #{log-analytics-subscription-id}#
+          logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
           logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
           azureLogAnalyticsSameAs: true
           keepCookies: []
