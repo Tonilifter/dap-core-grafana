@@ -92,7 +92,7 @@ data:
               "azureLogAnalytics": {
                 "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                           //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) //change “group by column” to a column in your table, such as “Computer”. The $__interval macro is used to auto-select the time grain. Can also use 1h, 5m etc.\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -108,7 +108,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -229,7 +229,7 @@ data:
               "azureLogAnalytics": {
                 "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                              //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where NIVEL_s == \"ERROR\"\n| summarize count()",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -245,7 +245,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": "",
@@ -316,7 +316,7 @@ data:
               "azureLogAnalytics": {
                 "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                             //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval) //change “group by column” to a column in your table, such as “Computer”. The $__interval macro is used to auto-select the time grain. Can also use 1h, 5m etc.\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -332,7 +332,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -432,7 +432,7 @@ data:
               "azureLogAnalytics": {
                 "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                              //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\n| order by TimeGenerated asc",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -448,7 +448,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
