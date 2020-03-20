@@ -474,4 +474,975 @@ data:
       "uid": "-wfWMmuZz",
       "version": 7
     }
+  uid-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 2,
+      "iteration": 1584614194649,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 9,
+            "w": 19,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {},
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": null,
+            "desc": false
+          },
+          "styles": [
+            {
+              "alias": "FECHA_EJECUCION",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "FECHA_EJECUCION",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s) in ($UID)\r\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Listado de ejecuciones por UID",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 9,
+            "w": 4,
+            "x": 19,
+            "y": 0
+          },
+          "id": 8,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 25
+                    },
+                    {
+                      "color": "red",
+                      "value": 50
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.6.0",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s) in ($UID)\n| summarize count()\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Errores",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s) in ($UID)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Llamadas por nivel de Log",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 11,
+            "x": 12,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 6,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": true,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s) in ($UID) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Llamadas por módulo",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "AP_CORP_SYNERGI_LIFE_GLB_ENERGY",
+              "value": [
+                "AP_CORP_SYNERGI_LIFE_GLB_ENERGY"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s)\n| distinct uid",
+            "hide": 0,
+            "includeAll": false,
+            "label": "UID",
+            "multi": true,
+            "name": "UID",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"([A-z-0-9\\\\-\\\\.]*[A-Za-z\\\\-])\", 1, UID_s)\n| distinct uid",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-7d",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "#{LogWorkspaceEnv}# - Operational Logs por UID",
+      "uid": "1C6FjwXZk",
+      "version": 4
+    }
+  app-region-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 2,
+      "iteration": 1584547731197,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 9,
+            "w": 18,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {},
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 3,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "FECHA_EJECUCION",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "FECHA_EJECUCION",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Listado de ejecuciones por application y region",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 9,
+            "w": 5,
+            "x": 18,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 25
+                    },
+                    {
+                      "color": "red",
+                      "value": 50
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.6.0",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and region in ($Region) and app in ($Application) \r\n| summarize count()\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Errores",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 6,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pluginVersion": "6.6.0",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| where $__timeFilter(TimeGenerated)                                      \n| where region in ($Region) and app in ($Application)\r\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Llamadas por nivel de Log",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": true,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \n| where region in ($Region) and app in ($Application) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Llamadas por módulo",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "ia_eyp_environmental_envirosoft",
+              "value": "ia_eyp_environmental_envirosoft"
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Application",
+            "multi": true,
+            "name": "Application",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "GLB",
+              "value": "GLB"
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "hide": 0,
+            "includeAll": false,
+            "label": "Region",
+            "multi": true,
+            "name": "Region",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "#{LogWorkspaceEnv}# - Operational Logs por application y region",
+      "uid": "iLe1XwXZz",
+      "version": 10
+    }
+
 ---
