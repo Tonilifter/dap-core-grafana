@@ -65,6 +65,24 @@ spec:
               value: #{grafana-admin-user}#
             - name: GF_SECURITY_ADMIN_PASSWORD
               value: #{grafana-admin-password}#
+            - name: GF_AUTH_GENERIC_OAUTH_NAME
+              value: Azure AD
+            - name: GF_AUTH_GENERIC_OAUTH_ENABLED
+              value: 'True'
+            - name: GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP
+              value: 'True'
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+              value: 6ac06a79-9632-43a3-a789-72e3f382848d
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+              value: #{grafana-oauth-secret}#
+            - name: GF_AUTH_GENERIC_OAUTH_SCOPES
+              value: openid email name
+            - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
+              value: https://login.microsoftonline.com/0a25214f-ee52-483c-b96b-dc79f3227a6f/oauth2/authorize
+            - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
+              value: https://login.microsoftonline.com/0a25214f-ee52-483c-b96b-dc79f3227a6f/oauth2/token
+            - name: GF_AUTH_GENERIC_OAUTH_ALLOWED_ORGANIZATIONS
+              value: repsol.com
       volumes:
         - name: grafana-storage
           emptyDir: {}
