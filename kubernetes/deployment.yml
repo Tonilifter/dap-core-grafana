@@ -61,10 +61,32 @@ spec:
           env:
             - name: GET_HOSTS_FROM
               value: dns
+            - name: GF_SERVER_DOMAIN
+              value: #{Namespace}#akcore.cloudapp.repsol.com
+            - name: GF_SERVER_ROOT_URL
+              value: https://#{Namespace}#akcore.cloudapp.repsol.com
             - name: GF_SECURITY_ADMIN_USER
               value: #{grafana-admin-user}#
             - name: GF_SECURITY_ADMIN_PASSWORD
               value: #{grafana-admin-password}#
+            - name: GF_AUTH_GENERIC_OAUTH_NAME
+              value: Azure AD
+            - name: GF_AUTH_GENERIC_OAUTH_ENABLED
+              value: 'True'
+            - name: GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP
+              value: 'True'
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+              value: 6ac06a79-9632-43a3-a789-72e3f382848d
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+              value: #{grafana-oauth-secret}#
+            - name: GF_AUTH_GENERIC_OAUTH_SCOPES
+              value: openid email profile
+            - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
+              value: https://login.microsoftonline.com/0a25214f-ee52-483c-b96b-dc79f3227a6f/oauth2/v2.0/authorize
+            - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
+              value: https://login.microsoftonline.com/0a25214f-ee52-483c-b96b-dc79f3227a6f/oauth2/v2.0/token
+            - name: GF_AUTH_GENERIC_OAUTH_ALLOWED_DOMAINS
+              value: repsol.com servexternos.repsol.com
       volumes:
         - name: grafana-storage
           emptyDir: {}
