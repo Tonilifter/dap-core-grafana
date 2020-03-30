@@ -86,7 +86,7 @@ spec:
             - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
               value: https://login.microsoftonline.com/0a25214f-ee52-483c-b96b-dc79f3227a6f/oauth2/v2.0/token
             - name: GF_AUTH_GENERIC_OAUTH_ALLOWED_DOMAINS
-              value: repsol.com
+              value: repsol.com servexternos.repsol.com
       volumes:
         - name: grafana-storage
           emptyDir: {}
