@@ -1,4 +1,4 @@
-FROM grafana/grafana:6.6.0
+FROM grafana/grafana:6.7.1
 
 COPY ./configuration/providers/grafana-dashboard-provider.yml /etc/grafana/provisioning/dashboards
 # COPY ./configuration/dashboards /var/lib/grafana/dashboards
