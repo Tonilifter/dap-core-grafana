@@ -550,7 +550,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s) in ($UID)\r\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s) in ($UID)\r\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -632,7 +632,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s) in ($UID)\n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -712,7 +712,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s) in ($UID)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -827,7 +827,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s) in ($UID) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s) in ($UID) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -904,14 +904,14 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s)\n| distinct uid",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "hide": 0,
             "includeAll": false,
             "label": "UID",
             "multi": true,
             "name": "UID",
             "options": [],
-            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.+)#(\\\\D+)#(.+)$\", 2, UID_s)\n| distinct uid",
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(\\\\w+)#(\\\\w+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
