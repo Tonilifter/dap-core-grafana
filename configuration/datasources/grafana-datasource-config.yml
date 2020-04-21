@@ -32,6 +32,10 @@ data:
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
 
+  microsoft-sql-server.yml: |-
+    apiVersion: 1
+
+    datasources:
       - name: Microsoft-SQL-Server
         type: Microsoft SQL Server
         url: daplatform0101tsqcomtdt.database.windows.net:1433
@@ -39,5 +43,4 @@ data:
         user: dba
         secureJsonData:
           password: #{dba-password}
-
 ---
