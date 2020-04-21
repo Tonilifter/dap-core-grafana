@@ -31,4 +31,13 @@ data:
           clientSecret: #{adsp-lacore-secret}#
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
+
+      - name: Microsoft-SQL-Server
+        type: Microsoft SQL Server
+        url: daplatform0101tsqcomtdt.database.windows.net:1433
+        database: daplatform0101tsqdbcomtdt
+        user: dba
+        secureJsonData:
+          password: #{dba-password}
+
 ---
