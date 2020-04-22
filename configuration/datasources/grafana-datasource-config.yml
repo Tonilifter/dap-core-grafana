@@ -31,4 +31,16 @@ data:
           clientSecret: #{adsp-lacore-secret}#
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
+
+  microsoft-sql-server.yml: |-
+    apiVersion: 1
+
+    datasources:
+      - name: Microsoft SQL Server
+        type: mssql
+        url: #{db-metadata-host}#
+        database: #{db-metadata-dbname}#
+        user: #{db-metadata-user-name}#
+        secureJsonData:
+          password: #{db-metadata-user-password}#
 ---
