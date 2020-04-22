@@ -38,9 +38,9 @@ data:
     datasources:
       - name: Microsoft SQL Server
         type: mssql
-        url: daplatform0101tsqcomtdt.database.windows.net:1433
-        database: daplatform0101tsqdbcomtdt
-        user: dba
+        url: #{db-metadata-host}#
+        database: #{db-metadata-dbname}#
+        user: #{db-metadata-user-name}#
         secureJsonData:
-          password: #{dba-password}#
+          password: #{db-metadata-user-password}#
 ---
