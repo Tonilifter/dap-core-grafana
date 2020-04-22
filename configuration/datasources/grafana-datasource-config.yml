@@ -42,5 +42,5 @@ data:
         database: #{db-metadata-dbname}#
         user: #{db-metadata-user-name}#
         secureJsonData:
-          password: #{db-metadata-user-password}#
+          password: #{dba-password}#
 ---
