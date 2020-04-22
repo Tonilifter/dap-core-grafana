@@ -36,8 +36,8 @@ data:
     apiVersion: 1
 
     datasources:
-      - name: Microsoft-SQL-Server
-        type: Microsoft SQL Server
+      - name: Microsoft SQL Server
+        type: mssql
         url: daplatform0101tsqcomtdt.database.windows.net:1433
         database: daplatform0101tsqdbcomtdt
         user: dba
