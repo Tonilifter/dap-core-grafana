@@ -1653,55 +1653,6 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM apis",
-        "refId": "A"
-      }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "apis",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "datasource": "Microsoft SQL Server",
-      "fontSize": "80%",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 16
-      },
-      "id": 38,
-      "pageSize": null,
-      "showHeader": true,
-      "sort": {
-        "col": 0,
-        "desc": true
-      },
-      "styles": [
-      {
-        "$$hashKey": "object:5880",
-        "alias": "",
-        "align": "left",
-        "colorMode": null,
-        "colors": [
-          "rgba(245, 54, 54, 0.9)",
-          "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)"
-        ],
-        "decimals": null,
-        "pattern": "/.*/",
-        "thresholds": [],
-        "type": "string",
-        "unit": "short"
-      }
-      ],
-      "targets": [
-      {
-        "alias": "",
-        "format": "table",
         "rawSql": "SELECT * FROM servicenow",
         "refId": "A"
       }
