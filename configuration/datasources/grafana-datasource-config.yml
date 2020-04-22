@@ -42,5 +42,5 @@ data:
         database: daplatform0101tsqdbcomtdt
         user: dba
         secureJsonData:
-          password: #{dba-password}
+          password: #{dba-password}#
 ---
