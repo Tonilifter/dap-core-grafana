@@ -1023,7 +1023,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, APPLICATION=app, REGION=region, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
