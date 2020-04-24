@@ -52,9 +52,12 @@ spec:
             - mountPath: /var/lib/grafana
               name: grafana-storage
               readOnly: false
-            - mountPath: /var/lib/grafana/dashboards
+            - mountPath: /var/lib/grafana/dashboards/core
               name: grafana-dashboards
               readOnly: true
+            - mountPath: /var/lib/grafana/dashboards/use-cases
+                name: grafana-dashboards
+                readOnly: true
             - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
