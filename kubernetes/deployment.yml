@@ -93,10 +93,14 @@ spec:
       volumes:
         - name: grafana-storage
           emptyDir: {}
-        - name: grafana-dashboards
+        - name: grafana-core-dashboards
           configMap:
             defaultMode: 420
-            name: grafana-dashboards
+            name: grafana-core-dashboards
+        - name: grafana-usecases-dashboards
+          configMap:
+            defaultMode: 420
+            name: grafana-usecases-dashboards
         - name: grafana-datasources
           configMap:
             defaultMode: 420
