@@ -5,7 +5,7 @@ metadata:
   name: grafana-usecases-dashboards
   namespace: core-monitoring
 data:
-  default-dashboard.json: |-
+  usecases-dashboard.json: |-
     {
       "annotations": {
         "list": [
