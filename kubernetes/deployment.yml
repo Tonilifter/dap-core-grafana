@@ -58,7 +58,7 @@ spec:
             - mountPath: /var/lib/grafana/use-cases
               name: grafana-dashboards-use-cases
               readOnly: true
-            - mountPath: /etc/grafana/provisioning/datasources
+     l       - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
           env:
