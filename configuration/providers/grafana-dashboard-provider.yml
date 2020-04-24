@@ -9,11 +9,3 @@ providers:
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
     path: /var/lib/grafana/dashboards
-- name: 'usecases'
-  orgId: 2
-  folder: 'UseCases'
-  type: file
-  disableDeletion: false
-  updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
-  options:
-    path: /var/lib/grafana/dashboards/usecases
