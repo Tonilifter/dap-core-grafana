@@ -51,7 +51,16 @@ steps:
   - task: CopyFiles@2
     displayName: 'Copy Files (grafana dashboards configuration) to: $(Build.ArtifactStagingDirectory)'
     inputs:
-      SourceFolder: configuration/dashboards
+      SourceFolder: configuration/dashboards/core
+      TargetFolder: $(Build.ArtifactStagingDirectory)
+      CleanTargetFolder: false
+      FlattenFolders: true
+      OverWrite: true
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files (grafana dashboards configuration) to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: configuration/dashboards/use-cases
       TargetFolder: $(Build.ArtifactStagingDirectory)
       CleanTargetFolder: false
       FlattenFolders: true
