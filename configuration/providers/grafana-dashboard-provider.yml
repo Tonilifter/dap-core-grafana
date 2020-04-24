@@ -10,7 +10,7 @@ providers:
   options:
     path: /var/lib/grafana/dashboards/core
 - name: 'usecases'
-  orgId: 2
+  orgId: 1
   folder: 'usecases'
   type: file
   disableDeletion: false
