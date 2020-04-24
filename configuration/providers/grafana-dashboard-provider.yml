@@ -3,14 +3,14 @@ apiVersion: 1
 providers:
 - name: 'default'
   orgId: 1
-  folder: ''
+  folder: 'core'
   type: file
   disableDeletion: false
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
-    path: /var/lib/grafana/dashboards
+    path: /var/lib/grafana/dashboards/core
 - name: 'usecases'
-  orgId: 1
+  orgId: 2
   folder: 'UseCases'
   type: file
   disableDeletion: false

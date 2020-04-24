@@ -5,7 +5,7 @@ metadata:
   name: grafana-dashboards
   namespace: core-monitoring
 data:
-  default-dashboard.json: |-
+  iams-dashboard.json: |-
     {
       "annotations": {
         "list": [
