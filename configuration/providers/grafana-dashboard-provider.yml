@@ -8,13 +8,13 @@ providers:
   disableDeletion: false
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
-    path: /var/lib/grafana/core
+    path: /var/lib/grafana/dashboards/core
 
 - name: 'use cases provider'
-  orgId: 1
+  orgId: 2
   folder: 'use-cases'
   type: file
   disableDeletion: false
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
-    path: /var/lib/grafana/use-cases
+    path: /var/lib/grafana/dashboards/use-cases
