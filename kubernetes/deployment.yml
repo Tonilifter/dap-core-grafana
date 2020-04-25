@@ -52,13 +52,13 @@ spec:
             - mountPath: /var/lib/grafana
               name: grafana-storage
               readOnly: false
-            - mountPath: /var/lib/grafana/core
-              name: grafana-dashboards-core
+            - mountPath: /var/lib/grafana/dashboards/core
+              name: grafana-core-dashboards
               readOnly: true
-            - mountPath: /var/lib/grafana/dashboards/use-cases
-              name: grafana-dashboards-use-cases
+            - mountPath: /var/lib/grafana/dashboards/usecases
+              name: grafana-usecases-dashboards
               readOnly: true
-     l       - mountPath: /etc/grafana/dashboards/provisioning/datasources
+            - mountPath: /etc/grafana/provisioning/datasources
               name: grafana-datasources
               readOnly: false
           env:
@@ -93,14 +93,14 @@ spec:
       volumes:
         - name: grafana-storage
           emptyDir: {}
-        - name: grafana-dashboards-use-cases
+        - name: grafana-core-dashboards
           configMap:
             defaultMode: 420
-            name: grafana-dashboards-use-cases
-        - name: grafana-dashboards-core
+            name: grafana-core-dashboards
+        - name: grafana-usecases-dashboards
           configMap:
             defaultMode: 420
-            name: grafana-dashboards-core
+            name: grafana-usecases-dashboards
         - name: grafana-datasources
           configMap:
             defaultMode: 420

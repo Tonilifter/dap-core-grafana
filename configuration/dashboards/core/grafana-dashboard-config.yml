@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboards
+  name: grafana-core-dashboards
   namespace: core-monitoring
 data:
   default-dashboard.json: |-
