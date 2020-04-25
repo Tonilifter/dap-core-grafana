@@ -632,7 +632,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"^(\\\\w+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) or ($UID) == ''\n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -712,7 +712,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(\\\\w+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) or ($UID) == ''\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -827,7 +827,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(\\\\w+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) or ($UID) == ''\r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
