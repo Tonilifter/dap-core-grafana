@@ -550,7 +550,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) or ($UID) == ''\r\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) or ($UID) == ''\r\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1023,7 +1023,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, APPLICATION=app, REGION=region, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG_ERROR=tostring(parse_json(PAYLOAD_s).MSG_ERROR), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, APPLICATION=app, REGION=region, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
