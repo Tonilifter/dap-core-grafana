@@ -21,7 +21,7 @@ data:
             }
             ]
           },
-          "description": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}#/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#core/logs",
+          "description": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}#/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#lwcore/logs",
           "editable": true,
           "gnetId": null,
           "graphTooltip": 1,
@@ -38,7 +38,7 @@ data:
             "title": "Log Analytics",
             "tooltip": "",
             "type": "link",
-            "url": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}#/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#core/logs"
+            "url": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}#/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#lwcore/logs"
           }
           ],
           "panels": [
