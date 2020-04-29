@@ -1,0 +1,2411 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-usecases-dashboards
+  namespace: core-monitoring
+data:
+  usecases-dashboard.json: |-
+      {
+        "annotations": {
+          "list": [
+          {
+            "$$hashKey": "object:5749",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+          ]
+        },
+        "description": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#/logs",
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 1,
+        "id": 5,
+        "iteration": 1587718176915,
+        "links": [
+        {
+          "$$hashKey": "object:7824",
+          "icon": "external link",
+          "includeVars": false,
+          "keepTime": false,
+          "tags": [],
+          "targetBlank": true,
+          "title": "Log Analytics",
+          "tooltip": "",
+          "type": "link",
+          "url": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}#/resourceGroups/#{log-analytics-resource-group}/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}#/logs"
+        }
+        ],
+        "panels": [
+        {
+          "collapsed": false,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 28,
+          "panels": [],
+          "repeat": null,
+          "title": "General Health Status",
+          "type": "row"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter  - Application = ID_CORP_TERADATA_IAMS\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 0,
+            "y": 1
+          },
+          "id": 26,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app== \"ID_CORP_TERADATA_IAMS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "TERADATA",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter - Application = ia_eyp_environmental_envirosoft\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 4,
+            "y": 1
+          },
+          "id": 29,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"ia_eyp_environmental_envirosoft\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SFTP - ENVIROSOFT",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter - Application contains \"IA_EYP_ENVIRONMENTAL_\" or Application contains \"IA_EYP_PMER_\"\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 8,
+            "y": 1
+          },
+          "id": 31,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and (app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" )\r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "WEB",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter - Application = AP_EYP_PMS\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 12,
+            "y": 1
+          },
+          "id": 35,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "#F2495C",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_PMS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "ENERGY COMPONENT",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter - Application = AP_CORP_SYNERGI_LIFE\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 0,
+            "y": 7
+          },
+          "id": 30,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "#F2495C",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_CORP_SYNERGI_LIFE\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SYNERGI DB",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter  - Application = AP_CORP_SYNERGI_LIFE\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 4,
+            "y": 7
+          },
+          "id": 40,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "#F2495C",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_CORP_SYNERGI_LIFE_WBS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "SYNERGI SOAP",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter  - Application = AP_EYP_OPENWELLS\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 8,
+            "y": 7
+          },
+          "id": 41,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "#F2495C",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_OPENWELLS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "OPENWELLS",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
+          "datasource": null,
+          "decimals": 0,
+          "description": "Static Filter  - Application = AP_EYP_GESTION_MANTENIMIENTO_PERU\n\nAvailable Filter: Time",
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 4,
+            "x": 12,
+            "y": 7
+          },
+          "id": 42,
+          "interval": null,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+          {
+            "$$hashKey": "object:2044",
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "$$hashKey": "object:2045",
+            "name": "range to text",
+            "value": 2
+          }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "30%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+          ],
+          "sparkline": {
+            "fillColor": "#F2495C",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": true,
+            "ymax": null,
+            "ymin": null
+          },
+          "tableColumn": "",
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_GESTION_MANTENIMIENTO_PERU\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "thresholds": "1,2",
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "MAINTENANCE ",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [],
+          "valueName": "first"
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 13
+          },
+          "id": 20,
+          "panels": [
+          {
+            "datasource": null,
+            "description": "Static Filter: Status = OK\n\nAvailable Filters: Time, Application, Module, Dataset\n\n",
+            "gridPos": {
+              "h": 7,
+              "w": 4,
+              "x": 0,
+              "y": 14
+            },
+            "id": 16,
+            "maxPerRow": 2,
+            "options": {
+              "colorMode": "value",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "defaults": {
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#6ED0E0",
+                      "value": 200
+                    },
+                    {
+                      "color": "dark-yellow",
+                      "value": 2500
+                    },
+                    {
+                      "color": "semi-dark-orange",
+                      "value": 5000
+                    },
+                    {
+                      "color": "red",
+                      "value": 10000
+                    }
+                    ]
+                  },
+                  "title": ""
+                },
+                "overrides": [],
+                "values": false
+              },
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "vertical"
+            },
+            "pluginVersion": "6.7.1",
+            "repeat": null,
+            "repeatDirection": "h",
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                             \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)   | where status == 'OK'  and app in ($Application) and modulo in (\"\",$Module) and dataset in (\"\", \"*\", $Dataset)\r                                  \r\n| summarize count()\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Total OK logs",
+            "type": "stat"
+          },
+          {
+            "datasource": null,
+            "description": "Static Filter: Status = KO\n\nAvailable Filters: Time, Application, Module, Dataset\n\n",
+            "gridPos": {
+              "h": 7,
+              "w": 4,
+              "x": 4,
+              "y": 14
+            },
+            "id": 32,
+            "maxPerRow": 2,
+            "options": {
+              "colorMode": "value",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "defaults": {
+                  "mappings": [],
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 5
+                    },
+                    {
+                      "color": "red",
+                      "value": 6
+                    }
+                    ]
+                  },
+                  "title": ""
+                },
+                "overrides": [],
+                "values": false
+              },
+              "graphMode": "area",
+              "justifyMode": "center",
+              "orientation": "vertical"
+            },
+            "pluginVersion": "6.7.1",
+            "repeatDirection": "h",
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                             \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                             \r\n| where status == 'KO'  and app in ($Application) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count()\r",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Total KO logs",
+            "type": "stat"
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Available Filters: Time, Application, Module, Dataset, Status \n",
+            "fill": 1,
+            "fillGradient": 9,
+            "gridPos": {
+              "h": 7,
+              "w": 16,
+              "x": 8,
+              "y": 14
+            },
+            "hiddenSeries": false,
+            "id": 34,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+            {
+              "$$hashKey": "object:3580",
+              "alias": "OK",
+              "color": "#56A64B"
+            },
+            {
+              "$$hashKey": "object:3591",
+              "alias": "KO",
+              "color": "#E02F44"
+            }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "\r\n CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application) and status in ($Status) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count() by status,  bin(TimeGenerated, $__interval)| order by TimeGenerated asc\r\n",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Logs",
+            "tooltip": {
+              "shared": true,
+              "sort": 1,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+            {
+              "$$hashKey": "object:9864",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:9865",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "columns": [],
+            "datasource": null,
+            "description": "Available Filters: Time, Application, Module, Dataset, Status \n",
+            "fontSize": "90%",
+            "gridPos": {
+              "h": 14,
+              "w": 24,
+              "x": 0,
+              "y": 21
+            },
+            "id": 14,
+            "pageSize": null,
+            "showHeader": true,
+            "sort": {
+              "col": 4,
+              "desc": false
+            },
+            "styles": [
+            {
+              "$$hashKey": "object:6641",
+              "alias": "EXECUTION DATE",
+              "align": "left",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "link": false,
+              "pattern": "EXECUTION_DATE",
+              "preserveFormat": true,
+              "sanitize": false,
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:6695",
+              "alias": "DATE INPUT",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "DD-MM-YYYY",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "DATE_INPUT",
+              "preserveFormat": false,
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:3671",
+              "alias": "LOG TYPE",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "LOG_TYPE",
+              "preserveFormat": true,
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+            ],
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend msg = strcat(strcat(tostring(parse_json(PAYLOAD_s).MSG_ERROR) ,tostring(parse_json(PAYLOAD_s).MSG)), tostring(parse_json(PAYLOAD_s).MSG_INFO))\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend logtype=tostring(parse_json(PAYLOAD_s).LOGTYPE)  \r\n| where $__timeFilter(TimeGenerated)    \r\n| where CLASE_s != \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"                            \r\n| where app in ($Application) and MODULO_s in (\"\",$Module) and dataset  in (\"\",$Dataset) and status in ($Status) \r\n| order by TimeGenerated desc\r\n| project \r\nEXECUTION_DATE=TimeGenerated,\r\nAPPLICATION=app,\r\nDATE_INPUT=tostring(parse_json(PAYLOAD_s).DATADATE), \r\nMODULE=MODULO_s, \r\nSTATUS=status,\r\nDATASET=dataset,\r\nREGION=region,\r\nLOG_TYPE=logtype,\r\nMSG=msg\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Logs",
+            "transform": "table",
+            "type": "table"
+          }
+          ],
+          "title": "ARIA Components Logs",
+          "type": "row"
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 14
+          },
+          "id": 12,
+          "panels": [
+          {
+            "aliasColors": {},
+            "bars": true,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Available Filters: Time, Application",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 3
+            },
+            "hiddenSeries": false,
+            "id": 8,
+            "legend": {
+              "alignAsTable": false,
+              "avg": false,
+              "current": false,
+              "hideEmpty": false,
+              "hideZero": false,
+              "max": false,
+              "min": false,
+              "rightSide": false,
+              "show": false,
+              "total": false,
+              "values": false
+            },
+            "lines": false,
+            "linewidth": 1,
+            "nullPointMode": "null as zero",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pluginVersion": "6.7.1",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [
+            {
+              "$$hashKey": "object:2146",
+              "alias": "validate",
+              "color": "#F2CC0C"
+            },
+            {
+              "$$hashKey": "object:4644",
+              "alias": "extract",
+              "color": "#FA6400"
+            }
+            ],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"file: input-excel-files\" and INSTANCIA_s  != \"\"   \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| summarize count() by INSTANCIA_s,  bin(TimeGenerated, $__interval)",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Actions",
+            "tooltip": {
+              "shared": false,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "series",
+              "name": null,
+              "show": true,
+              "values": [
+                "total"
+              ]
+            },
+            "yaxes": [
+            {
+              "$$hashKey": "object:2157",
+              "decimals": null,
+              "format": "none",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:2158",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Available Filters: Time, Application",
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 3
+            },
+            "hiddenSeries": false,
+            "id": 6,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": false,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "dataLinks": []
+            },
+            "percentage": false,
+            "pointradius": 2,
+            "points": true,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| where INSTANCIA_s == \"validate\"  and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"input-excel-files\" and $__timeFilter(TimeGenerated) and app in ($Application)\r\n| summarize count()  by  app,  bin(TimeGenerated, $__interval)\r\n",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Uploaded files",
+            "tooltip": {
+              "shared": true,
+              "sort": 1,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+            {
+              "$$hashKey": "object:1548",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1549",
+              "decimals": null,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "columns": [],
+            "datasource": null,
+            "fontSize": "80%",
+            "gridPos": {
+              "h": 9,
+              "w": 24,
+              "x": 0,
+              "y": 11
+            },
+            "id": 24,
+            "pageSize": null,
+            "showHeader": true,
+            "sort": {
+              "col": 1,
+              "desc": false
+            },
+            "styles": [
+            {
+              "$$hashKey": "object:1036",
+              "alias": "Application",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "link": false,
+              "linkTooltip": "`poihfg",
+              "linkUrl": "",
+              "pattern": "app",
+              "type": "string"
+            },
+            {
+              "$$hashKey": "object:1037",
+              "alias": "Uploaded date",
+              "align": "left",
+              "colorMode": "value",
+              "colors": [
+                "#F2495C",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "link": false,
+              "mappingType": 1,
+              "pattern": "uploadFile",
+              "thresholds": [
+                "-"
+              ],
+              "type": "date",
+              "unit": "short",
+              "valueMaps": [
+              {
+                "$$hashKey": "object:1222",
+                "text": "-",
+                "value": ""
+              }
+              ]
+            },
+            {
+              "$$hashKey": "object:1186",
+              "alias": "Método",
+              "align": "left",
+              "colorMode": "value",
+              "colors": [
+                "#C4162A",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 2,
+              "pattern": "INSTANCIA_s",
+              "sanitize": false,
+              "thresholds": [
+                ""
+              ],
+              "type": "hidden",
+              "unit": "short",
+              "valueMaps": []
+            },
+            {
+              "$$hashKey": "object:1224",
+              "alias": "Validate",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "fileName",
+              "preserveFormat": false,
+              "sanitize": false,
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1245",
+              "alias": "Método",
+              "align": "auto",
+              "colorMode": "row",
+              "colors": [
+                "rgba(245, 54, 54, 0.36)",
+                "rgb(255, 125, 125)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "INSTANCIA_s1",
+              "thresholds": [
+                "\"\""
+              ],
+              "type": "hidden",
+              "unit": "short",
+              "valueMaps": [
+              {
+                "$$hashKey": "object:1470",
+                "text": "extract",
+                "value": ""
+              }
+              ]
+            },
+            {
+              "$$hashKey": "object:1472",
+              "alias": "Extract",
+              "align": "left",
+              "colorMode": "row",
+              "colors": [
+                "rgb(138, 2, 17)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "fileName1",
+              "preserveFormat": false,
+              "sanitize": false,
+              "thresholds": [
+                "-"
+              ],
+              "type": "string",
+              "unit": "short",
+              "valueMaps": [
+              {
+                "$$hashKey": "object:7615",
+                "text": "-",
+                "value": ""
+              }
+              ]
+            },
+            {
+              "$$hashKey": "object:2117",
+              "alias": "Rows processed",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "mappingType": 1,
+              "pattern": "numRowsProcessed_",
+              "preserveFormat": true,
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:3233",
+              "alias": "Run Id",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "runId_",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:3254",
+              "alias": "Tabla destino",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "dataset_",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:3265",
+              "alias": "",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:3276",
+              "alias": "Error",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(50, 172, 45, 0.97)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(245, 54, 54, 0.9)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "exceptionMessage_",
+              "thresholds": [
+                ""
+              ],
+              "type": "string",
+              "unit": "short",
+              "valueMaps": [
+              {
+                "$$hashKey": "object:3522",
+                "text": "OK",
+                "value": ""
+              }
+              ]
+            },
+            {
+              "$$hashKey": "object:3511",
+              "alias": "",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "result_",
+              "thresholds": [],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:8599",
+              "alias": "Etl date",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "processorStart",
+              "thresholds": [],
+              "type": "date",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:751",
+              "alias": "Path",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "path_",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+            ],
+            "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project app,timeFile,INSTANCIA_s,fileName\r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend  timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| extend tsextract =  tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO), \"in partition ts=\",1)[0])\r\n| order by TimeGenerated\r\n| where (INSTANCIA_s == \"extract\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS]- Extracting file: input-excel-files\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where  app in ($Application)\r\n| project INSTANCIA_s,fileName,timeFile,tsextract) on timeFile, fileName \r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend dataset_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend tsextract = tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",2)[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend path_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend result_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).result) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend startDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).startDate) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project tsextract,runId_ , processorStart, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_, fileName, sqlFilter_) on fileName, tsextract \r| where fileName in ($FileName)\n| project app,uploadFile=timeFile, fileName,  INSTANCIA_s, INSTANCIA_s1,fileName1,processorStart, runId_, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_,sqlFilter_\r\n| order by uploadFile  desc\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Web Logs",
+            "transform": "table",
+            "type": "table"
+          }
+          ],
+          "title": "Web",
+          "type": "row"
+        },
+        {
+          "collapsed": false,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 15
+          },
+          "id": 37,
+          "panels": [],
+          "title": "Processor Control Panel",
+          "type": "row"
+        },
+        {
+          "columns": [],
+          "datasource": null,
+          "description": "Available Filters: Time, Application, Module, Dataset and FileName",
+          "fontSize": "80%",
+          "gridPos": {
+            "h": 13,
+            "w": 24,
+            "x": 0,
+            "y": 16
+          },
+          "id": 39,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+          {
+            "$$hashKey": "object:180",
+            "alias": "Run id",
+            "align": "right",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "runId_",
+            "preserveFormat": false,
+            "thresholds": [],
+            "type": "string",
+            "unit": "short"
+          },
+          {
+            "$$hashKey": "object:353",
+            "alias": "Etl date",
+            "align": "auto",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "processorStart",
+            "thresholds": [],
+            "type": "date",
+            "unit": "short"
+          },
+          {
+            "$$hashKey": "object:366",
+            "alias": "Nº rows",
+            "align": "center",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "mappingType": 1,
+            "pattern": "numRowsProcessed_",
+            "preserveFormat": false,
+            "thresholds": [
+              ""
+            ],
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "$$hashKey": "object:481",
+            "alias": "",
+            "align": "auto",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "Application",
+            "preserveFormat": false,
+            "thresholds": [],
+            "type": "string",
+            "unit": "short"
+          },
+          {
+            "$$hashKey": "object:1076",
+            "alias": "Error",
+            "align": "auto",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "exceptionMessage_",
+            "preserveFormat": false,
+            "thresholds": [],
+            "type": "string",
+            "unit": "short",
+            "valueMaps": [
+            {
+              "$$hashKey": "object:1097",
+              "text": "Ok",
+              "value": ""
+            }
+            ]
+          },
+          {
+            "$$hashKey": "object:1099",
+            "alias": "",
+            "align": "auto",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "Path",
+            "preserveFormat": false,
+            "thresholds": [],
+            "type": "string",
+            "unit": "short"
+          },
+          {
+            "$$hashKey": "object:1244",
+            "alias": "File Name",
+            "align": "center",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "fileName",
+            "thresholds": [],
+            "type": "string",
+            "unit": "short",
+            "valueMaps": [
+            {
+              "$$hashKey": "object:3475",
+              "text": "-",
+              "value": ""
+            }
+            ]
+          },
+          {
+            "$$hashKey": "object:3452",
+            "alias": "Filter",
+            "align": "center",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 2,
+            "mappingType": 1,
+            "pattern": "sqlFilter_",
+            "thresholds": [],
+            "type": "string",
+            "unit": "short",
+            "valueMaps": [
+            {
+              "$$hashKey": "object:3473",
+              "text": "-",
+              "value": ""
+            }
+            ]
+          }
+          ],
+          "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend Application=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend Region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend Dataset = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend Path = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| extend User = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).userId) \r\n| where $__timeFilter(TimeGenerated)    \r\n| where Application in ($Application) and MODULO_s in (\"\", $Module) and Dataset  in (\"\" ,$Dataset) and fileName in ($FileName)\n| project Application, Region, processorStart, Dataset, Path, numRowsProcessed_,fileName, exceptionMessage_,  sqlFilter_, User\r\n, runId_ \r\n\r\n",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id}#"
+          }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "",
+          "transform": "table",
+          "type": "table"
+        }
+        ],
+        "refresh": "5m",
+        "schemaVersion": 22,
+        "style": "dark",
+        "tags": [
+          "iams"
+        ],
+        "templating": {
+          "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "AP_CORP_SYNERGI_LIFE + AP_CORP_SYNERGI_LIFE_WBS + AP_EYP_GESTION_MANTENIMIENTO_PERU + AP_EYP_OPENWELLS + AP_EYP_PMS + IA_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIROMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_EMISSIONS + IA_EYP_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_SITUATIONS + IA_EYP_ENVIRONMENTAL_WASTE + IA_EYP_ENVIRONMENTAL_WATER + IA_EYP_PMER_DECOM + IA_EYP_PMER_DEV + ia_eyp_environmental_envirosoft",
+              "value": [
+                "AP_CORP_SYNERGI_LIFE",
+                "AP_CORP_SYNERGI_LIFE_WBS",
+                "AP_EYP_GESTION_MANTENIMIENTO_PERU",
+                "AP_EYP_OPENWELLS",
+                "AP_EYP_PMS",
+                "IA_ENVIRONMENTAL_ENVIROSOFT",
+                "IA_EYP_ENVIROMENTAL_ENVIROSOFT",
+                "IA_EYP_ENVIRONMENTAL_EMISSIONS",
+                "IA_EYP_ENVIRONMENTAL_ENVIROSOFT",
+                "IA_EYP_ENVIRONMENTAL_SITUATIONS",
+                "IA_EYP_ENVIRONMENTAL_WASTE",
+                "IA_EYP_ENVIRONMENTAL_WATER",
+                "IA_EYP_PMER_DECOM",
+                "IA_EYP_PMER_DEV",
+                "ia_eyp_environmental_envirosoft"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Application",
+            "multi": true,
+            "name": "Application",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where  app in ($Application)                                                          \n| distinct  MODULO_s\n",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Module",
+            "multi": true,
+            "name": "Module",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where  app in ($Application)                                                          \n| distinct  MODULO_s\n",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where  app in ($Application)   and MODULO_s in (\"\", $Module)\n| project dataset\n",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Dataset",
+            "multi": true,
+            "name": "Dataset",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where  app in ($Application)   and MODULO_s in (\"\", $Module)\n| project dataset\n",
+            "refresh": 2,
+            "regex": "[A-Za-z0-9? *,_-]+",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| where app != \"\"\n| where  app in ($Application) \n| distinct status",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Status",
+            "multi": true,
+            "name": "Status",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| where app != \"\"\n| where  app in ($Application) \n| distinct status",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\n| where app in ($Application)\n| project fileName\n",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "FileName",
+            "multi": true,
+            "name": "FileName",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\n| where app in ($Application)\n| project fileName\n",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+          ]
+        },
+        "time": {
+          "from": "now-24h",
+          "to": "now"
+        },
+        "timepicker": {
+          "hidden": false,
+          "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ]
+        },
+        "timezone": "",
+        "title": "IAMS #{LogWorkspaceEnv}#",
+        "uid": "x6YLv9jZk",
+        "variables": {
+          "list": []
+        },
+        "version": 2
+      }
+---
