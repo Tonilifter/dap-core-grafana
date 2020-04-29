@@ -21,7 +21,7 @@ data:
         }
         ]
       },
-      "description": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/757633f7-178c-46e4-bdf2-05488423d7c7/resourceGroups/z0euw1sdmrsg015/providers/Microsoft.OperationalInsights/workspaces/daplatform0101tlwcore/logs",
+      "description": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}/resourceGroups/#{log-analytics-resource-group}/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}/logs",
       "editable": true,
       "gnetId": null,
       "graphTooltip": 1,
@@ -38,7 +38,7 @@ data:
         "title": "Log Analytics",
         "tooltip": "",
         "type": "link",
-        "url": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/757633f7-178c-46e4-bdf2-05488423d7c7/resourceGroups/z0euw1sdmrsg015/providers/Microsoft.OperationalInsights/workspaces/daplatform0101tlwcore/logs"
+        "url": "https://portal.azure.com/#@Repsol365.onmicrosoft.com/resource/subscriptions/#{log-analytics-subscription-id}/resourceGroups/#{log-analytics-resource-group}/providers/Microsoft.OperationalInsights/workspaces/#{log-analytics-namespace}/logs"
       }
       ],
       "panels": [
@@ -138,7 +138,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app== \"ID_CORP_TERADATA_IAMS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -154,7 +154,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -247,7 +247,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"ia_eyp_environmental_envirosoft\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -263,7 +263,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -356,7 +356,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and (app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" )\r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -372,7 +372,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -465,7 +465,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_PMS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -481,7 +481,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -574,7 +574,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_CORP_SYNERGI_LIFE\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -590,7 +590,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -683,7 +683,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_CORP_SYNERGI_LIFE_WBS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -699,7 +699,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -792,7 +792,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_OPENWELLS\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -808,7 +808,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -901,7 +901,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and app == \"AP_EYP_GESTION_MANTENIMIENTO_PERU\" \r\n| where $__timeFilter(TimeGenerated)                                                               \r\n| summarize count()",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -917,7 +917,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "thresholds": "1,2",
@@ -1010,7 +1010,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                             \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)   | where status == 'OK'  and app in ($Application) and modulo in (\"\",$Module) and dataset in (\"\", \"*\", $Dataset)\r                                  \r\n| summarize count()\r\n",
               "resultFormat": "table",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1026,7 +1026,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "timeFrom": null,
@@ -1095,7 +1095,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                             \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                             \r\n| where status == 'KO'  and app in ($Application) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count()\r",
               "resultFormat": "table",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1111,7 +1111,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "timeFrom": null,
@@ -1184,7 +1184,7 @@ data:
             "azureLogAnalytics": {
               "query": "\r\n CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application) and status in ($Status) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count() by status,  bin(TimeGenerated, $__interval)| order by TimeGenerated asc\r\n",
               "resultFormat": "time_series",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1200,7 +1200,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "thresholds": [],
@@ -1329,7 +1329,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend msg = strcat(strcat(tostring(parse_json(PAYLOAD_s).MSG_ERROR) ,tostring(parse_json(PAYLOAD_s).MSG)), tostring(parse_json(PAYLOAD_s).MSG_INFO))\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend logtype=tostring(parse_json(PAYLOAD_s).LOGTYPE)  \r\n| where $__timeFilter(TimeGenerated)    \r\n| where CLASE_s != \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"                            \r\n| where app in ($Application) and MODULO_s in (\"\",$Module) and dataset  in (\"\",$Dataset) and status in ($Status) \r\n| order by TimeGenerated desc\r\n| project \r\nEXECUTION_DATE=TimeGenerated,\r\nAPPLICATION=app,\r\nDATE_INPUT=tostring(parse_json(PAYLOAD_s).DATADATE), \r\nMODULE=MODULO_s, \r\nSTATUS=status,\r\nDATASET=dataset,\r\nREGION=region,\r\nLOG_TYPE=logtype,\r\nMSG=msg\r\n",
               "resultFormat": "table",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1345,7 +1345,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "timeFrom": null,
@@ -1439,7 +1439,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"file: input-excel-files\" and INSTANCIA_s  != \"\"   \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| summarize count() by INSTANCIA_s,  bin(TimeGenerated, $__interval)",
               "resultFormat": "time_series",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1455,7 +1455,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "thresholds": [],
@@ -1558,7 +1558,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| where INSTANCIA_s == \"validate\"  and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"input-excel-files\" and $__timeFilter(TimeGenerated) and app in ($Application)\r\n| summarize count()  by  app,  bin(TimeGenerated, $__interval)\r\n",
               "resultFormat": "time_series",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1574,7 +1574,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "thresholds": [],
@@ -1944,7 +1944,7 @@ data:
             "azureLogAnalytics": {
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project app,timeFile,INSTANCIA_s,fileName\r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend  timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| extend tsextract =  tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO), \"in partition ts=\",1)[0])\r\n| order by TimeGenerated\r\n| where (INSTANCIA_s == \"extract\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS]- Extracting file: input-excel-files\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where  app in ($Application)\r\n| project INSTANCIA_s,fileName,timeFile,tsextract) on timeFile, fileName \r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend dataset_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend tsextract = tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",2)[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend path_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend result_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).result) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend startDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).startDate) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project tsextract,runId_ , processorStart, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_, fileName, sqlFilter_) on fileName, tsextract \r| where fileName in ($FileName)\n| project app,uploadFile=timeFile, fileName,  INSTANCIA_s, INSTANCIA_s1,fileName1,processorStart, runId_, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_,sqlFilter_\r\n| order by uploadFile  desc\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
               "resultFormat": "table",
-              "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              "workspace": "#{log-analytics-workspace-id}"
             },
             "azureMonitor": {
               "aggOptions": [],
@@ -1960,7 +1960,7 @@ data:
             },
             "queryType": "Azure Log Analytics",
             "refId": "A",
-            "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            "subscription": "#{log-analytics-subscription-id}"
           }
           ],
           "timeFrom": null,
@@ -2191,7 +2191,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend Application=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend Region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend Dataset = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend Path = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| extend User = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).userId) \r\n| where $__timeFilter(TimeGenerated)    \r\n| where Application in ($Application) and MODULO_s in (\"\", $Module) and Dataset  in (\"\" ,$Dataset) and fileName in ($FileName)\n| project Application, Region, processorStart, Dataset, Path, numRowsProcessed_,fileName, exceptionMessage_,  sqlFilter_, User\r\n, runId_ \r\n\r\n",
             "resultFormat": "table",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -2207,7 +2207,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}"
         }
         ],
         "timeFrom": null,
