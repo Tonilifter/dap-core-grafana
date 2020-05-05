@@ -354,7 +354,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\"  and (app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" )\r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\" and app != \"IA_EYP_ENVIRONMENTAL_ENVIROSOFT\" and ( app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" )\r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
