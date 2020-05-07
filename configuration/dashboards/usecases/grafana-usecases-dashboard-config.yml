@@ -2225,49 +2225,121 @@ data:
           ],
           "templating": {
             "list": [
-            {
-              "allValue": null,
-              "current": {
-                "text": "AP_CORP_SYNERGI_LIFE + AP_CORP_SYNERGI_LIFE_WBS + AP_EYP_GESTION_MANTENIMIENTO_PERU + AP_EYP_OPENWELLS + AP_EYP_PMS + IA_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIROMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_EMISSIONS + IA_EYP_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_SITUATIONS + IA_EYP_ENVIRONMENTAL_WASTE + IA_EYP_ENVIRONMENTAL_WATER + IA_EYP_PMER_DECOM + IA_EYP_PMER_DEV + ID_CORP_TERADATA_IAMS + ia_eyp_environmental_envirosoft",
-                "value": [
-                  "AP_CORP_SYNERGI_LIFE",
-                  "AP_CORP_SYNERGI_LIFE_WBS",
-                  "AP_EYP_GESTION_MANTENIMIENTO_PERU",
-                  "AP_EYP_OPENWELLS",
-                  "AP_EYP_PMS",
-                  "IA_ENVIRONMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIROMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIRONMENTAL_EMISSIONS",
-                  "IA_EYP_ENVIRONMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIRONMENTAL_SITUATIONS",
-                  "IA_EYP_ENVIRONMENTAL_WASTE",
-                  "IA_EYP_ENVIRONMENTAL_WATER",
-                  "IA_EYP_PMER_DECOM",
-                  "IA_EYP_PMER_DEV",
-                  "ID_CORP_TERADATA_IAMS",
-                  "ia_eyp_environmental_envirosoft"
-                ]
+        {
+         "allValue": null,
+         "current": {
+           "text": "All",
+           "value": [
+             "$__all"
+           ]
+         },
+         "hide": 0,
+         "includeAll": true,
+         "label": "Application",
+         "multi": true,
+         "name": "Application",
+         "options": [
+                 {
+                   "$$hashKey": "object:281",
+                   "selected": true,
+                   "text": "All",
+                   "value": "$__all"
+                 },
+                 {
+                   "$$hashKey": "object:282",
+                   "selected": false,
+                   "text": "AP_CORP_SYNERGI_LIFE",
+                   "value": "AP_CORP_SYNERGI_LIFE"
+                 },
+                 {
+                   "$$hashKey": "object:283",
+                   "selected": false,
+                   "text": "AP_CORP_SYNERGI_LIFE_WBS",
+                   "value": "AP_CORP_SYNERGI_LIFE_WBS"
+                 },
+                 {
+                   "$$hashKey": "object:284",
+                   "selected": false,
+                   "text": "AP_EYP_OPENWELLS",
+                   "value": "AP_EYP_OPENWELLS"
+                 },
+                 {
+                   "$$hashKey": "object:285",
+                   "selected": false,
+                   "text": "AP_EYP_PMS",
+                   "value": "AP_EYP_PMS"
+                 },
+                 {
+                   "$$hashKey": "object:286",
+                   "selected": false,
+                   "text": "AP_EYP_GESTION_MANTENIMIENTO_PERU",
+                   "value": "AP_EYP_GESTION_MANTENIMIENTO_PERU"
+                 },
+                 {
+                   "$$hashKey": "object:287",
+                   "selected": false,
+                   "text": "ID_CORP_TERADATA_IAMS",
+                   "value": "ID_CORP_TERADATA_IAMS"
+                 },
+                 {
+                   "$$hashKey": "object:288",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_EMISSIONS",
+                   "value": "IA_EYP_ENVIRONMENTAL_EMISSIONS"
+                 },
+                 {
+                   "$$hashKey": "object:289",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_ENVIROSOFT",
+                   "value": "IA_EYP_ENVIRONMENTAL_ENVIROSOFT"
+                 },
+                 {
+                   "$$hashKey": "object:290",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_SITUATIONS",
+                   "value": "IA_EYP_ENVIRONMENTAL_SITUATIONS"
+                 },
+                 {
+                   "$$hashKey": "object:291",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_WASTE",
+                   "value": "IA_EYP_ENVIRONMENTAL_WASTE"
+                 },
+                 {
+                   "$$hashKey": "object:292",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_WATER",
+                   "value": "IA_EYP_ENVIRONMENTAL_WATER"
+                 },
+                 {
+                   "$$hashKey": "object:293",
+                   "selected": false,
+                   "text": "IA_EYP_PMER_DEV",
+                   "value": "IA_EYP_PMER_DEV"
+                 },
+                 {
+                   "$$hashKey": "object:294",
+                   "selected": false,
+                   "text": "IA_EYP_PMER_DECOM",
+                   "value": "IA_EYP_PMER_DECOM"
+                 },
+                 {
+                   "$$hashKey": "object:295",
+                   "selected": false,
+                   "text": "IA_EYP_HSE_PARAM",
+                   "value": "IA_EYP_HSE_PARAM"
+                 },
+                 {
+                   "$$hashKey": "object:296",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
+                   "value": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM"
+                 }
+               ],
+               "query": "AP_CORP_SYNERGI_LIFE, AP_CORP_SYNERGI_LIFE_WBS, AP_EYP_OPENWELLS,  AP_EYP_PMS, AP_EYP_GESTION_MANTENIMIENTO_PERU, ID_CORP_TERADATA_IAMS,  IA_EYP_ENVIRONMENTAL_EMISSIONS,  IA_EYP_ENVIRONMENTAL_ENVIROSOFT,   IA_EYP_ENVIRONMENTAL_SITUATIONS, IA_EYP_ENVIRONMENTAL_WASTE, IA_EYP_ENVIRONMENTAL_WATER,  IA_EYP_PMER_DEV, IA_EYP_PMER_DECOM,IA_EYP_HSE_PARAM, IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
+               "skipUrlSync": false,
+               "type": "custom"
               },
-              "datasource": "azure-loganalytics-workspace",
-              "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
-              "hide": 0,
-              "includeAll": true,
-              "index": -1,
-              "label": "Application",
-              "multi": true,
-              "name": "Application",
-              "options": [],
-              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
-              "refresh": 1,
-              "regex": "",
-              "skipUrlSync": false,
-              "sort": 1,
-              "tagValuesQuery": "",
-              "tags": [],
-              "tagsQuery": "",
-              "type": "query",
-              "useTags": false
-            },
             {
               "allValue": null,
               "current": {
