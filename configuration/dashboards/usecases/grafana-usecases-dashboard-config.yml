@@ -1624,6 +1624,7 @@ data:
             {
               "columns": [],
               "datasource": null,
+              "description": "Available Filters: Time and Application",
               "fontSize": "80%",
               "gridPos": {
                 "h": 9,
