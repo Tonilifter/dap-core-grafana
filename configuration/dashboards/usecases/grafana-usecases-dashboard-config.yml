@@ -615,7 +615,7 @@ data:
             ],
             "datasource": null,
             "decimals": 0,
-            "description": "Static Filter  - Application = AP_CORP_SYNERGI_LIFE\n\nAvailable Filter: Time",
+            "description": "Static Filter  - Application = AP_CORP_SYNERGI_LIFE_WBS\n\nAvailable Filter: Time",
             "format": "none",
             "gauge": {
               "maxValue": 100,
@@ -1624,6 +1624,7 @@ data:
             {
               "columns": [],
               "datasource": null,
+              "description": "Available Filters: Time and Application",
               "fontSize": "80%",
               "gridPos": {
                 "h": 9,
@@ -1942,7 +1943,7 @@ data:
                   "valueColumn": ""
                 },
                 "azureLogAnalytics": {
-                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project app,timeFile,INSTANCIA_s,fileName\r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend  timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| extend tsextract =  tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO), \"in partition ts=\",1)[0])\r\n| order by TimeGenerated\r\n| where (INSTANCIA_s == \"extract\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS]- Extracting file: input-excel-files\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where  app in ($Application)\r\n| project INSTANCIA_s,fileName,timeFile,tsextract) on timeFile, fileName \r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend dataset_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend tsextract = tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",2)[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend path_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend result_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).result) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend startDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).startDate) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project tsextract,runId_ , processorStart, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_, fileName, sqlFilter_) on fileName, tsextract \r| where fileName in ($FileName)\n| project app,uploadFile=timeFile, fileName,  INSTANCIA_s, INSTANCIA_s1,fileName1,processorStart, runId_, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_,sqlFilter_\r\n| order by uploadFile  desc\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
+                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project app,timeFile,INSTANCIA_s,fileName\r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend  timeFile= tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO),\"/\",3)[0])\r\n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\r\n| extend tsextract =  tostring(split(tostring(parse_json(PAYLOAD_s).MSG_INFO), \"in partition ts=\",1)[0])\r\n| order by TimeGenerated\r\n| where (INSTANCIA_s == \"extract\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS]- Extracting file: input-excel-files\"\r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where  app in ($Application)\r\n| project INSTANCIA_s,fileName,timeFile,tsextract) on timeFile, fileName \r\n| join kind=leftouter (\r\nCoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend dataset_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend tsextract = tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",2)[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend path_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend result_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).result) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend startDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).startDate) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application)\r\n| project tsextract,runId_ , processorStart, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_, fileName, sqlFilter_) on fileName, tsextract \r| project app,uploadFile=timeFile, fileName,  INSTANCIA_s, INSTANCIA_s1,fileName1,processorStart, runId_, dataset_, path_, numRowsProcessed_, result_, exceptionMessage_,sqlFilter_\r\n| order by uploadFile  desc\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n",
                   "resultFormat": "table",
                   "workspace": "#{log-analytics-workspace-id}#"
                 },
@@ -1990,7 +1991,7 @@ data:
           {
             "columns": [],
             "datasource": null,
-            "description": "Available Filters: Time, Application, Module, Dataset and FileName",
+            "description": "Available Filters: Time, Application, Module and Dataset",
             "fontSize": "80%",
             "gridPos": {
               "h": 13,
@@ -2189,7 +2190,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend Application=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend Region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend Dataset = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend Path = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| extend User = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).userId) \r\n| where $__timeFilter(TimeGenerated)    \r\n| where Application in ($Application) and MODULO_s in (\"\", $Module) and Dataset  in (\"\" ,$Dataset) and fileName in ($FileName)\n| project Application, Region, processorStart, Dataset, Path, numRowsProcessed_,fileName, exceptionMessage_,  sqlFilter_, User\r\n, runId_ \r\n\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where CLASE_s == \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"\r\n| extend Application=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend Region = tostring(parse_json(PAYLOAD_s).REGION) \r\n| extend additionalInfo_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).additionalInfo) \r\n| extend Dataset = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).dataset) \r\n| extend endDate_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).endDate) \r\n| extend exceptionMessage_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).exceptionMessage) \r\n| extend fileName = tostring(split(tostring(split(tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).fileName), \"/\",3)[0]),\".xlsx\")[0])\r\n| extend processorStart = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).jobStartDate) \r\n| extend Path = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).path) \r\n| extend runId_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).runId) \r\n| extend sqlFilter_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).sqlFilter) \r\n| extend numRowsProcessed_ = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).numRowsProcessed) \r\n| extend User = tostring(parse_json(tostring(parse_json(PAYLOAD_s).MSG_INFO)).userId) \r\n| where $__timeFilter(TimeGenerated)    \r\n| where Application in ($Application) and MODULO_s in (\"\", $Module) and Dataset  in (\"\" ,$Dataset) \n| project Application, Region, processorStart, Dataset, Path, numRowsProcessed_,fileName, exceptionMessage_,  sqlFilter_, User\r\n, runId_ \r\n\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2225,49 +2226,121 @@ data:
           ],
           "templating": {
             "list": [
-            {
-              "allValue": null,
-              "current": {
-                "text": "AP_CORP_SYNERGI_LIFE + AP_CORP_SYNERGI_LIFE_WBS + AP_EYP_GESTION_MANTENIMIENTO_PERU + AP_EYP_OPENWELLS + AP_EYP_PMS + IA_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIROMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_EMISSIONS + IA_EYP_ENVIRONMENTAL_ENVIROSOFT + IA_EYP_ENVIRONMENTAL_SITUATIONS + IA_EYP_ENVIRONMENTAL_WASTE + IA_EYP_ENVIRONMENTAL_WATER + IA_EYP_PMER_DECOM + IA_EYP_PMER_DEV + ID_CORP_TERADATA_IAMS + ia_eyp_environmental_envirosoft",
-                "value": [
-                  "AP_CORP_SYNERGI_LIFE",
-                  "AP_CORP_SYNERGI_LIFE_WBS",
-                  "AP_EYP_GESTION_MANTENIMIENTO_PERU",
-                  "AP_EYP_OPENWELLS",
-                  "AP_EYP_PMS",
-                  "IA_ENVIRONMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIROMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIRONMENTAL_EMISSIONS",
-                  "IA_EYP_ENVIRONMENTAL_ENVIROSOFT",
-                  "IA_EYP_ENVIRONMENTAL_SITUATIONS",
-                  "IA_EYP_ENVIRONMENTAL_WASTE",
-                  "IA_EYP_ENVIRONMENTAL_WATER",
-                  "IA_EYP_PMER_DECOM",
-                  "IA_EYP_PMER_DEV",
-                  "ID_CORP_TERADATA_IAMS",
-                  "ia_eyp_environmental_envirosoft"
-                ]
+        {
+         "allValue": null,
+         "current": {
+           "text": "All",
+           "value": [
+             "$__all"
+           ]
+         },
+         "hide": 0,
+         "includeAll": true,
+         "label": "Application",
+         "multi": true,
+         "name": "Application",
+         "options": [
+                 {
+                   "$$hashKey": "object:281",
+                   "selected": true,
+                   "text": "All",
+                   "value": "$__all"
+                 },
+                 {
+                   "$$hashKey": "object:282",
+                   "selected": false,
+                   "text": "AP_CORP_SYNERGI_LIFE",
+                   "value": "AP_CORP_SYNERGI_LIFE"
+                 },
+                 {
+                   "$$hashKey": "object:283",
+                   "selected": false,
+                   "text": "AP_CORP_SYNERGI_LIFE_WBS",
+                   "value": "AP_CORP_SYNERGI_LIFE_WBS"
+                 },
+                 {
+                   "$$hashKey": "object:284",
+                   "selected": false,
+                   "text": "AP_EYP_OPENWELLS",
+                   "value": "AP_EYP_OPENWELLS"
+                 },
+                 {
+                   "$$hashKey": "object:285",
+                   "selected": false,
+                   "text": "AP_EYP_PMS",
+                   "value": "AP_EYP_PMS"
+                 },
+                 {
+                   "$$hashKey": "object:286",
+                   "selected": false,
+                   "text": "AP_EYP_GESTION_MANTENIMIENTO_PERU",
+                   "value": "AP_EYP_GESTION_MANTENIMIENTO_PERU"
+                 },
+                 {
+                   "$$hashKey": "object:287",
+                   "selected": false,
+                   "text": "ID_CORP_TERADATA_IAMS",
+                   "value": "ID_CORP_TERADATA_IAMS"
+                 },
+                 {
+                   "$$hashKey": "object:288",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_EMISSIONS",
+                   "value": "IA_EYP_ENVIRONMENTAL_EMISSIONS"
+                 },
+                 {
+                   "$$hashKey": "object:289",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_ENVIROSOFT",
+                   "value": "IA_EYP_ENVIRONMENTAL_ENVIROSOFT"
+                 },
+                 {
+                   "$$hashKey": "object:290",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_SITUATIONS",
+                   "value": "IA_EYP_ENVIRONMENTAL_SITUATIONS"
+                 },
+                 {
+                   "$$hashKey": "object:291",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_WASTE",
+                   "value": "IA_EYP_ENVIRONMENTAL_WASTE"
+                 },
+                 {
+                   "$$hashKey": "object:292",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_WATER",
+                   "value": "IA_EYP_ENVIRONMENTAL_WATER"
+                 },
+                 {
+                   "$$hashKey": "object:293",
+                   "selected": false,
+                   "text": "IA_EYP_PMER_DEV",
+                   "value": "IA_EYP_PMER_DEV"
+                 },
+                 {
+                   "$$hashKey": "object:294",
+                   "selected": false,
+                   "text": "IA_EYP_PMER_DECOM",
+                   "value": "IA_EYP_PMER_DECOM"
+                 },
+                 {
+                   "$$hashKey": "object:295",
+                   "selected": false,
+                   "text": "IA_EYP_HSE_PARAM",
+                   "value": "IA_EYP_HSE_PARAM"
+                 },
+                 {
+                   "$$hashKey": "object:296",
+                   "selected": false,
+                   "text": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
+                   "value": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM"
+                 }
+               ],
+               "query": "AP_CORP_SYNERGI_LIFE, AP_CORP_SYNERGI_LIFE_WBS, AP_EYP_OPENWELLS,  AP_EYP_PMS, AP_EYP_GESTION_MANTENIMIENTO_PERU, ID_CORP_TERADATA_IAMS,  IA_EYP_ENVIRONMENTAL_EMISSIONS,  IA_EYP_ENVIRONMENTAL_ENVIROSOFT,   IA_EYP_ENVIRONMENTAL_SITUATIONS, IA_EYP_ENVIRONMENTAL_WASTE, IA_EYP_ENVIRONMENTAL_WATER,  IA_EYP_PMER_DEV, IA_EYP_PMER_DECOM,IA_EYP_HSE_PARAM, IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
+               "skipUrlSync": false,
+               "type": "custom"
               },
-              "datasource": "azure-loganalytics-workspace",
-              "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
-              "hide": 0,
-              "includeAll": true,
-              "index": -1,
-              "label": "Application",
-              "multi": true,
-              "name": "Application",
-              "options": [],
-              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where app != \"\"\n| distinct app",
-              "refresh": 1,
-              "regex": "",
-              "skipUrlSync": false,
-              "sort": 1,
-              "tagValuesQuery": "",
-              "tags": [],
-              "tagsQuery": "",
-              "type": "query",
-              "useTags": false
-            },
             {
               "allValue": null,
               "current": {
@@ -2342,34 +2415,6 @@ data:
               "name": "Status",
               "options": [],
               "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| where app != \"\"\n| where  app in ($Application) \n| distinct status",
-              "refresh": 2,
-              "regex": "",
-              "skipUrlSync": false,
-              "sort": 1,
-              "tagValuesQuery": "",
-              "tags": [],
-              "tagsQuery": "",
-              "type": "query",
-              "useTags": false
-            },
-            {
-              "allValue": null,
-              "current": {
-                "text": "All",
-                "value": [
-                  "$__all"
-                ]
-              },
-              "datasource": "azure-loganalytics-workspace",
-              "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\n| where app in ($Application)\n| project fileName\n",
-              "hide": 0,
-              "includeAll": true,
-              "index": -1,
-              "label": "FileName",
-              "multi": true,
-              "name": "FileName",
-              "options": [],
-              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \n| extend fileName= tostring(split(parse_json(PAYLOAD_s).DATASET,\".xlsx\",0)[0])\n| where (INSTANCIA_s ==  \"validate\" ) and parse_json(PAYLOAD_s).LOGTYPE == \"INFO\" and parse_json(PAYLOAD_s).MSG_INFO contains \"[IAMS] - Validating the file: input-excel-file\"\n| where app in ($Application)\n| project fileName\n",
               "refresh": 2,
               "regex": "",
               "skipUrlSync": false,
