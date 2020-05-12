@@ -1327,7 +1327,7 @@ data:
                   "valueColumn": ""
                 },
                 "azureLogAnalytics": {
-                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend msg = strcat(strcat(tostring(parse_json(PAYLOAD_s).MSG_ERROR) ,tostring(parse_json(PAYLOAD_s).MSG)), tostring(parse_json(PAYLOAD_s).MSG_INFO))\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend logtype=tostring(parse_json(PAYLOAD_s).LOGTYPE)  \r\n| where $__timeFilter(TimeGenerated)    \r\n| where CLASE_s != \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"                            \r\n| where app in ($Application) and MODULO_s in (\"\",$Module) and dataset  in (\"\",$Dataset) and status in ($Status) \r\n| order by TimeGenerated desc\r\n| project \r\nEXECUTION_DATE=TimeGenerated,\r\nAPPLICATION=app,\r\nDATE_INPUT=tostring(parse_json(PAYLOAD_s).DATADATE), \r\nMODULE=MODULO_s, \r\nSTATUS=status,\r\nDATASET=dataset,\r\nREGION=region,\r\nLOG_TYPE=logtype,\r\nMSG=msg\r\n",
+                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend msg = strcat(strcat(tostring(parse_json(PAYLOAD_s).MSG_ERROR) ,tostring(parse_json(PAYLOAD_s).MSG)), tostring(parse_json(PAYLOAD_s).MSG_INFO))\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend logtype=tostring(parse_json(PAYLOAD_s).LOGTYPE)  \r\n| where $__timeFilter(TimeGenerated)    \r\n| where CLASE_s != \"com.repsol.datalake.iams.processor.IamsProcessorHelper.Control\"                            \r\n| where app in ($Application) and MODULO_s in (\"\",$Module) and dataset  in (\"\",$Dataset) and status in ($Status)  \rand logtype in ($Logtype)\n| order by TimeGenerated desc\r\n| project \r\nEXECUTION_DATE=TimeGenerated,\r\nAPPLICATION=app,\r\nDATE_INPUT=tostring(parse_json(PAYLOAD_s).DATADATE), \r\nMODULE=MODULO_s, \r\nSTATUS=status,\r\nDATASET=dataset,\r\nREGION=region,\r\nLOG_TYPE=logtype,\r\nMSG=msg\r\n",
                   "resultFormat": "table",
                   "workspace": "#{log-analytics-workspace-id}#"
                 },
@@ -2424,7 +2424,61 @@ data:
               "tagsQuery": "",
               "type": "query",
               "useTags": false
-            }
+            },
+              {
+                    "allValue": null,
+                    "current": {
+                          "text": "All",
+                          "value": [
+                                "$__all"
+                          ]
+                    },
+                    "datasource": "azure-loganalytics-workspace",
+                    "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where  app in ($Application)  and MODULO_s in (\"\", $Module)  \n| distinct  tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                    "hide": 0,
+                    "includeAll": true,
+                    "index": -1,
+                    "label": "Logtype",
+                    "multi": true,
+                    "name": "Logtype",
+                    "options": [
+                    {
+                          "selected": true,
+                          "text": "All",
+                          "value": "$__all"
+                    },
+                    {
+                          "selected": false,
+                          "text": "END",
+                          "value": "END"
+                    },
+                    {
+                          "selected": false,
+                          "text": "ERROR",
+                          "value": "ERROR"
+                    },
+                    {
+                          "selected": false,
+                          "text": "INFO",
+                          "value": "INFO"
+                    },
+                    {
+                          "selected": false,
+                          "text": "START",
+                          "value": "START"
+                    }
+                    ],
+                    "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| where  app in ($Application)  and MODULO_s in (\"\", $Module)  \n| distinct  tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                    "refresh": 0,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 1,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+              }
             ]
           },
           "time": {
