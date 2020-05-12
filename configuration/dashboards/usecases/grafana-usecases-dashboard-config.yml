@@ -1093,7 +1093,7 @@ data:
                   "valueColumn": ""
                 },
                 "azureLogAnalytics": {
-                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                             \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                             \r\n| where status == 'KO'  and app in ($Application) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count()\r",
+                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)   \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)    \r\n| where status == 'KO'  and app in ($Application) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count()\r",
                   "resultFormat": "table",
                   "workspace": "#{log-analytics-workspace-id}#"
                 },
@@ -1125,7 +1125,7 @@ data:
               "dashLength": 10,
               "dashes": false,
               "datasource": null,
-              "description": "Available Filters: Time, Application, Module, Dataset, Status \n",
+              "description": "Available Filters: Time, Application, Module, Dataset, Status and Logtype \n",
               "fill": 1,
               "fillGradient": 9,
               "gridPos": {
@@ -1182,7 +1182,7 @@ data:
                   "valueColumn": ""
                 },
                 "azureLogAnalytics": {
-                  "query": "\r\n CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where app in ($Application) and status in ($Status) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset)\r\n| summarize count() by status,  bin(TimeGenerated, $__interval)| order by TimeGenerated asc\r\n",
+                  "query": "\r\n CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS)\r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend modulo=MODULO_s \r\n| where $__timeFilter(TimeGenerated)  \r\n| extend logtype=tostring(parse_json(PAYLOAD_s).LOGTYPE)  \r\n| where app in ($Application) and status in ($Status) and modulo in (\"\", $Module) and dataset in (\"\",$Dataset) and logtype in ($Logtype) \r\n| summarize count() by status,  bin(TimeGenerated, $__interval)| order by TimeGenerated asc\r\n",
                   "resultFormat": "time_series",
                   "workspace": "#{log-analytics-workspace-id}#"
                 },
@@ -1249,7 +1249,7 @@ data:
             {
               "columns": [],
               "datasource": null,
-              "description": "Available Filters: Time, Application, Module, Dataset, Status \n",
+              "description": "Available Filters: Time, Application, Module, Dataset, Status and Logtype\n",
               "fontSize": "90%",
               "gridPos": {
                 "h": 14,
