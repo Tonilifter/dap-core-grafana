@@ -40,7 +40,7 @@ data:
         type: mssql
         url: #{db-metadata-host}#
         database: #{db-metadata-dbname}#
-        user: #{db-metadata-user-name}#
+        user: #{db-mtdt-reader-user}#
         secureJsonData:
-          password: #{dba-password}#
+          password: #{db-mtdt-reader-password}#
 ---
