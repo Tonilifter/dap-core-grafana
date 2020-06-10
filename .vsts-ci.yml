@@ -23,6 +23,9 @@ steps:
       azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
       azureContainerRegistry: daplatform0101pcr.azurecr.io
       dockerFile: Dockerfile
+      arguments: 
+        -e "GF_INSTALL_PLUGINS=natel-plotly-panel,grafana-piechart-panel"
+
 
   - task: Docker@1
     displayName: 'Push an image'
