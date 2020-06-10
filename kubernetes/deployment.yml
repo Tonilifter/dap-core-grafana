@@ -49,9 +49,9 @@ spec:
               memory: "1Gi"
               cpu: "500m"
           volumeMounts:
-            - mountPath: /var/lib/grafana
-              name: grafana-storage
-              readOnly: false
+            # - mountPath: /var/lib/grafana
+            #   name: grafana-storage
+            #   readOnly: false
             - mountPath: /var/lib/grafana/dashboards/core
               name: grafana-core-dashboards
               readOnly: true
@@ -91,8 +91,8 @@ spec:
             - name: GF_AUTH_GENERIC_OAUTH_ALLOWED_DOMAINS
               value: repsol.com servexternos.repsol.com
       volumes:
-        - name: grafana-storage
-          emptyDir: {}
+        # - name: grafana-storage
+        #   emptyDir: {}
         - name: grafana-core-dashboards
           configMap:
             defaultMode: 420
