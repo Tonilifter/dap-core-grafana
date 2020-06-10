@@ -6,7 +6,7 @@ trigger:
       - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: RDT Repsol Linux EU - Datahub
 
 steps:
   - task: qetza.replacetokens.replacetokens-task.replacetokens@3
@@ -23,8 +23,10 @@ steps:
       azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
       azureContainerRegistry: daplatform0101pcr.azurecr.io
       dockerFile: Dockerfile
-      envVars: 
-        "GF_INSTALL_PLUGINS=natel-plotly-panel,grafana-piechart-panel"
+      arguments: 
+        --build-arg "GF_INSTALL_PLUGINS=natel-plotly-panel,grafana-piechart-panel"
+        --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080 
+        --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080 
 
 
   - task: Docker@1
