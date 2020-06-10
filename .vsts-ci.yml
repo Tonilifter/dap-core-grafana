@@ -24,7 +24,6 @@ steps:
       azureContainerRegistry: daplatform0101pcr.azurecr.io
       dockerFile: Dockerfile
       arguments: 
-        --build-arg "GF_INSTALL_PLUGINS=natel-plotly-panel,grafana-piechart-panel"
         --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080 
         --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080 
 
