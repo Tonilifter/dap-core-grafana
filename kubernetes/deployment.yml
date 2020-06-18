@@ -49,9 +49,6 @@ spec:
               memory: "1Gi"
               cpu: "500m"
           volumeMounts:
-            # - mountPath: /var/lib/grafana
-            #   name: grafana-storage
-            #   readOnly: false
             - mountPath: /var/lib/grafana/dashboards/core
               name: grafana-core-dashboards
               readOnly: true
@@ -79,9 +76,9 @@ spec:
             - name: GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP
               value: 'True'
             - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
-              value: 6ac06a79-9632-43a3-a789-72e3f382848d
+              value: #{adapp-grafanacore-id}#
             - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
-              value: #{grafana-oauth-secret}#
+              value: #{adsp-grafanacore-secret}#
             - name: GF_AUTH_GENERIC_OAUTH_SCOPES
               value: openid email profile
             - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
@@ -91,8 +88,6 @@ spec:
             - name: GF_AUTH_GENERIC_OAUTH_ALLOWED_DOMAINS
               value: repsol.com servexternos.repsol.com
       volumes:
-        # - name: grafana-storage
-        #   emptyDir: {}
         - name: grafana-core-dashboards
           configMap:
             defaultMode: 420

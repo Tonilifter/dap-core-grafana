@@ -3011,4 +3011,1221 @@ data:
       },
       "version": 18
     }
+  data-quality-overview-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 11,
+      "iteration": 1592462117038,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "azure-loganalytics-workspace",
+          "gridPos": {
+            "h": 5,
+            "w": 6,
+            "x": 0,
+            "y": 0
+          },
+          "id": 7,
+          "options": {
+            "fieldOptions": {
+              "calcs": [
+                "sum"
+              ],
+              "defaults": {
+                "decimals": 2,
+                "mappings": [],
+                "max": 100,
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 35
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 70
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "orientation": "auto",
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100-avg(percent_excluded)",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Overall Data Quality",
+          "type": "gauge"
+        },
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 10,
+            "w": 18,
+            "x": 6,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 2,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "PERCENT_ROWS_EXCLUDED",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "PERCENT_EXCLUDED",
+              "thresholds": [],
+              "type": "number",
+              "unit": "percent"
+            },
+            {
+              "alias": "EXECUTION_DATE",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "EXECUTION_DATE",
+              "thresholds": [],
+              "type": "date",
+              "unit": "short"
+            },
+            {
+              "alias": "APPLICATION",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "link": true,
+              "linkTargetBlank": true,
+              "linkTooltip": "",
+              "linkUrl": "https://#{Namespace}#akcore.cloudapp.repsol.com/d/XfUJcTiGk/data-quality-detail?var-application=${__cell}&var-region=${__cell_1}&var-datadate=${__cell_2}&var-timestamp=${__cell_3}",
+              "mappingType": 1,
+              "pattern": "APPLICATION",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| where $__timeFilter(TimeGenerated)\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app in ($Application) and region in ($Region)\n| project \r\n    APPLICATION=app,\r\n    EXECUTION_DATE=TimeGenerated, \r\n    REGION=region, \r\n    DATA_DATE=datadate, \r\n    TOTAL_ROWS_EXCLUDED=toint(cleaner_results.total_row_excluded), \r\n    PERCENT_EXCLUDED = todouble(cleaner_results.percent_excluded)\r\n| summarize arg_max(EXECUTION_DATE, *) by APPLICATION, REGION, DATA_DATE\r\n| sort by DATA_DATE desc",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            },
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "//change this example to create your own time series query\n<table name>                                                              //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\n| summarize count() by <group by column>, bin(TimeGenerated, $__interval) //change “group by column” to a column in your table, such as “Computer”. The $__interval macro is used to auto-select the time grain. Can also use 1h, 5m etc.\n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Monitor",
+              "refId": "B",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Data Quality Overview By Application And Region",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "datasource": "azure-loganalytics-workspace",
+          "gridPos": {
+            "h": 5,
+            "w": 6,
+            "x": 0,
+            "y": 5
+          },
+          "id": 6,
+          "options": {
+            "fieldOptions": {
+              "calcs": [
+                "sum"
+              ],
+              "defaults": {
+                "decimals": 2,
+                "mappings": [],
+                "max": 100,
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 35
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 70
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "orientation": "auto",
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| where app in ($Application) and region in ($Region)\n| where $__timeFilter(tdatadate)\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100-avg(percent_excluded)\n\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Overall Data Quality By App And Region",
+          "type": "gauge"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "cacheTimeout": null,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 10
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend total_row_excluded = toint(cleaner_results.total_row_excluded)\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where region in ($Region) and app in ($Application)\r\n| summarize arg_max(TimeGenerated, *) by app, region, datadate\n| summarize sum(100-percent_excluded) by app, bin(tdatadate, $__interval)\n| sort by tdatadate asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": "1d",
+          "timeRegions": [],
+          "timeShift": "1d",
+          "title": "Data Quality over Time And Region By App",
+          "tooltip": {
+            "shared": false,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "",
+              "value": [
+                ""
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Application",
+            "multi": true,
+            "name": "Application",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "",
+              "value": [
+                ""
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Region",
+            "multi": true,
+            "name": "Region",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "2020-05-22T22:00:00.000Z",
+        "to": "2020-07-13T21:59:59.000Z"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "utc",
+      "title": "Data Quality Overview",
+      "uid": "YR8fu-iGk",
+      "variables": {
+        "list": []
+      },
+      "version": 36
+    }
+  data-quality-detail-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 12,
+      "iteration": 1592471124070,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "azure-loganalytics-workspace",
+          "gridPos": {
+            "h": 11,
+            "w": 2,
+            "x": 0,
+            "y": 0
+          },
+          "id": 9,
+          "options": {
+            "displayMode": "lcd",
+            "fieldOptions": {
+              "calcs": [
+                "sum"
+              ],
+              "defaults": {
+                "decimals": 2,
+                "mappings": [],
+                "max": 100,
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 35
+                    },
+                    {
+                      "color": "dark-green",
+                      "value": 75
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "orientation": "vertical",
+            "showUnfilled": true
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \r\n| where TimeGenerated==\"$timestamp\"\n| where dataset in ($dataset)\r\n| summarize (100-avg(todouble(cleaner_results.percent_excluded)))\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Data Quality",
+          "type": "bargauge"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 5,
+            "w": 3,
+            "x": 2,
+            "y": 0
+          },
+          "id": 5,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "sum"
+              ],
+              "defaults": {
+                "decimals": 0,
+                "mappings": [],
+                "max": 10000,
+                "min": 0,
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-green",
+                      "value": null
+                    }
+                  ]
+                },
+                "title": "",
+                "unit": "none"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "center",
+            "orientation": "horizontal"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where dataset in ($dataset)\n| where TimeGenerated == todatetime(\"$timestamp\")\n| project \r\nROWS_AFFECTED =  toint(rule_list.rows_excluded),\r\nPERCENT_EXCLUDED = todouble(cleaner_results.percent_excluded)\n| summarize ((100 * sum(ROWS_AFFECTED)) / avg(PERCENT_EXCLUDED))-sum(ROWS_AFFECTED)",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Valid rows",
+          "type": "stat"
+        },
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 11,
+            "w": 19,
+            "x": 5,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "EXTRACTION_DATE",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD",
+              "pattern": "EXTRACTION_DATE",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 0,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "none"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where TimeGenerated==\"$timestamp\"\n| where dataset in ($dataset)\n| order by TimeGenerated asc\r\n| project \r\nAPPLICATION = app,\r\nREGION = region,\r\nDATASET = dataset,\r\nEXTRACTION_DATE = datadate,\r\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED =  tostring(rule_list.rows_excluded),\r\nTOTAL_ROWS_AFFECTED= tostring(cleaner_results.total_row_excluded)\n| summarize by APPLICATION, REGION, DATASET, EXTRACTION_DATE, VALIDATION_MESSAGE, ROWS_AFFECTED, TOTAL_ROWS_AFFECTED\r\n",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Unfulfilled Validation Rules",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 6,
+            "w": 3,
+            "x": 2,
+            "y": 5
+          },
+          "id": 4,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "sum"
+              ],
+              "defaults": {
+                "mappings": [],
+                "max": 10000,
+                "min": 0,
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "dark-red",
+                      "value": null
+                    }
+                  ]
+                },
+                "title": "",
+                "unit": "none"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "center",
+            "orientation": "horizontal"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where dataset in ($dataset)\n| where TimeGenerated == todatetime(\"$timestamp\")\n| project \r\nROWS_AFFECTED =  toint(rule_list.rows_excluded)\n| summarize sum(ROWS_AFFECTED)",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Not valid rows",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "cacheTimeout": null,
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": "azure-loganalytics-workspace",
+          "decimals": null,
+          "fontSize": "80%",
+          "format": "short",
+          "gridPos": {
+            "h": 11,
+            "w": 8,
+            "x": 0,
+            "y": 11
+          },
+          "id": 7,
+          "interval": null,
+          "legend": {
+            "header": "rows",
+            "percentage": true,
+            "show": true,
+            "sideWidth": null,
+            "values": true
+          },
+          "legendType": "Right side",
+          "links": [],
+          "maxDataPoints": 1,
+          "nullPointMode": "connected",
+          "pieType": "donut",
+          "strokeWidth": 1,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where TimeGenerated==\"$timestamp\"\n| where dataset in ($dataset)\n| order by TimeGenerated asc\r\n| project \r\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED =  toint(rule_list.rows_excluded),\r\nTimeGenerated\n",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Unfulfilled Validation Rules By Type",
+          "type": "grafana-piechart-panel",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "decimals": 2,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 11,
+            "w": 16,
+            "x": 8,
+            "y": 11
+          },
+          "hiddenSeries": false,
+          "id": 11,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "hideEmpty": true,
+            "hideZero": true,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend dataset=tostring(payload.DATASET)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where region==\"$region\" and app==\"$application\"\n| summarize arg_max(TimeGenerated, *) by datadate, dataset\n| summarize sum(100-percent_excluded) by dataset, bin(tdatadate, $__interval)\n| sort by tdatadate asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": "1d",
+          "timeRegions": [],
+          "timeShift": "1d",
+          "title": "Data Quality over Time By Dataset",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": null,
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            },
+            {
+              "decimals": 2,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": "100",
+              "min": "0",
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {
+              "text": "",
+              "value": ""
+            },
+            "hide": 0,
+            "label": "Application",
+            "name": "application",
+            "options": [
+              {
+                "selected": true,
+                "text": "",
+                "value": ""
+              }
+            ],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          },
+          {
+            "current": {
+              "text": "",
+              "value": ""
+            },
+            "hide": 0,
+            "label": "Region",
+            "name": "region",
+            "options": [
+              {
+                "selected": true,
+                "text": "",
+                "value": ""
+              }
+            ],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "",
+              "value": [
+                ""
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where app=='$application'\n| distinct dataset",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Dataset",
+            "multi": true,
+            "name": "dataset",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where app=='$application'\n| distinct dataset",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "current": {
+              "text": "",
+              "value": ""
+            },
+            "hide": 0,
+            "label": "Date",
+            "name": "datadate",
+            "options": [
+              {
+                "selected": true,
+                "text": "",
+                "value": ""
+              }
+            ],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          },
+          {
+            "current": {
+              "selected": false,
+              "text": "",
+              "value": ""
+            },
+            "hide": 0,
+            "label": null,
+            "name": "timestamp",
+            "options": [
+              {
+                "selected": true,
+                "text": "",
+                "value": ""
+              }
+            ],
+            "query": "",
+            "skipUrlSync": false,
+            "type": "textbox"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "utc",
+      "title": "Data Quality Detail",
+      "uid": "XfUJcTiGk",
+      "variables": {
+        "list": []
+      },
+      "version": 35
+    }
 ---
