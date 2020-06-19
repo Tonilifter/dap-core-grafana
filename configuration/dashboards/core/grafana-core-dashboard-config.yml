@@ -3468,15 +3468,15 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "index": -1,
             "label": "Application",
             "multi": true,
@@ -3496,15 +3496,15 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "index": -1,
             "label": "Region",
             "multi": true,
@@ -4136,15 +4136,15 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where app=='$application'\n| distinct dataset",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "index": -1,
             "label": "Dataset",
             "multi": true,

@@ -5,8 +5,6 @@ COPY ./configuration/providers/grafana-dashboard-provider.yml /etc/grafana/provi
 # COPY ./configuration/notifiers /etc/grafana/provisioning/notifiers
 
 RUN grafana-cli --pluginsDir "/var/lib/grafana/plugins" plugins install grafana-piechart-panel; 
-RUN grafana-cli --pluginsDir "/var/lib/grafana/plugins" plugins install natel-plotly-panel; 
-RUN grafana-cli --pluginsDir "/var/lib/grafana/plugins" plugins install michaeldmoore-multistat-panel; 
 
 EXPOSE 3000
 
