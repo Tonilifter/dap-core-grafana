@@ -3418,7 +3418,7 @@ data:
             }
           ],
           "thresholds": [],
-          "timeFrom": "1d",
+          "timeFrom": "1M",
           "timeRegions": [],
           "timeShift": "1d",
           "title": "Data Quality over Time And Region By App",
@@ -3524,8 +3524,8 @@ data:
         ]
       },
       "time": {
-        "from": "2020-05-22T22:00:00.000Z",
-        "to": "2020-07-13T21:59:59.000Z"
+        "from": "now-1M",
+        "to": "now"
       },
       "timepicker": {
         "refresh_intervals": [
@@ -3755,11 +3755,20 @@ data:
           },
           "styles": [
             {
-              "alias": "EXTRACTION_DATE",
-              "align": "auto",
-              "dateFormat": "YYYY-MM-DD",
-              "pattern": "EXTRACTION_DATE",
-              "type": "date"
+              "alias": "TOTAL_ROWS_AFFECTED",
+              "align": "",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "TOTAL_ROWS_AFFECTED",
+              "thresholds": [],
+              "type": "number",
+              "unit": "percentunit"
             },
             {
               "alias": "",
@@ -3789,7 +3798,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where TimeGenerated==\"$timestamp\"\n| where dataset in ($dataset)\n| order by TimeGenerated asc\r\n| project \r\nAPPLICATION = app,\r\nREGION = region,\r\nDATASET = dataset,\r\nEXTRACTION_DATE = datadate,\r\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED =  tostring(rule_list.rows_excluded),\r\nTOTAL_ROWS_AFFECTED= tostring(cleaner_results.total_row_excluded)\n| summarize by APPLICATION, REGION, DATASET, EXTRACTION_DATE, VALIDATION_MESSAGE, ROWS_AFFECTED, TOTAL_ROWS_AFFECTED\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend dataset=tostring(payload.DATASET)\n| extend datadate=tostring(payload.DATADATE)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| where MODULO_s == \"SANITED\"\r\n| where NIVEL_s == \"WARN\"\r\n| where app==\"$application\" and datadate==\"$datadate\" \n| where TimeGenerated==\"$timestamp\"\n| where dataset in ($dataset)\n| order by TimeGenerated asc\r\n| project \r\nAPPLICATION = app,\r\nREGION = region,\r\nDATASET = dataset,\r\nEXTRACTION_DATE = datadate,\r\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED =  tostring(rule_list.rows_excluded),\r\nTOTAL_ROWS_AFFECTED=(todouble(rule_list.rows_excluded)/todouble(cleaner_results.total_row_excluded))\n| summarize by APPLICATION, REGION, DATASET, EXTRACTION_DATE, VALIDATION_MESSAGE, ROWS_AFFECTED, TOTAL_ROWS_AFFECTED\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4046,7 +4055,7 @@ data:
             }
           ],
           "thresholds": [],
-          "timeFrom": "1d",
+          "timeFrom": "6M",
           "timeRegions": [],
           "timeShift": "1d",
           "title": "Data Quality over Time By Dataset",
@@ -4186,7 +4195,7 @@ data:
               "text": "",
               "value": ""
             },
-            "hide": 0,
+            "hide": 2,
             "label": null,
             "name": "timestamp",
             "options": [
@@ -4203,7 +4212,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-6h",
+        "from": "now-1M",
         "to": "now"
       },
       "timepicker": {
