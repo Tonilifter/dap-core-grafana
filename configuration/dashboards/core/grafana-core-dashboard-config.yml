@@ -2662,7 +2662,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\"\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, id, resultCode, duration_in_seconds, timestamp\n| order by timestamp desc  ",
+                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\"\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
                 "resultFormat": "time_series",
                 "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
               },
