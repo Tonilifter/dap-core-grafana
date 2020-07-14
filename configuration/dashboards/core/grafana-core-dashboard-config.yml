@@ -2524,89 +2524,10 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 3,
+      "id": 5,
+      "iteration": 1594727588097,
       "links": [],
       "panels": [
-        {
-          "columns": [],
-          "datasource": null,
-          "fontSize": "100%",
-          "gridPos": {
-            "h": 25,
-            "w": 24,
-            "x": 0,
-            "y": 0
-          },
-          "id": 2,
-          "pageSize": null,
-          "showHeader": true,
-          "sort": {
-            "col": 0,
-            "desc": true
-          },
-          "styles": [
-            {
-              "alias": "Time",
-              "align": "auto",
-              "dateFormat": "YYYY-MM-DD HH:mm:ss",
-              "pattern": "Time",
-              "type": "date"
-            },
-            {
-              "alias": "",
-              "align": "right",
-              "colorMode": null,
-              "colors": [
-                "rgba(245, 54, 54, 0.9)",
-                "rgba(237, 129, 40, 0.89)",
-                "rgba(50, 172, 45, 0.97)"
-              ],
-              "decimals": 2,
-              "pattern": "/.*/",
-              "thresholds": [],
-              "type": "number",
-              "unit": "short"
-            }
-          ],
-          "targets": [
-            {
-              "appInsights": {
-                "dimension": "none",
-                "metricName": "select",
-                "rawQuery": false,
-                "rawQueryString": "",
-                "timeColumn": "timestamp",
-                "timeGrain": "auto",
-                "valueColumn": ""
-              },
-              "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\"\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
-                "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
-              },
-              "azureMonitor": {
-                "aggOptions": [],
-                "dimensionFilter": "*",
-                "metricDefinition": "select",
-                "metricName": "select",
-                "metricNamespace": "select",
-                "resourceGroup": "select",
-                "resourceName": "select",
-                "timeGrain": "auto",
-                "timeGrains": [],
-                "top": "10"
-              },
-              "queryType": "Azure Log Analytics",
-              "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Logs",
-          "transform": "table",
-          "type": "table"
-        },
         {
           "aliasColors": {},
           "bars": false,
@@ -2618,9 +2539,9 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 9,
-            "w": 24,
+            "w": 18,
             "x": 0,
-            "y": 25
+            "y": 0
           },
           "hiddenSeries": false,
           "id": 4,
@@ -2662,7 +2583,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\"\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
                 "resultFormat": "time_series",
                 "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
               },
@@ -2732,13 +2653,214 @@ data:
             "align": false,
             "alignLevel": null
           }
+        },
+        {
+          "datasource": "azure-loganalytics-workspace",
+          "description": "",
+          "gridPos": {
+            "h": 9,
+            "w": 6,
+            "x": 18,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [
+                  {
+                    "from": "",
+                    "id": 1,
+                    "operator": "",
+                    "text": "0",
+                    "to": "",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 20
+                    },
+                    {
+                      "color": "#E24D42",
+                      "value": 50
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where resultCode != 200\n| summarize count()",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Errores",
+          "type": "stat"
+        },
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 25,
+            "w": 24,
+            "x": 0,
+            "y": 9
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "right",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Logs",
+          "transform": "table",
+          "type": "table"
         }
       ],
       "schemaVersion": 22,
       "style": "dark",
       "tags": [],
       "templating": {
-        "list": []
+        "list": [
+          {
+            "allValue": "",
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| distinct name",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "App Function Name",
+            "multi": true,
+            "name": "name",
+            "options": [],
+            "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| distinct name",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
       },
       "time": {
         "from": "now-6h",
