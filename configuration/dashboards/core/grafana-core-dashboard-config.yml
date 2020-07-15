@@ -2524,8 +2524,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 5,
-      "iteration": 1594727588097,
+      "id": 8,
+      "iteration": 1594795417796,
       "links": [],
       "panels": [
         {
@@ -2583,7 +2583,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
                 "resultFormat": "time_series",
                 "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
               },
@@ -2604,16 +2604,7 @@ data:
               "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
             }
           ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 5,
-              "yaxis": "left"
-            }
-          ],
+          "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
@@ -2720,7 +2711,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where resultCode != 200\n| summarize count()",
+                "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| where resultCode != 200\n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
               },
@@ -2799,7 +2790,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
+                "query": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
                 "resultFormat": "table",
                 "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
               },
@@ -2833,6 +2824,55 @@ data:
       "templating": {
         "list": [
           {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| project cloud_RoleName",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "App Function",
+            "multi": true,
+            "name": "RoleName",
+            "options": [
+              {
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "selected": false,
+                "text": "daplatform0101lfcoexpy",
+                "value": "daplatform0101lfcoexpy"
+              },
+              {
+                "selected": false,
+                "text": "daplatform0101lfcopipy",
+                "value": "daplatform0101lfcopipy"
+              },
+              {
+                "selected": false,
+                "text": "daplatform0101lfcorepy",
+                "value": "daplatform0101lfcorepy"
+              }
+            ],
+            "query": "union\napp('daplatform0101lfcorepyai').traces,\napp('daplatform0101lfcoexpyai').traces,\napp('daplatform0101lfcopipyai').traces\n| project cloud_RoleName",
+            "refresh": 0,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
             "allValue": "",
             "current": {
               "text": "All",
@@ -2841,15 +2881,15 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| distinct name",
+            "definition": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "hide": 0,
             "includeAll": true,
             "index": -1,
-            "label": "App Function Name",
+            "label": "Function Name",
             "multi": true,
             "name": "name",
             "options": [],
-            "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| distinct name",
+            "query": "union\napp('daplatform0101lfcorepyai').requests,\napp('daplatform0101lfcoexpyai').requests,\napp('daplatform0101lfcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
