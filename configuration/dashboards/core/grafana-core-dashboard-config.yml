@@ -2525,8 +2525,333 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": 9,
+      "iteration": 1594796299590,
       "links": [],
       "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 10,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by cloud_RoleName, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Duración por App Function",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 11,
+            "x": 10,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": false,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null as zero",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Duración por Function Name",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "datasource": "azure-loganalytics-workspace",
+          "description": "",
+          "gridPos": {
+            "h": 7,
+            "w": 3,
+            "x": 21,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [
+                  {
+                    "from": "",
+                    "id": 1,
+                    "operator": "",
+                    "text": "0",
+                    "to": "",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 20
+                    },
+                    {
+                      "color": "#E24D42",
+                      "value": 50
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| where resultCode != 200\n| summarize count()",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Errores",
+          "type": "stat"
+        },
         {
           "columns": [],
           "datasource": null,
@@ -2535,7 +2860,7 @@ data:
             "h": 25,
             "w": 24,
             "x": 0,
-            "y": 0
+            "y": 7
           },
           "id": 2,
           "pageSize": null,
@@ -2580,7 +2905,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\"\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
+                "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2612,7 +2937,85 @@ data:
       "style": "dark",
       "tags": [],
       "templating": {
-        "list": []
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "App Function",
+            "multi": true,
+            "name": "RoleName",
+            "options": [
+              {
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fcoexpy",
+                "value": "#{Namespace}#fcoexpy"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fcopipy",
+                "value": "#{Namespace}#fcopipy"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fcorepy",
+                "value": "#{Namespace}#fcorepy"
+              }
+            ],
+            "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "refresh": 0,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": "",
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Function Name",
+            "multi": true,
+            "name": "name",
+            "options": [],
+            "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
       },
       "time": {
         "from": "now-6h",
