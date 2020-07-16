@@ -2923,7 +2923,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
