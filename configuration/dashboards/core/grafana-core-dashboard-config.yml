@@ -3156,7 +3156,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT TOP (1000) * FROM [pitagmanager].[pi_system_tags]",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_tags] ORDER BY pi_server",
               "refId": "A"
             }
           ],
@@ -3384,7 +3384,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_order_tags]",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_order_items]",
               "refId": "A"
             }
           ],
