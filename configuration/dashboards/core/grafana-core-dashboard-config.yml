@@ -3494,7 +3494,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLogLab_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100 - avg(percent_excluded)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100 - avg(percent_excluded)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3604,7 +3604,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLogTest_CL\n| extend payload = parse_json(PAYLOAD_s)\n| extend region=tostring(payload.REGION)\n| extend app=tostring(payload.APPLICATION)\n| extend datadate=tostring(payload.DATADATE)\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_OUT\n| extend dataset_name = dataset.NAME\n| extend dataset_length = dataset.NUM_ITEMS\n| extend total_rows_excluded = toint(cleaner_results.total_row_excluded)\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\" and logtype == \"END\"\n| order by TimeGenerated desc\n| project \n APPLICATION=app,\n EXECUTION_DATE=TimeGenerated,\n REGION=region,\n DATA_DATE=datadate,\n TOTAL_ROWS_EXCLUDED=total_rows_excluded,\n PERCENT_EXCLUDED = percent_excluded,\n DATASET_NAME = tostring(dataset_name)\n| summarize arg_max(EXECUTION_DATE, APPLICATION, REGION, DATA_DATE),\nTOTAL_ROWS_EXCLUDED = sum(TOTAL_ROWS_EXCLUDED),\nPERCENT_EXCLUDED = avg(PERCENT_EXCLUDED)\nby APPLICATION, REGION, DATA_DATE\n| project APPLICATION, REGION, DATA_DATE, EXECUTION_DATE, TOTAL_ROWS_EXCLUDED, PERCENT_EXCLUDED\n| sort by DATA_DATE desc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend payload = parse_json(PAYLOAD_s)\n| extend region=tostring(payload.REGION)\n| extend app=tostring(payload.APPLICATION)\n| extend datadate=tostring(payload.DATADATE)\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_OUT\n| extend dataset_name = dataset.NAME\n| extend dataset_length = dataset.NUM_ITEMS\n| extend total_rows_excluded = toint(cleaner_results.total_row_excluded)\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\" and logtype == \"END\"\n| order by TimeGenerated desc\n| project \n APPLICATION=app,\n EXECUTION_DATE=TimeGenerated,\n REGION=region,\n DATA_DATE=datadate,\n TOTAL_ROWS_EXCLUDED=total_rows_excluded,\n PERCENT_EXCLUDED = percent_excluded,\n DATASET_NAME = tostring(dataset_name)\n| summarize arg_max(EXECUTION_DATE, APPLICATION, REGION, DATA_DATE),\nTOTAL_ROWS_EXCLUDED = sum(TOTAL_ROWS_EXCLUDED),\nPERCENT_EXCLUDED = avg(PERCENT_EXCLUDED)\nby APPLICATION, REGION, DATA_DATE\n| project APPLICATION, REGION, DATA_DATE, EXECUTION_DATE, TOTAL_ROWS_EXCLUDED, PERCENT_EXCLUDED\n| sort by DATA_DATE desc",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3720,7 +3720,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLogLab_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where app in ($Application) and region in ($Region)\n| where $__timeFilter(tdatadate)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100-avg(percent_excluded)\n\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where app in ($Application) and region in ($Region)\n| where $__timeFilter(tdatadate)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| project  app, percent_excluded, TimeGenerated, datadate\r\n| summarize arg_max(TimeGenerated, *) by app, datadate\r\n| summarize 100-avg(percent_excluded)\n\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3799,7 +3799,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLogLab_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| where region in ($Region) and app in ($Application)\r\n| summarize arg_max(TimeGenerated, *) by app, region, datadate\n| summarize sum(100-percent_excluded) by app, bin(tdatadate, $__interval)\n| sort by tdatadate asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate = todatetime(replace(\"/\",\"-\", tostring(payload.DATADATE)))\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend percent_excluded = todouble(cleaner_results.percent_excluded)\r\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\"\r and logtype == \"END\"\n| where region in ($Region) and app in ($Application)\r\n| summarize arg_max(TimeGenerated, *) by app, region, datadate\n| summarize sum(100-percent_excluded) by app, bin(tdatadate, $__interval)\n| sort by tdatadate asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4554,7 +4554,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where app=='$application'\n| distinct dataset",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend payload = parse_json(PAYLOAD_s)\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_IN\n| extend dataset_name = dataset.NAME\n| where app=='$application'\n| distinct tostring(dataset_name)",
             "hide": 0,
             "includeAll": true,
             "index": -1,
@@ -4562,7 +4562,7 @@ data:
             "multi": true,
             "name": "dataset",
             "options": [],
-            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\n| where app=='$application'\n| distinct dataset",
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \n| extend payload = parse_json(PAYLOAD_s)\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_IN\n| extend dataset_name = dataset.NAME\n| where app=='$application'\n| distinct tostring(dataset_name)",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
