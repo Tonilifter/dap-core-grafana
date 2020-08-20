@@ -3390,7 +3390,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Order Tags",
+          "title": "Order Items",
           "transform": "table",
           "type": "table"
         }
