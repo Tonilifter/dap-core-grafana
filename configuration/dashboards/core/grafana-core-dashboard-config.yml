@@ -4943,7 +4943,7 @@ data:
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "index": -1,
             "label": "UID",
             "multi": true,
