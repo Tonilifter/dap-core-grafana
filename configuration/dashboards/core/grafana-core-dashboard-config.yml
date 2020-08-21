@@ -4935,9 +4935,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "AP_CORP_SYNERGI_LIFE_WBS_GLB",
+              "text": "All",
               "value": [
-                "AP_CORP_SYNERGI_LIFE_WBS_GLB"
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
