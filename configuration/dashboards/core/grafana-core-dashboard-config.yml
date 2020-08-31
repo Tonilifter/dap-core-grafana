@@ -4933,7 +4933,7 @@ data:
       "templating": {
         "list": [
           {
-            "allValue": null,
+            "allValue": "",
             "current": {
               "text": "All",
               "value": [
