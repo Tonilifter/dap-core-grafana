@@ -4695,7 +4695,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend payload = parse_json(PAYLOAD_s)\n| extend datadate=tostring(payload.DATADATE)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)\n| extend msg_error = tostring(payload.MSG_ERROR)\n| extend msg = tostring(payload.MSG)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| project UID_s, DATADATE=datadate, LOGTYPE=logtype, STATUS=tostring(status), MSG_END_KO=tostring(msg), MSG_ERROR=tostring(msg_error)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend payload = parse_json(PAYLOAD_s)\n| extend region=tostring(payload.REGION)\n| extend app=tostring(payload.APPLICATION)\n| extend datadate=tostring(payload.DATADATE)\n| extend msg = tostring(payload.MSG)\n| extend status = tostring(payload.STATUS)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_OUT\n| extend dataset_name = dataset.NAME\n| extend logtype = tostring(payload.LOGTYPE)\n| where region in ($Region) and app in ($Application)\r\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| order by TimeGenerated desc\n| project \n UID=UID_s,\n DATA_DATE=datadate,\n LOGTYPE=logtype,\n STATUS=tostring(status),\n MSG=tostring(msg)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4933,7 +4933,7 @@ data:
       "templating": {
         "list": [
           {
-            "allValue": "",
+            "allValue": null,
             "current": {
               "text": "All",
               "value": [
@@ -4941,15 +4941,43 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
             "hide": 0,
             "includeAll": true,
             "index": -1,
-            "label": "UID",
+            "label": "Application",
             "multi": true,
-            "name": "UID",
+            "name": "Application",
             "options": [],
-            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Region",
+            "multi": true,
+            "name": "Region",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
