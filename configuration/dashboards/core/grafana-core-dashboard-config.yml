@@ -23,7 +23,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 2,
+      "id": 8,
       "links": [],
       "panels": [
         {
@@ -172,7 +172,7 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
+            "w": 6,
             "x": 18,
             "y": 0
           },
@@ -273,7 +273,7 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
-            "w": 23,
+            "w": 24,
             "x": 0,
             "y": 8
           },
@@ -382,7 +382,7 @@ data:
           "fontSize": "100%",
           "gridPos": {
             "h": 10,
-            "w": 23,
+            "w": 24,
             "x": 0,
             "y": 16
           },
@@ -974,7 +974,7 @@ data:
           "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
-            "h": 9,
+            "h": 11,
             "w": 18,
             "x": 0,
             "y": 0
@@ -1053,8 +1053,8 @@ data:
         {
           "datasource": null,
           "gridPos": {
-            "h": 9,
-            "w": 5,
+            "h": 11,
+            "w": 6,
             "x": 18,
             "y": 0
           },
@@ -1140,10 +1140,10 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 11,
             "w": 12,
             "x": 0,
-            "y": 9
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 6,
@@ -1256,10 +1256,10 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 11,
             "w": 12,
             "x": 12,
-            "y": 9
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 8,
