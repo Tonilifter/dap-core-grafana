@@ -227,7 +227,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                              //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where NIVEL_s == \"ERROR\"\n| summarize count()",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL        \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)                                                      //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1105,7 +1105,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and region in ($Region) and app in ($Application) \r\n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)        \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)   \n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"                                           \n| where region in ($Region) and app in ($Application) \n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1372,13 +1372,16 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "ia_eyp_environmental_envirosoft",
-              "value": "ia_eyp_environmental_envirosoft"
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
+            "index": -1,
             "label": "Application",
             "multi": true,
             "name": "Application",
@@ -1397,13 +1400,16 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "GLB",
-              "value": "GLB"
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
+            "index": -1,
             "label": "Region",
             "multi": true,
             "name": "Region",
