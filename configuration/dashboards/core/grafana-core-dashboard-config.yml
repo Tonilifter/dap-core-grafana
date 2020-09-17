@@ -23,7 +23,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 2,
+      "id": 8,
       "links": [],
       "panels": [
         {
@@ -172,7 +172,7 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 5,
+            "w": 6,
             "x": 18,
             "y": 0
           },
@@ -227,7 +227,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "//change this example to create your own time series query\nCoreOperationLog#{LogWorkspaceEnv}#_CL                                                              //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where NIVEL_s == \"ERROR\"\n| summarize count()",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL        \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)                                                      //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -273,7 +273,7 @@ data:
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
-            "w": 23,
+            "w": 24,
             "x": 0,
             "y": 8
           },
@@ -382,7 +382,7 @@ data:
           "fontSize": "100%",
           "gridPos": {
             "h": 10,
-            "w": 23,
+            "w": 24,
             "x": 0,
             "y": 16
           },
@@ -974,7 +974,7 @@ data:
           "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
-            "h": 9,
+            "h": 11,
             "w": 18,
             "x": 0,
             "y": 0
@@ -1053,8 +1053,8 @@ data:
         {
           "datasource": null,
           "gridPos": {
-            "h": 9,
-            "w": 5,
+            "h": 11,
+            "w": 6,
             "x": 18,
             "y": 0
           },
@@ -1105,7 +1105,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and region in ($Region) and app in ($Application) \r\n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)        \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)   \n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"                                           \n| where region in ($Region) and app in ($Application) \n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1140,10 +1140,10 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 11,
             "w": 12,
             "x": 0,
-            "y": 9
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 6,
@@ -1256,10 +1256,10 @@ data:
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
-            "h": 8,
+            "h": 11,
             "w": 12,
             "x": 12,
-            "y": 9
+            "y": 11
           },
           "hiddenSeries": false,
           "id": 8,
@@ -1372,13 +1372,16 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "ia_eyp_environmental_envirosoft",
-              "value": "ia_eyp_environmental_envirosoft"
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| distinct app",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
+            "index": -1,
             "label": "Application",
             "multi": true,
             "name": "Application",
@@ -1397,13 +1400,16 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "GLB",
-              "value": "GLB"
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
             },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
+            "index": -1,
             "label": "Region",
             "multi": true,
             "name": "Region",
