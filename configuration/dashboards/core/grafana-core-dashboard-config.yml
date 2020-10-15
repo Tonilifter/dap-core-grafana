@@ -3573,7 +3573,7 @@ data:
               "link": true,
               "linkTargetBlank": true,
               "linkTooltip": "",
-              "linkUrl": "https://#{Namespace}#akcore.cloudapp.repsol.com/d/XfUJcTiGk/data-quality-detail?var-application=${__cell}&var-region=${__cell_1}&var-datadate=${__cell_2}&var-timestamp=${__cell_3}",
+              "linkUrl": "https://#{Namespace}#akcore.cloudapp.repsol.com/d/XfUJcTiGk/data-quality-detail?var-application=${__cell}&var-region=${__cell_1}&var-datadate=${__cell_2}&var-executiondate=${__cell_3}",
               "mappingType": 1,
               "pattern": "APPLICATION",
               "thresholds": [],
