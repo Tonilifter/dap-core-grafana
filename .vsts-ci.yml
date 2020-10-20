@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+      - feature_mllab/*
       - feature/*
       - develop
       - master
