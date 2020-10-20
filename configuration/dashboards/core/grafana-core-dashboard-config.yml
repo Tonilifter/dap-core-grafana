@@ -3960,7 +3960,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "iteration": 1603186689590,
+      "iteration": 1603208769380,
       "links": [],
       "panels": [
         {
@@ -4451,7 +4451,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate=todatetime(replace(\"/\",\"-\", datadate))\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\n| mv-expand dataset_array = lineage\n| mv-expand dataset = dataset_array.DATASETS_IN\n| extend dataset_name = dataset.NAME\n| extend logtype = tostring(payload.LOGTYPE)\n| where MODULO_s == \"SANITED\" and logtype == \"END\"\n| where app==\"$application\"\n| where tdatadate between(datetime(\"$datadatefrom\") .. datetime(\"$datadateto\"))\n| where dataset_name in ($dataset)\n| order by TimeGenerated asc\r\n| project\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED = toint(rule_list.rows_excluded), tdatadate\r\n| summarize sum(ROWS_AFFECTED) by VALIDATION_MESSAGE, tdatadate\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\r\n| extend datadate=tostring(payload.DATADATE)\r\n| extend tdatadate=todatetime(replace(\"/\",\"-\", datadate))\r\n| extend cleaner_results = parse_json(tostring(parse_json(payload.MSG))).cleaner_results\r\n| extend cleaner_rules = parse_json(tostring(cleaner_results.rules))\r\n| extend execution_date = TimeGenerated\r\n| mv-expand rules = cleaner_rules\r\n| mv-expand rule_list = rules\r\n| extend lineage = parse_json(tostring(parse_json(payload.LINEAGE_DATA)))\r\n| mv-expand dataset_array = lineage\r\n| mv-expand dataset = dataset_array.DATASETS_IN\r\n| extend dataset_name = dataset.NAME\r\n| extend logtype = tostring(payload.LOGTYPE)\r\n| where MODULO_s == \"SANITED\" and logtype == \"END\"\r\n| where app==\"$application\"\r\n| where tdatadate between(datetime(\"$datadatefrom\") .. datetime(\"$datadateto\"))\r\n| where execution_date in ($executiondate)\r\n| where dataset_name in ($dataset)\r\n| order by execution_date asc\r\n| project\r\nVALIDATION_MESSAGE = tostring(rule_list.msg),\r\nROWS_AFFECTED = toint(rule_list.rows_excluded)\n| summarize sum(ROWS_AFFECTED) by VALIDATION_MESSAGE, now()\n",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4646,10 +4646,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "reuters_api + reuters_propane_eia",
+              "text": "",
               "value": [
-                "reuters_api",
-                "reuters_propane_eia"
+                ""
               ]
             },
             "datasource": "azure-loganalytics-workspace",
