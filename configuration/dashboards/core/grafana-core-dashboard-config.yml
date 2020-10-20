@@ -1809,13 +1809,13 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM external_apis",
+        "rawSql": "SELECT * FROM azure_function_apis",
         "refId": "A"
       }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "external_apis",
+      "title": "azure_function_apis",
       "transform": "table",
       "type": "table"
     },
