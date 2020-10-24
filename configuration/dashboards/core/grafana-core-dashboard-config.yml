@@ -4710,10 +4710,9 @@ data:
           },
           {
             "current": {
+              "selected": false,
               "text": "",
-              "value": [
-                ""
-              ]
+              "value": ""
             },
             "hide": 0,
             "label": "ExecutionDate",
@@ -4727,7 +4726,7 @@ data:
             ],
             "query": "",
             "skipUrlSync": false,
-            "type": "textbox",
+            "type": "textbox"
           }
         ]
       },
