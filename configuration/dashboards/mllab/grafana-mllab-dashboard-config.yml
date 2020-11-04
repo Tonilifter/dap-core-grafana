@@ -1,0 +1,4917 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-mllab-dashboards
+  namespace: core-monitoring
+data:
+  mbs-logs-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:1298",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "iteration": 1603809072272,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 21,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:1404",
+              "alias": "Time",
+              "align": "left",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:1405",
+              "alias": "",
+              "align": "",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "decimals": 0,
+              "link": false,
+              "mappingType": 1,
+              "pattern": "State",
+              "rangeMaps": [],
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short",
+              "valueMaps": [
+                {
+                  "$$hashKey": "object:844",
+                  "text": "",
+                  "value": ""
+                }
+              ]
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "LOGS",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": "",
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "hide": 0,
+            "includeAll": true,
+            "label": "Log Level",
+            "multi": true,
+            "name": "Log_level",
+            "options": [
+              {
+                "$$hashKey": "object:692",
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "$$hashKey": "object:693",
+                "selected": false,
+                "text": "INFO",
+                "value": "INFO"
+              },
+              {
+                "$$hashKey": "object:694",
+                "selected": false,
+                "text": "WARNING",
+                "value": "WARNING"
+              },
+              {
+                "$$hashKey": "object:695",
+                "selected": false,
+                "text": "ERROR",
+                "value": "ERROR"
+              }
+            ],
+            "query": "INFO, WARNING, ERROR",
+            "skipUrlSync": false,
+            "type": "custom"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MBS LOGS",
+      "uid": "q9wOcctGk",
+      "variables": {
+        "list": []
+      },
+      "version": 1
+    }
+  mbs-requests-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:281",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 16,
+      "links": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 11,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 2,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" | where InstanceName has \"mbs\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, CPUUsage=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:424",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:425",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 11,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 6,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 5m;\nlet capacityCounterName = 'cpuLimitNanoCores';\nlet usageCounterName = 'cpuUsageNanoCores';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mbs'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Percent Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 11
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "Perf\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" | where InstanceName has \"mbs\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Memory Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 11
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let endDateTime = now();\nlet startDateTime = ago(6h);\nlet trendBinSize = 5m;\nlet capacityCounterName = 'memoryLimitBytes';\nlet usageCounterName = 'memoryRssBytes';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mbs'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Memory Usage Percentage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MBS CPU/MEMORY",
+      "uid": "wxSUHOtMz",
+      "variables": {
+        "list": []
+      },
+      "version": 3
+    }
+  mbs-indicators-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:57",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 21,
+      "links": [],
+      "panels": [
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 7,
+            "w": 7,
+            "x": 3,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Log Errors",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 7,
+            "w": 7,
+            "x": 10,
+            "y": 0
+          },
+          "id": 12,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Log Warnings",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 7,
+            "w": 7,
+            "x": 3,
+            "y": 7
+          },
+          "id": 14,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [
+                  {
+                    "$$hashKey": "object:594",
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "none"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/datasets\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request / datasets",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 13,
+            "x": 10,
+            "y": 7
+          },
+          "hiddenSeries": false,
+          "id": 18,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/datasets\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Request datasets Endpoint Historic",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:165",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:166",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 7,
+            "w": 7,
+            "x": 3,
+            "y": 14
+          },
+          "id": 16,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [
+                  {
+                    "$$hashKey": "object:319",
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "none"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/training-pipelines\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests / training-pipelines",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 7,
+            "w": 13,
+            "x": 10,
+            "y": 14
+          },
+          "hiddenSeries": false,
+          "id": 20,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/training-pipelines\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Request training-pipelines Endpoint Historic",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:359",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:360",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MBS INDICATORS",
+      "uid": "TAfSnEcGz",
+      "variables": {
+        "list": []
+      },
+      "version": 9
+    }
+  mds-logs-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:155",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "iteration": 1603808893216,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 21,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:267",
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:1121",
+              "alias": "",
+              "align": "auto",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "mappingType": 1,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "LOGS",
+          "transform": "table",
+          "transparent": true,
+          "type": "table"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
+            "hide": 0,
+            "includeAll": true,
+            "label": "Log Level",
+            "multi": true,
+            "name": "Log_level",
+            "options": [
+              {
+                "$$hashKey": "object:1384",
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "$$hashKey": "object:1385",
+                "selected": false,
+                "text": "INFO",
+                "value": "INFO"
+              },
+              {
+                "$$hashKey": "object:1386",
+                "selected": false,
+                "text": "WARNING",
+                "value": "WARNING"
+              },
+              {
+                "$$hashKey": "object:1387",
+                "selected": false,
+                "text": "ERROR",
+                "value": "ERROR"
+              }
+            ],
+            "query": "INFO, WARNING, ERROR",
+            "skipUrlSync": false,
+            "type": "custom"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MDS LOGS",
+      "uid": "JC9QF8cMk",
+      "variables": {
+        "list": []
+      },
+      "version": 1
+    }
+  mds-requests-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+        {
+          "$$hashKey": "object:525",
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 18,
+      "links": [],
+      "panels": [
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "id": 2,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "appInsights": {
+            "dimension": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "timeColumn": "timestamp",
+            "timeGrain": "auto",
+            "valueColumn": ""
+          },
+          "azureLogAnalytics": {
+            "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" | where InstanceName has \"mds\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, CPUUsage=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
+            "resultFormat": "time_series",
+            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+          },
+          "azureMonitor": {
+            "aggOptions": [],
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "metricNamespace": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto",
+            "timeGrains": [],
+            "top": "10"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "CPU Usage",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "transparent": true,
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "$$hashKey": "object:1093",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:1094",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 11,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "id": 6,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "appInsights": {
+            "dimension": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "timeColumn": "timestamp",
+            "timeGrain": "auto",
+            "valueColumn": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let trendBinSize = 5m;\nlet capacityCounterName = 'cpuLimitNanoCores';\nlet usageCounterName = 'cpuUsageNanoCores';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mds'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
+            "resultFormat": "time_series",
+            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+          },
+          "azureMonitor": {
+            "aggOptions": [],
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "metricNamespace": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto",
+            "timeGrains": [],
+            "top": "10"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "CPU Percent Usage",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "$$hashKey": "object:1407",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:1408",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 11
+        },
+        "hiddenSeries": false,
+        "id": 4,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "appInsights": {
+            "dimension": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "timeColumn": "timestamp",
+            "timeGrain": "auto",
+            "valueColumn": ""
+          },
+          "azureLogAnalytics": {
+            "query": "Perf\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" | where InstanceName has \"mds\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
+            "resultFormat": "time_series",
+            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+          },
+          "azureMonitor": {
+            "aggOptions": [],
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "metricNamespace": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto",
+            "timeGrains": [],
+            "top": "10"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Memory Usage",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "$$hashKey": "object:281",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:282",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": null,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 11
+        },
+        "hiddenSeries": false,
+        "id": 8,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+        {
+          "appInsights": {
+            "dimension": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "timeColumn": "timestamp",
+            "timeGrain": "auto",
+            "valueColumn": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let endDateTime = now();\nlet startDateTime = ago(6h);\nlet trendBinSize = 5m;\nlet capacityCounterName = 'memoryLimitBytes';\nlet usageCounterName = 'memoryRssBytes';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mds'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc",
+            "resultFormat": "time_series",
+            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+          },
+          "azureMonitor": {
+            "aggOptions": [],
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "metricNamespace": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto",
+            "timeGrains": [],
+            "top": "10"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+        }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Memory Usage Percentage",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MDS CPU/MEMORY",
+      "uid": "AJ9g58cMk",
+      "variables": {
+        "list": []
+      },
+      "version": 6
+    }
+
+  mds-indicators-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:2610",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "links": [],
+      "panels": [
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Errors Logs",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Warnings Logs",
+          "type": "stat"
+        },
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 20,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 12,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": null,
+            "desc": false
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:366",
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "link": false,
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:157",
+              "alias": "",
+              "align": "left",
+              "colorMode": "row",
+              "colors": [
+                "#56A64B",
+                "#E02F44",
+                "#8AB8FF"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 0,
+              "mappingType": 1,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "none",
+              "valueMaps": [
+                {
+                  "$$hashKey": "object:186",
+                  "text": "0",
+                  "value": "Completed"
+                }
+              ]
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "AmlComputeJobEvent\n| extend JobID_Splited = split(JobId, \"$azureml$\")\n| extend RunId = tostring(JobID_Splited[1])\n| summarize num_RunId = count() by RunId\n| order by num_RunId asc\n| project-away num_RunId\n| where RunId !contains \"automl_\"\n| join kind= rightouter (AmlRunStatusChangedEvent | project TimeGenerated, RunId, Status, WorkspaceName) on RunId\n| where isempty(RunId) == True \n| order by RunId1 desc, TimeGenerated desc\n| extend rn = row_number(1, prev(RunId1) != RunId1)\n| where rn == 1 and tolower(RunId1) !contains \"automl_\"\n| order by TimeGenerated desc\n| extend LocalTimestamp = TimeGenerated + 1h\n| extend CurrentTime = now() + 1h\n| extend DiffTime = CurrentTime - LocalTimestamp\n| extend Status = case(Status==\"Running\" and DiffTime > 48h, \"Failed\", Status)\n| extend State=array_index_of(dynamic([\"Completed\", \"Failed\", \"Running\", \"Canceled\", \"NotStarted\", \"Finalizing\", \"CancelRequested\"]) , Status) \n| project-away RunId, rn, CurrentTime, DiffTime, TimeGenerated\n| project-rename RunId = RunId1, Workspace = WorkspaceName, TimeGenerated=LocalTimestamp\n| project-reorder TimeGenerated desc, Workspace, RunId, Status, State",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "AML Pipelines - Last Runs",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 4
+          },
+          "id": 6,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/endpoints\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests /endpoints",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 4
+          },
+          "id": 7,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/deploy\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests /deploy",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 8
+          },
+          "id": 8,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/image-deploy\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests /image-deploy",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 8
+          },
+          "id": 9,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/pipeline-runs\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests /pipeline-runs",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 12
+          },
+          "id": 10,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/triggers\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests /triggers",
+          "type": "stat"
+        }
+      ],
+      "refresh": "",
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "MDS INDICATORS",
+      "uid": "tArNmw5Gk",
+      "variables": {
+        "list": []
+      },
+      "version": 1
+    }
+  mib-logs-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:80",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "iteration": 1603809582625,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 16,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:139",
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:140",
+              "alias": "",
+              "align": "",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "decimals": 0,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "LOGS",
+          "transform": "table",
+          "transparent": true,
+          "type": "table"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "tags": [],
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "hide": 0,
+            "includeAll": true,
+            "label": "Log Level",
+            "multi": true,
+            "name": "Log_level",
+            "options": [
+              {
+                "$$hashKey": "object:513",
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "$$hashKey": "object:514",
+                "selected": false,
+                "text": "INFO",
+                "value": "INFO"
+              },
+              {
+                "$$hashKey": "object:515",
+                "selected": false,
+                "text": "WARNING",
+                "value": "WARNING"
+              },
+              {
+                "$$hashKey": "object:516",
+                "selected": false,
+                "text": "ERROR",
+                "value": "ERROR"
+              }
+            ],
+            "query": "INFO, WARNING, ERROR",
+            "skipUrlSync": false,
+            "type": "custom"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MIB LOGS",
+      "uid": "CZjo4WtGk",
+      "variables": {
+        "list": []
+      },
+      "version": 1
+    }
+  mib-requests-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 20,
+      "iteration": 1603350039798,
+      "links": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 13,
+            "w": 23,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 2,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 5m;\r\nKubePodInventory \r\n| where $__timeFilter()\r\n| project ClusterName, Namespace, ContainerID, ContainerName\r\n| where Namespace == \"dap-mllab-services-mib\" \r\n| where ContainerName in ($INSTANCE)\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"mib request launched\" \r\n| summarize  count() by bin(TimeGenerated, trendBinSize)\r\n| order by TimeGenerated asc\r\n\n",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Peticiones por minuto",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "selected": false,
+              "text": "All",
+              "value": "$__all"
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nKubePodInventory \n| project ClusterName, Namespace, ContainerID, TimeGenerated, ContainerName\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where Namespace == \"dap-mllab-services-mib\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| summarize by ContainerName",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "INSTANCE",
+            "multi": false,
+            "name": "INSTANCE",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nKubePodInventory \n| project ClusterName, Namespace, ContainerID, TimeGenerated, ContainerName\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where Namespace == \"dap-mllab-services-mib\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| summarize by ContainerName",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MIB REQUESTS",
+      "uid": "APjK1npGk",
+      "variables": {
+        "list": []
+      },
+      "version": 27
+    }
+  mib-indicators-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 21,
+      "links": [],
+      "panels": [
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Errors Logs",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Warnings Logs",
+          "type": "stat"
+        },
+        {
+          "cacheTimeout": null,
+          "datasource": null,
+          "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 4
+          },
+          "id": 6,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"mib request launched\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Requests / score",
+          "type": "stat"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MIB INDICATORS",
+      "uid": "wyhxZNpMk",
+      "variables": {
+        "list": []
+      },
+      "version": 3
+    }
+  mss-logs-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:603",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 24,
+      "iteration": 1604056215549,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": null,
+          "description": "",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 22,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:1526",
+              "alias": "Time",
+              "align": "left",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:1527",
+              "alias": "",
+              "align": "",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "decimals": 0,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "aggregation": "",
+                "dimension": "",
+                "dimensionFilter": "*",
+                "dimensions": [],
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "dap-mllab-services-mss",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "MSS Service Logs",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "columns": [],
+          "datasource": null,
+          "description": "",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 22,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 3,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:1526",
+              "alias": "Time",
+              "align": "left",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:1527",
+              "alias": "",
+              "align": "",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "decimals": 0,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS_DAEMON|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "aggregation": "",
+                "dimension": "",
+                "dimensionFilter": "*",
+                "dimensions": [],
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "dap-mllab-services-mss",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "MSS Daemon Logs",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "hide": 0,
+            "includeAll": true,
+            "label": "Log_level",
+            "multi": true,
+            "name": "Log_level",
+            "options": [
+              {
+                "$$hashKey": "object:445",
+                "selected": true,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "$$hashKey": "object:446",
+                "selected": false,
+                "text": "INFO",
+                "value": "INFO"
+              },
+              {
+                "$$hashKey": "object:447",
+                "selected": false,
+                "text": "WARNING",
+                "value": "WARNING"
+              },
+              {
+                "$$hashKey": "object:448",
+                "selected": false,
+                "text": "ERROR",
+                "value": "ERROR"
+              }
+            ],
+            "query": "INFO, WARNING, ERROR",
+            "skipUrlSync": false,
+            "type": "custom"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MSS Logs",
+      "uid": "6mNjpLtGz",
+      "variables": {
+        "list": []
+      },
+      "version": 5
+    }
+  mss-cpu-memory-dashboards.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:397",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 25,
+      "links": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 2,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName \r\n| where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" \r\n| where InstanceName has \"mss\" and InstanceName has \"#{Namespace}#akmlla2\" \r\n| project-rename Date=TimeGenerated, CPUUsage=CounterValue \r\n| project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:468",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:469",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "hiddenSeries": false,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 5m;\r\nlet capacityCounterName = 'cpuLimitNanoCores';\r\nlet usageCounterName = 'cpuUsageNanoCores';\r\nlet clusterName = '#{Namespace}#akmlla2';\r\n\r\nKubePodInventory\r\n| where $__timeFilter()\r\n| where ClusterName == clusterName\r\n| where ControllerName has 'mss'\r\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\r\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\r\n| distinct Computer, InstanceName, ContainerName\r\n| join hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == capacityCounterName\r\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\r\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\r\n) on Computer, InstanceName\r\n| join kind=inner hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == usageCounterName\r\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\r\n) on Computer, InstanceName\r\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\r\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\r\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Percent Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:673",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:674",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 7,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "Perf\r\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName \r\n| where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" \r\n| where InstanceName has \"mss\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Memory Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:890",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:891",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let endDateTime = now();\r\nlet startDateTime = ago(6h);\r\nlet trendBinSize = 5m;\r\nlet capacityCounterName = 'memoryLimitBytes';\r\nlet usageCounterName = 'memoryRssBytes';\r\nlet clusterName = '#{Namespace}#akmlla2';\r\n\r\nKubePodInventory\r\n| where $__timeFilter()\r\n| where ClusterName == clusterName\r\n| where ControllerName has 'mss'\r\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\r\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\r\n| distinct Computer, InstanceName, ContainerName\r\n| join hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == capacityCounterName\r\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\r\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\r\n) on Computer, InstanceName\r\n| join kind=inner hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == usageCounterName\r\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\r\n) on Computer, InstanceName\r\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\r\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\r\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc\r\n",
+                "resultFormat": "time_series",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Memory Usage Percentage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1057",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1058",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "MSS CPU & Memory",
+      "uid": "qRXPJLpMk",
+      "variables": {
+        "list": []
+      },
+      "version": 5
+    }
+  mss-indicators-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:427",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 16,
+      "links": [],
+      "panels": [
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 5,
+            "w": 5,
+            "x": 1,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Errors Logs",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "gridPos": {
+            "h": 5,
+            "w": 5,
+            "x": 6,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "#EAB839",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Warnings Logs",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "Save Model",
+          "gridPos": {
+            "h": 5,
+            "w": 5,
+            "x": 12,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models \" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request  /models",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "Load Model",
+          "gridPos": {
+            "h": 5,
+            "w": 5,
+            "x": 17,
+            "y": 0
+          },
+          "id": 7,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models/\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request  /models/<model_name>",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "AML Model Download Request",
+          "gridPos": {
+            "h": 5,
+            "w": 7,
+            "x": 1,
+            "y": 5
+          },
+          "id": 8,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/aml/models/demand \" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request /aml/models/demand",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "Get Status of a AML Model Download Request",
+          "gridPos": {
+            "h": 5,
+            "w": 7,
+            "x": 8,
+            "y": 5
+          },
+          "id": 10,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+/status\" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request /aml/models/demand/<job_id>/status",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "description": "AML Model Download  by  Job Id",
+          "gridPos": {
+            "h": 5,
+            "w": 7,
+            "x": 15,
+            "y": 5
+          },
+          "id": 9,
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "defaults": {
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto"
+          },
+          "pluginVersion": "6.7.1",
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+ \" | summarize count(LogEntry)",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Num Request /aml/models/demand/<job_id>",
+          "type": "stat"
+        },
+        {
+          "columns": [],
+          "datasource": null,
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 13,
+            "w": 24,
+            "x": 0,
+            "y": 10
+          },
+          "id": 12,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:1483",
+              "alias": "Time",
+              "align": "center",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "$$hashKey": "object:1708",
+              "alias": "Job ID",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "Job_Id",
+              "preserveFormat": false,
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1731",
+              "alias": "Case ID",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "Case_Id",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1752",
+              "alias": "Model Name",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "Model_Name",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1773",
+              "alias": "Model Version",
+              "align": "center",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": null,
+              "mappingType": 1,
+              "pattern": "Model_Version",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1784",
+              "alias": "Model Path",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "Model_Path",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            },
+            {
+              "$$hashKey": "object:1805",
+              "alias": "Pod Name",
+              "align": "left",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "PodName",
+              "thresholds": [],
+              "type": "string",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory\r\n | where $__timeFilter()\r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID\r\n) on ContainerID\r\n| where LogEntry contains \"job_coordinator_service_impl.py -> process_event\" and LogEntry contains \"status COMPLETED\" \r\n| extend message = split(LogEntry, \"|\", 7)\r\n| extend data_mensaje = tostring(split(message, \"{\", 1))\r\n| extend data_mensaje_clean = replace(\"('|}|:|\\\"|]|,)\", \"\", data_mensaje)\r\n| extend data_split = split(data_mensaje_clean, \" \")\r\n| extend Case_Id = data_split[1]\r\n| extend Model_Name = data_split[3]\r\n| extend Model_Version = data_split[5]\r\n| extend Model_Path = data_split[7]\r\n| extend job_id = tostring(split(message, \"{\", 0))\r\n| extend job_id_array = split(job_id, \" \")\r\n| extend Job_Id = job_id_array[2]\r\n| project-rename Date=TimeGenerated, PodName = Name\r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, LogEntry, message, data_mensaje, data_split, data_mensaje_clean\r\n, job_id, job_id_array\r\n| project-reorder Date desc, Job_Id, Case_Id, Model_Name, Model_Version, Model_Path, PodName",
+                "resultFormat": "table",
+                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "AML Models Downloaded",
+          "transform": "table",
+          "type": "table"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MSS Indicators",
+      "uid": "Ch5-R_tGk",
+      "variables": {
+        "list": []
+      },
+      "version": 6
+    }
+---
