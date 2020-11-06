@@ -1475,6 +1475,116 @@ data:
     {
       "columns": [],
       "datasource": "Microsoft SQL Server",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 38,
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "align": "auto",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "align": "right",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "format": "table",
+          "rawSql": "SELECT * FROM dbo.triggers",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "triggers",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "Microsoft SQL Server",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 40,
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "align": "auto",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "align": "right",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "format": "table",
+          "rawSql": "SELECT * FROM dbo.mllab",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "mllab",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "Microsoft SQL Server",
       "fontSize": "80%",
       "gridPos": {
         "h": 8,
@@ -1511,7 +1621,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM streaming",
+        "rawSql": "SELECT * FROM dbo.streaming",
         "refId": "A"
       }
       ],
@@ -1560,7 +1670,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM files",
+        "rawSql": "SELECT * FROM dbo.files",
         "refId": "A"
       }
       ],
@@ -1609,7 +1719,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM schemas",
+        "rawSql": "SELECT * FROM dbo.schemas",
         "refId": "A"
       }
       ],
@@ -1659,7 +1769,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM servicenow",
+        "rawSql": "SELECT * FROM dbo.servicenow",
         "refId": "A"
       }
       ],
@@ -1711,7 +1821,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * from db",
+        "rawSql": "SELECT * from dbo.db",
         "refId": "A"
       }
       ],
@@ -1760,7 +1870,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM salesforce",
+        "rawSql": "SELECT * FROM dbo.salesforce",
         "refId": "A"
       }
       ],
@@ -1809,7 +1919,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM azure_function_apis",
+        "rawSql": "SELECT * FROM dbo.azure_function_apis",
         "refId": "A"
       }
       ],
@@ -1858,7 +1968,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM provider",
+        "rawSql": "SELECT * FROM dbo.provider",
         "refId": "A"
       }
       ],
@@ -1907,7 +2017,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM ddg_dwh",
+        "rawSql": "SELECT * FROM dbo.ddg_dwh",
         "refId": "A"
       }
       ],
@@ -1956,7 +2066,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM processor",
+        "rawSql": "SELECT * FROM dbo.processor",
         "refId": "A"
       }
       ],
@@ -2005,7 +2115,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM manual_files_use_cases",
+        "rawSql": "SELECT * FROM dbo.manual_files_use_cases",
         "refId": "A"
       }
       ],
@@ -2054,7 +2164,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM process_orchestrator",
+        "rawSql": "SELECT * FROM dbo.process_orchestrator",
         "refId": "A"
       }
       ],
@@ -2103,7 +2213,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM insecure",
+        "rawSql": "SELECT * FROM dbo.insecure",
         "refId": "A"
       }
       ],
@@ -2152,7 +2262,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM internal_apis",
+        "rawSql": "SELECT * FROM dbo.internal_apis",
         "refId": "A"
       }
       ],
@@ -2201,7 +2311,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM metadata_schema",
+        "rawSql": "SELECT * FROM dbo.metadata_schema",
         "refId": "A"
       }
       ],
@@ -2250,7 +2360,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM dynamic_dataset_generator",
+        "rawSql": "SELECT * FROM dbo.dynamic_dataset_generator",
         "refId": "A"
       }
       ],
@@ -2301,7 +2411,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM teradata",
+        "rawSql": "SELECT * FROM dbo.teradata",
         "refId": "A"
       }
       ],
@@ -2350,7 +2460,7 @@ data:
       {
         "alias": "",
         "format": "table",
-        "rawSql": "SELECT * FROM manual_files",
+        "rawSql": "SELECT * FROM dbo.manual_files",
         "refId": "A"
       }
       ],
@@ -2358,6 +2468,62 @@ data:
       "timeShift": null,
       "title": "manual_files",
       "transform": "table",
+      "type": "table"
+    },
+    {
+      "columns": [],
+      "datasource": "Microsoft SQL Server",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 38,
+      "links": [],
+      "pageSize": null,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "align": "auto",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "align": "right",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "format": "table",
+          "rawSql": "SELECT * FROM dbo.process_list_cmdb",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "process_list_cmdb",
+      "transform": "timeseries_to_columns",
       "type": "table"
     }
     ],
@@ -3397,6 +3563,116 @@ data:
           "timeFrom": null,
           "timeShift": null,
           "title": "Order Items",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "columns": [],
+          "datasource": "Microsoft SQL Server",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 81
+          },
+          "id": 14,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "right",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "alias": "",
+              "format": "table",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_ad_user_groups]",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "PI Ad user groups",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "columns": [],
+          "datasource": "Microsoft SQL Server",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 16,
+            "w": 24,
+            "x": 0,
+            "y": 89
+          },
+          "id": 16,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "right",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "alias": "",
+              "format": "table",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_piaf]",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "PI Piaf",
           "transform": "table",
           "type": "table"
         }
