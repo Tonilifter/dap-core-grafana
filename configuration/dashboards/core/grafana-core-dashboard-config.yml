@@ -5224,7 +5224,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n| where logType == 'END'\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n| join kind = inner(CoreOperationLog_CL\n | extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n | extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n | where logType == 'START'\n | project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n ) on uid\n| extend arr = split(uid,\"#\")\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\n| where runsOn in ($Infra)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\n| where $__timeFilter(TimeGenerated)\n| project uid, startTime, endTime, diff_seconds=datetime_diff('second', todatetime(endTime), todatetime(startTime)), runsOn, simpleUid\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(diff_seconds) by UID=simpleUid, INFRA=runsOn",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n| where logType == 'END'\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\n | extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n | extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n | where logType == 'START'\n | project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n ) on uid\n| extend arr = split(uid,\"#\")\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\n| where runsOn in ($Infra)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\n| where $__timeFilter(TimeGenerated)\n| project uid, startTime, endTime, diff_seconds=datetime_diff('second', todatetime(endTime), todatetime(startTime)), runsOn, simpleUid\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(diff_seconds) by UID=simpleUid, INFRA=runsOn",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -5275,7 +5275,7 @@ data:
             "name": "UID",
             "options": [],
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
-            "refresh": 0,
+            "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
             "sort": 1,
@@ -5303,7 +5303,7 @@ data:
             "name": "Infra",
             "options": [],
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n| distinct runsOn",
-            "refresh": 0,
+            "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
             "sort": 1,
