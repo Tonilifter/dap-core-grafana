@@ -5259,16 +5259,11 @@ data:
         "list": [
           {
             "allValue": null,
-            "current": {
-              "text": "All",
-              "value": [
-                "$__all"
-              ]
-            },
+            "current": {},
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "hide": 0,
-            "includeAll": true,
+            "includeAll": false,
             "index": -1,
             "label": "UID",
             "multi": true,
