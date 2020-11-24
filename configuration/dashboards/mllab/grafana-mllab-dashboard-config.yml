@@ -29,7 +29,7 @@ data:
       "panels": [
         {
           "columns": [],
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
             "h": 21,
@@ -97,7 +97,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -113,7 +113,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -226,7 +226,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -274,7 +274,7 @@ data:
               "azureLogAnalytics": {
                 "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" | where InstanceName has \"mbs\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, CPUUsage=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -290,7 +290,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -389,7 +389,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let trendBinSize = 5m;\nlet capacityCounterName = 'cpuLimitNanoCores';\nlet usageCounterName = 'cpuUsageNanoCores';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mbs'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -405,7 +405,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -502,7 +502,7 @@ data:
               "azureLogAnalytics": {
                 "query": "Perf\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" | where InstanceName has \"mbs\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -518,7 +518,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -615,7 +615,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let endDateTime = now();\nlet startDateTime = ago(6h);\nlet trendBinSize = 5m;\nlet capacityCounterName = 'memoryLimitBytes';\nlet usageCounterName = 'memoryRssBytes';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mbs'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -631,7 +631,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -732,7 +732,7 @@ data:
       "links": [],
       "panels": [
         {
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "gridPos": {
             "h": 7,
             "w": 7,
@@ -784,7 +784,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -800,7 +800,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -861,7 +861,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -877,7 +877,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -947,7 +947,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/datasets\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -963,7 +963,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -1024,7 +1024,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/datasets\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -1040,7 +1040,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -1148,7 +1148,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/training-pipelines\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -1164,7 +1164,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -1225,7 +1225,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/training-pipelines\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -1241,7 +1241,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -1344,7 +1344,7 @@ data:
       "panels": [
         {
           "columns": [],
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
             "h": 21,
@@ -1404,7 +1404,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -1420,7 +1420,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -1533,7 +1533,7 @@ data:
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": null,
+        "datasource": "azure-loganalytics-workspace",
         "fill": 1,
         "fillGradient": 0,
         "gridPos": {
@@ -1581,7 +1581,7 @@ data:
           "azureLogAnalytics": {
             "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" | where InstanceName has \"mds\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, CPUUsage=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
             "resultFormat": "time_series",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}#"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -1597,7 +1597,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}#"
         }
         ],
         "thresholds": [],
@@ -1697,7 +1697,7 @@ data:
           "azureLogAnalytics": {
             "query": "let trendBinSize = 5m;\nlet capacityCounterName = 'cpuLimitNanoCores';\nlet usageCounterName = 'cpuUsageNanoCores';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mds'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
             "resultFormat": "time_series",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}#"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -1713,7 +1713,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}#"
         }
         ],
         "thresholds": [],
@@ -1812,7 +1812,7 @@ data:
           "azureLogAnalytics": {
             "query": "Perf\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName | where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" | where InstanceName has \"mds\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
             "resultFormat": "time_series",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}#"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -1828,7 +1828,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}#"
         }
         ],
         "thresholds": [],
@@ -1927,7 +1927,7 @@ data:
           "azureLogAnalytics": {
             "query": "let endDateTime = now();\nlet startDateTime = ago(6h);\nlet trendBinSize = 5m;\nlet capacityCounterName = 'memoryLimitBytes';\nlet usageCounterName = 'memoryRssBytes';\nlet clusterName = '#{Namespace}#akmlla2';\n\nKubePodInventory\n| where $__timeFilter()\n| where ClusterName == clusterName\n| where ControllerName has 'mds'\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\n| distinct Computer, InstanceName, ContainerName\n| join hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == capacityCounterName\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\n) on Computer, InstanceName\n| join kind=inner hint.strategy=shuffle (\n    Perf\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\n    | where CounterName == usageCounterName\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\n) on Computer, InstanceName\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc",
             "resultFormat": "time_series",
-            "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+            "workspace": "#{log-analytics-workspace-id}#"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -1943,7 +1943,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+          "subscription": "#{log-analytics-subscription-id}#"
         }
         ],
         "thresholds": [],
@@ -2044,7 +2044,7 @@ data:
       "links": [],
       "panels": [
         {
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "gridPos": {
             "h": 4,
             "w": 6,
@@ -2096,7 +2096,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2112,7 +2112,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2173,7 +2173,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2189,7 +2189,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2267,7 +2267,7 @@ data:
               "azureLogAnalytics": {
                 "query": "AmlComputeJobEvent\n| extend JobID_Splited = split(JobId, \"$azureml$\")\n| extend RunId = tostring(JobID_Splited[1])\n| summarize num_RunId = count() by RunId\n| order by num_RunId asc\n| project-away num_RunId\n| where RunId !contains \"automl_\"\n| join kind= rightouter (AmlRunStatusChangedEvent | project TimeGenerated, RunId, Status, WorkspaceName) on RunId\n| where isempty(RunId) == True \n| order by RunId1 desc, TimeGenerated desc\n| extend rn = row_number(1, prev(RunId1) != RunId1)\n| where rn == 1 and tolower(RunId1) !contains \"automl_\"\n| order by TimeGenerated desc\n| extend LocalTimestamp = TimeGenerated + 1h\n| extend CurrentTime = now() + 1h\n| extend DiffTime = CurrentTime - LocalTimestamp\n| extend Status = case(Status==\"Running\" and DiffTime > 48h, \"Failed\", Status)\n| extend State=array_index_of(dynamic([\"Completed\", \"Failed\", \"Running\", \"Canceled\", \"NotStarted\", \"Finalizing\", \"CancelRequested\"]) , Status) \n| project-away RunId, rn, CurrentTime, DiffTime, TimeGenerated\n| project-rename RunId = RunId1, Workspace = WorkspaceName, TimeGenerated=LocalTimestamp\n| project-reorder TimeGenerated desc, Workspace, RunId, Status, State",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2283,7 +2283,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2347,7 +2347,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/endpoints\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2363,7 +2363,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2426,7 +2426,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/deploy\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2442,7 +2442,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2505,7 +2505,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/image-deploy\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2521,7 +2521,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2584,7 +2584,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/pipeline-runs\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2600,7 +2600,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2663,7 +2663,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/triggers\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2679,7 +2679,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2732,7 +2732,7 @@ data:
       "panels": [
         {
           "columns": [],
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
             "h": 16,
@@ -2790,7 +2790,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2806,7 +2806,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -2921,7 +2921,7 @@ data:
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "description": "",
           "fill": 1,
           "fillGradient": 0,
@@ -2970,7 +2970,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let trendBinSize = 5m;\r\nKubePodInventory \r\n| where $__timeFilter()\r\n| project ClusterName, Namespace, ContainerID, ContainerName\r\n| where Namespace == \"dap-mllab-services-mib\" \r\n| where ContainerName in ($INSTANCE)\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"mib request launched\" \r\n| summarize  count() by bin(TimeGenerated, trendBinSize)\r\n| order by TimeGenerated asc\r\n\n",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -2986,7 +2986,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -3115,7 +3115,7 @@ data:
       "links": [],
       "panels": [
         {
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "gridPos": {
             "h": 4,
             "w": 6,
@@ -3167,7 +3167,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3183,7 +3183,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -3244,7 +3244,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3260,7 +3260,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -3323,7 +3323,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"mib request launched\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3339,7 +3339,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -3405,7 +3405,7 @@ data:
       "panels": [
         {
           "columns": [],
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "description": "",
           "fontSize": "100%",
           "gridPos": {
@@ -3464,7 +3464,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3483,7 +3483,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -3553,7 +3553,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS_DAEMON|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3572,7 +3572,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -3685,7 +3685,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -3733,7 +3733,7 @@ data:
               "azureLogAnalytics": {
                 "query": "Perf\r\n| where $__timeFilter() | project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName \r\n| where ObjectName == \"K8SContainer\" and CounterName == \"cpuUsageNanoCores\" \r\n| where InstanceName has \"mss\" and InstanceName has \"#{Namespace}#akmlla2\" \r\n| project-rename Date=TimeGenerated, CPUUsage=CounterValue \r\n| project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, CPUUsage | order by Date asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3749,7 +3749,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -3848,7 +3848,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let trendBinSize = 5m;\r\nlet capacityCounterName = 'cpuLimitNanoCores';\r\nlet usageCounterName = 'cpuUsageNanoCores';\r\nlet clusterName = '#{Namespace}#akmlla2';\r\n\r\nKubePodInventory\r\n| where $__timeFilter()\r\n| where ClusterName == clusterName\r\n| where ControllerName has 'mss'\r\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\r\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\r\n| distinct Computer, InstanceName, ContainerName\r\n| join hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == capacityCounterName\r\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\r\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\r\n) on Computer, InstanceName\r\n| join kind=inner hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == usageCounterName\r\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\r\n) on Computer, InstanceName\r\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\r\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\r\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename AverageUsagePercent=AggregatedValue | order by TimeGenerated asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3864,7 +3864,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -3963,7 +3963,7 @@ data:
               "azureLogAnalytics": {
                 "query": "Perf\r\n| where $__timeFilter()| project CounterValue, TimeGenerated, ObjectName, CounterName,  InstanceName \r\n| where ObjectName == \"K8SContainer\" and CounterName == \"memoryRssBytes\" \r\n| where InstanceName has \"mss\" and InstanceName has \"#{Namespace}#akmlla2\" | project-rename Date=TimeGenerated, Memory=CounterValue | project-away ObjectName, CounterName, InstanceName | project-reorder Date desc, Memory | order by Date asc",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -3979,7 +3979,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -4078,7 +4078,7 @@ data:
               "azureLogAnalytics": {
                 "query": "let endDateTime = now();\r\nlet startDateTime = ago(6h);\r\nlet trendBinSize = 5m;\r\nlet capacityCounterName = 'memoryLimitBytes';\r\nlet usageCounterName = 'memoryRssBytes';\r\nlet clusterName = '#{Namespace}#akmlla2';\r\n\r\nKubePodInventory\r\n| where $__timeFilter()\r\n| where ClusterName == clusterName\r\n| where ControllerName has 'mss'\r\n| extend InstanceName = strcat(ClusterId, '/', ContainerName),\r\n         ContainerName = strcat(ControllerName, '/', tostring(split(ContainerName, '/')[1]))\r\n| distinct Computer, InstanceName, ContainerName\r\n| join hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo()\r\n    | where TimeGenerated >= $__timeFrom()\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == capacityCounterName\r\n    | summarize LimitValue = max(CounterValue) by Computer, InstanceName, bin(TimeGenerated, trendBinSize)\r\n    | project Computer, InstanceName, LimitStartTime = TimeGenerated, LimitEndTime = TimeGenerated + trendBinSize, LimitValue\r\n) on Computer, InstanceName\r\n| join kind=inner hint.strategy=shuffle (\r\n    Perf\r\n    | where TimeGenerated < $__timeTo() + trendBinSize\r\n    | where TimeGenerated >= $__timeFrom() - trendBinSize\r\n    | where ObjectName == 'K8SContainer'\r\n    | where CounterName == usageCounterName\r\n    | project Computer, InstanceName, UsageValue = CounterValue, TimeGenerated\r\n) on Computer, InstanceName\r\n| where TimeGenerated >= LimitStartTime and TimeGenerated < LimitEndTime\r\n| project Computer, ContainerName, TimeGenerated, UsagePercent = UsageValue * 100.0 / LimitValue\r\n| summarize AggregatedValue = avg(UsagePercent) by bin(TimeGenerated, trendBinSize) , ContainerName | project-away ContainerName | project-rename MemoryUsagePercent=AggregatedValue | order by TimeGenerated asc\r\n",
                 "resultFormat": "time_series",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4094,7 +4094,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "thresholds": [],
@@ -4183,7 +4183,7 @@ data:
       "links": [],
       "panels": [
         {
-          "datasource": null,
+          "datasource": "azure-loganalytics-workspace",
           "gridPos": {
             "h": 5,
             "w": 5,
@@ -4235,7 +4235,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4251,7 +4251,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4312,7 +4312,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4328,7 +4328,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4386,7 +4386,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models \" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4402,7 +4402,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4460,7 +4460,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models/\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4476,7 +4476,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4534,7 +4534,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/aml/models/demand \" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4550,7 +4550,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4608,7 +4608,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+/status\" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4624,7 +4624,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4682,7 +4682,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+ \" | summarize count(LogEntry)",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4698,7 +4698,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
@@ -4856,7 +4856,7 @@ data:
               "azureLogAnalytics": {
                 "query": "KubePodInventory\r\n | where $__timeFilter()\r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID\r\n) on ContainerID\r\n| where LogEntry contains \"job_coordinator_service_impl.py -> process_event\" and LogEntry contains \"status COMPLETED\" \r\n| extend message = split(LogEntry, \"|\", 7)\r\n| extend data_mensaje = tostring(split(message, \"{\", 1))\r\n| extend data_mensaje_clean = replace(\"('|}|:|\\\"|]|,)\", \"\", data_mensaje)\r\n| extend data_split = split(data_mensaje_clean, \" \")\r\n| extend Case_Id = data_split[1]\r\n| extend Model_Name = data_split[3]\r\n| extend Model_Version = data_split[5]\r\n| extend Model_Path = data_split[7]\r\n| extend job_id = tostring(split(message, \"{\", 0))\r\n| extend job_id_array = split(job_id, \" \")\r\n| extend Job_Id = job_id_array[2]\r\n| project-rename Date=TimeGenerated, PodName = Name\r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, LogEntry, message, data_mensaje, data_split, data_mensaje_clean\r\n, job_id, job_id_array\r\n| project-reorder Date desc, Job_Id, Case_Id, Model_Name, Model_Version, Model_Path, PodName",
                 "resultFormat": "table",
-                "workspace": "42e812e6-8563-4705-967e-4dd5be805228"
+                "workspace": "#{log-analytics-workspace-id}#"
               },
               "azureMonitor": {
                 "aggOptions": [],
@@ -4872,7 +4872,7 @@ data:
               },
               "queryType": "Azure Log Analytics",
               "refId": "A",
-              "subscription": "757633f7-178c-46e4-bdf2-05488423d7c7"
+              "subscription": "#{log-analytics-subscription-id}#"
             }
           ],
           "timeFrom": null,
