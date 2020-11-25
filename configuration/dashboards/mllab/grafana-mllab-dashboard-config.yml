@@ -95,7 +95,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -782,7 +782,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -859,7 +859,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -945,7 +945,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/datasets\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/datasets\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1022,7 +1022,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/datasets\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
+                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/datasets\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1146,7 +1146,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/training-pipelines\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mbs\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mbs/v1/training-pipelines\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1223,7 +1223,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/training-pipelines\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
+                "query": "let trendBinSize = 30m;\nKubePodInventory \n| where $__timeFilter()\n| project ClusterName, Namespace, ContainerID, ContainerName\n| where Namespace == \"dap-mllab-services-mbs\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \n| where LogEntry has \"/mbs/v1/training-pipelines\"  \n| summarize  count() by bin(TimeGenerated, trendBinSize)\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1402,7 +1402,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2094,7 +2094,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2171,7 +2171,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2345,7 +2345,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/endpoints\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/endpoints\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2424,7 +2424,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/deploy\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/deploy\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2503,7 +2503,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/image-deploy\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/image-deploy\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2582,7 +2582,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/pipeline-runs\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/pipeline-runs\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2661,7 +2661,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/triggers\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mds\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"/mds/v1/triggers\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2788,7 +2788,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"|ERROR|\", 0, iif(LogEntry has \"|WARNING|\", 1, iif(LogEntry has \"|INFO|\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"|ERROR|\", \"ERROR\", \n LogEntry has \"|WARNING|\", \"WARNING\", \n LogEntry has \"|INFO|\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2968,7 +2968,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "let trendBinSize = 5m;\r\nKubePodInventory \r\n| where $__timeFilter()\r\n| project ClusterName, Namespace, ContainerID, ContainerName\r\n| where Namespace == \"dap-mllab-services-mib\" \r\n| where ContainerName in ($INSTANCE)\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"mib request launched\" \r\n| summarize  count() by bin(TimeGenerated, trendBinSize)\r\n| order by TimeGenerated asc\r\n\n",
+                "query": "let trendBinSize = 5m;\r\nKubePodInventory \r\n| where $__timeFilter()\r\n| project ClusterName, Namespace, ContainerID, ContainerName\r\n| where Namespace == \"dap-mllab-services-mib\" \r\n| where ContainerName in ($INSTANCE)\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"mib request launched\" \r\n| summarize  count() by bin(TimeGenerated, trendBinSize)\r\n| order by TimeGenerated asc\r\n\n",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3165,7 +3165,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3242,7 +3242,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3321,7 +3321,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"mib request launched\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID | where Namespace == \"dap-mllab-services-mib\" | where ClusterName == \"#{Namespace}#akmlla2\" | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID | where LogEntry has \"mib request launched\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3462,7 +3462,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
+                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| where $__timeFilter() \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3551,7 +3551,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS_DAEMON|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
+                "query": "KubePodInventory | where $__timeFilter() \r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| where $__timeFilter() \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"ERROR\", 0, iif(LogEntry has \"WARNING\", 1, iif(LogEntry has \"INFO\",2,3)))\r\n) on ContainerID\r\n| extend Log_Level = case(LogEntry has \"ERROR\", \"ERROR\", \r\n                          LogEntry has \"WARNING\", \"WARNING\", \r\n                          LogEntry has \"INFO\", \"INFO\", \r\n                          \"UNKNOWN\")\r\n| where Log_Level in ($Log_level) \r| where LogEntry has \"|MSS_DAEMON|\" \n| project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry \r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, Log_Level \r\n| project-reorder Date desc, PodName, Log",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4233,7 +4233,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|ERROR|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4310,7 +4310,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"|WARNING|\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4384,7 +4384,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models \" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models \" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4458,7 +4458,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models/\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/models/\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4532,7 +4532,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/aml/models/demand \" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry has \"/mss/v1/aml/models/demand \" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4606,7 +4606,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+/status\" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+/status\" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4680,7 +4680,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+ \" | summarize count(LogEntry)",
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" | where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, TimeGenerated , ContainerID ) on ContainerID \r\n| where LogEntry matches regex \"/mss/v1/aml/models/demand/[a-z|0-9|-]+ \" | summarize count(LogEntry)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -4854,7 +4854,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "KubePodInventory\r\n | where $__timeFilter()\r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID\r\n) on ContainerID\r\n| where LogEntry contains \"job_coordinator_service_impl.py -> process_event\" and LogEntry contains \"status COMPLETED\" \r\n| extend message = split(LogEntry, \"|\", 7)\r\n| extend data_mensaje = tostring(split(message, \"{\", 1))\r\n| extend data_mensaje_clean = replace(\"('|}|:|\\\"|]|,)\", \"\", data_mensaje)\r\n| extend data_split = split(data_mensaje_clean, \" \")\r\n| extend Case_Id = data_split[1]\r\n| extend Model_Name = data_split[3]\r\n| extend Model_Version = data_split[5]\r\n| extend Model_Path = data_split[7]\r\n| extend job_id = tostring(split(message, \"{\", 0))\r\n| extend job_id_array = split(job_id, \" \")\r\n| extend Job_Id = job_id_array[2]\r\n| project-rename Date=TimeGenerated, PodName = Name\r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, LogEntry, message, data_mensaje, data_split, data_mensaje_clean\r\n, job_id, job_id_array\r\n| project-reorder Date desc, Job_Id, Case_Id, Model_Name, Model_Version, Model_Path, PodName",
+                "query": "KubePodInventory\r\n | where $__timeFilter()\r\n| project ClusterName, Namespace, Name, ContainerID \r\n| where Namespace == \"dap-mllab-services-mss\" \r\n| where ClusterName == \"#{Namespace}#akmlla2\" \r\n| join kind= innerunique ( ContainerLog \r\n| where $__timeFilter() \r\n| project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID\r\n) on ContainerID\r\n| where LogEntry contains \"job_coordinator_service_impl.py -> process_event\" and LogEntry contains \"status COMPLETED\" \r\n| extend message = split(LogEntry, \"|\", 7)\r\n| extend data_mensaje = tostring(split(message, \"{\", 1))\r\n| extend data_mensaje_clean = replace(\"('|}|:|\\\"|]|,)\", \"\", data_mensaje)\r\n| extend data_split = split(data_mensaje_clean, \" \")\r\n| extend Case_Id = data_split[1]\r\n| extend Model_Name = data_split[3]\r\n| extend Model_Version = data_split[5]\r\n| extend Model_Path = data_split[7]\r\n| extend job_id = tostring(split(message, \"{\", 0))\r\n| extend job_id_array = split(job_id, \" \")\r\n| extend Job_Id = job_id_array[2]\r\n| project-rename Date=TimeGenerated, PodName = Name\r\n| project-away ClusterName, Namespace, ContainerID, ContainerID1, LogEntry, message, data_mensaje, data_split, data_mensaje_clean\r\n, job_id, job_id_array\r\n| project-reorder Date desc, Job_Id, Case_Id, Model_Name, Model_Version, Model_Path, PodName",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
