@@ -5426,10 +5426,84 @@ data:
           "datasource": "azure-loganalytics-workspace",
           "fontSize": "100%",
           "gridPos": {
-            "h": 15,
+            "h": 8,
             "w": 24,
             "x": 0,
             "y": 0
+          },
+          "id": 4,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "$$hashKey": "object:251",
+              "alias": "",
+              "align": "right",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 0,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\r\n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n | extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\r\n | extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\r\n | where logType == 'START'\r\n | project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\r\n ) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| where runsOn in ($Infra)\r\n| where $__timeFilter(TimeGenerated)\r\n| project uid, startTime, endTime, diff_seconds=datetime_diff('second', todatetime(endTime), todatetime(startTime)), runsOn, simpleUid\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(diff_seconds) by UID=simpleUid, INFRA=runsOn",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Listado de tiempos de ejecución por Infraestructura",
+          "transform": "table",
+          "type": "table"
+        },
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 5,
+            "w": 12,
+            "x": 0,
+            "y": 8
           },
           "id": 2,
           "pageSize": null,
