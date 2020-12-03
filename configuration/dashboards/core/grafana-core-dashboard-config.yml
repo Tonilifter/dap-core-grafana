@@ -5404,6 +5404,7 @@ data:
       "annotations": {
         "list": [
           {
+            "$$hashKey": "object:131",
             "builtIn": 1,
             "datasource": "-- Grafana --",
             "enable": true,
@@ -5440,9 +5441,10 @@ data:
           },
           "styles": [
             {
-            "alias": "",
-            "align": "left",
-            "colorMode": null,
+              "$$hashKey": "object:374",
+              "alias": "",
+              "align": "left",
+              "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -5457,6 +5459,7 @@ data:
               "unit": "short"
             },
             {
+              "$$hashKey": "object:375",
               "alias": "",
               "align": "left",
               "colorMode": null,
@@ -5512,239 +5515,242 @@ data:
           "type": "table"
         },
         {
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "azure-loganalytics-workspace",
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 9,
-              "w": 12,
-              "x": 0,
-              "y": 8
-            },
-            "hiddenSeries": false,
-            "id": 6,
-            "legend": {
-              "alignAsTable": true,
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "rightSide": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": false,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "dataLinks": []
-            },
-            "percentage": false,
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "appInsights": {
-                  "dimension": "none",
-                  "metricName": "select",
-                  "rawQuery": false,
-                  "rawQueryString": "",
-                  "timeColumn": "timestamp",
-                  "timeGrain": "auto",
-                  "valueColumn": ""
-                },
-                "azureLogAnalytics": {
-                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\r\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"DATABRICKS\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
-                  "resultFormat": "time_series",
-                  "workspace": "#{log-analytics-workspace-id}#"
-                },
-                "azureMonitor": {
-                  "aggOptions": [],
-                  "dimensionFilter": "*",
-                  "metricDefinition": "select",
-                  "metricName": "select",
-                  "metricNamespace": "select",
-                  "resourceGroup": "select",
-                  "resourceName": "select",
-                  "timeGrain": "auto",
-                  "timeGrains": [],
-                  "top": "10"
-                },
-                "queryType": "Azure Log Analytics",
-                "refId": "A",
-                "subscription": "#{log-analytics-subscription-id}#"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Tiempos de ejecución por fuente en DATABRICKS",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "$$hashKey": "object:672",
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": "0",
-                "show": true
-              },
-              {
-                "$$hashKey": "object:673",
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
-            }
+          "aliasColors": {
+            "SANITED#AP_COM_INTELIGENCIA_CLIENTE_GLB": "red"
           },
-          {
-            "aliasColors": {},
-            "bars": true,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "azure-loganalytics-workspace",
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 9,
-              "w": 12,
-              "x": 12,
-              "y": 8
-            },
-            "hiddenSeries": false,
-            "id": 8,
-            "legend": {
-              "alignAsTable": true,
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": false,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "dataLinks": []
-            },
-            "percentage": false,
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "appInsights": {
-                  "dimension": "none",
-                  "metricName": "select",
-                  "rawQuery": false,
-                  "rawQueryString": "",
-                  "timeColumn": "timestamp",
-                  "timeGrain": "auto",
-                  "valueColumn": ""
-                },
-                "azureLogAnalytics": {
-                  "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\r\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"ADF\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
-                  "resultFormat": "time_series",
-                  "workspace": "#{log-analytics-workspace-id}#"
-                },
-                "azureMonitor": {
-                  "aggOptions": [],
-                  "dimensionFilter": "*",
-                  "metricDefinition": "select",
-                  "metricName": "select",
-                  "metricNamespace": "select",
-                  "resourceGroup": "select",
-                  "resourceName": "select",
-                  "timeGrain": "auto",
-                  "timeGrains": [],
-                  "top": "10"
-                },
-                "queryType": "Azure Log Analytics",
-                "refId": "A",
-                "subscription": "#{log-analytics-subscription-id}#"
-              }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Tiempos de ejecución por fuente en ADF",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "$$hashKey": "object:1043",
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": "0",
-                "show": true
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "hiddenSeries": false,
+          "id": 6,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
               },
-              {
-                "$$hashKey": "object:1044",
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"DATABRICKS\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
             }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Tiempos de ejecución por fuente en DATABRICKS",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:672",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:673",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
           }
-        ],
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "hiddenSeries": false,
+          "id": 8,
+          "legend": {
+            "alignAsTable": true,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, payload\r\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"ADF\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Tiempos de ejecución por fuente en ADF",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:1043",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "$$hashKey": "object:1044",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
       ],
+      "refresh": false,
       "schemaVersion": 22,
       "style": "dark",
       "tags": [],
@@ -5752,7 +5758,12 @@ data:
         "list": [
           {
             "allValue": null,
-            "current": {},
+            "current": {
+              "text": "",
+              "value": [
+                ""
+              ]
+            },
             "datasource": "azure-loganalytics-workspace",
             "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "hide": 0,
@@ -5776,9 +5787,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "All",
+              "text": "",
               "value": [
-                "$__all"
+                ""
               ]
             },
             "datasource": "azure-loganalytics-workspace",
@@ -5827,6 +5838,6 @@ data:
       "variables": {
         "list": []
       },
-      "version": 2
+      "version": 1
     }
 ---
