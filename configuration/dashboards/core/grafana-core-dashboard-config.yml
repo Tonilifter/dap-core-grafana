@@ -5515,9 +5515,6 @@ data:
           "type": "table"
         },
         {
-          "aliasColors": {
-            "SANITED#AP_COM_INTELIGENCIA_CLIENTE_GLB": "red"
-          },
           "bars": true,
           "dashLength": 10,
           "dashes": false,
