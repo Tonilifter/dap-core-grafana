@@ -5756,9 +5756,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
@@ -5784,9 +5784,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
