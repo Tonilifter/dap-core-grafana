@@ -3255,7 +3255,7 @@ data:
             {
             "alias": "",
             "format": "table",
-            "rawSql": "SELECT * FROM [pitagmanager].[pi_system_servers]",
+            "rawSql": "SELECT * FROM [pitagmanager].[pi_system_servers]\nWHERE pi_server in ($pi_server)",
             "refId": "A"
             }
         ],
@@ -3312,7 +3312,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_tags] ORDER BY pi_server",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_tags]\nWHERE pi_server in ($pi_server)\nORDER BY pi_server",
               "refId": "A"
             }
           ],
@@ -3369,7 +3369,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_executions] ORDER BY [requested_start_time] DESC",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_executions]\nWHERE pi_server in ($pi_server)\nORDER BY [requested_start_time] DESC",
               "refId": "A"
             }
           ],
@@ -3426,7 +3426,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_enqueues]",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_enqueues]\nWHERE pi_server in ($pi_server)",
               "refId": "A"
             }
           ],
@@ -3483,7 +3483,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_orders] ORDER BY [create_at] DESC",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_orders]\nWHERE pi_server in ($pi_server)\nORDER BY [create_at] DESC",
               "refId": "A"
             }
           ],
@@ -3650,7 +3650,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_piaf]",
+              "rawSql": "SELECT * FROM [pitagmanager].[pi_system_piaf]\nWHERE pi_server in ($pi_server)",
               "refId": "A"
             }
           ],
@@ -3665,7 +3665,36 @@ data:
       "style": "dark",
       "tags": [],
       "templating": {
-        "list": []
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+               "$__all"
+              ]
+            },
+            "datasource": "Microsoft SQL Server",
+            "definition": "SELECT pi_server FROM [pitagmanager].[pi_system_servers]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_tags]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_executions]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_enqueues]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_orders]\nUNION SELECT pi_server FROM  [pitagmanager].[pi_system_piaf]",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "pi_server",
+            "multi": true,
+            "name": "pi_server",
+            "options": [],
+            "query": "SELECT pi_server FROM [pitagmanager].[pi_system_servers]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_tags]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_executions]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_enqueues]\nUNION SELECT pi_server FROM [pitagmanager].[pi_system_orders]\nUNION SELECT pi_server FROM  [pitagmanager].[pi_system_piaf]",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
       },
       "time": {
         "from": "now-6h",
