@@ -7,7 +7,7 @@ trigger:
       - master
 
 pool:
-  name: RDT Repsol Linux EU - Datahub
+  name: RDT Repsol Linux EU - External
 
 steps:
   - task: qetza.replacetokens.replacetokens-task.replacetokens@3
@@ -25,8 +25,8 @@ steps:
       azureContainerRegistry: daplatform0101pcr.azurecr.io
       dockerFile: Dockerfile
       arguments: 
-        --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080 
-        --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080 
+#        --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080
+#        --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080
 
 
   - task: Docker@1
