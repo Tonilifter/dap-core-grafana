@@ -5784,21 +5784,23 @@ data:
         "list": [
           {
             "current": {
-              "text": "",
-              "value": ""
+              "$$hashKey": "object:155",
+              "selected": false,
+              "text": "*",
+              "value": "*"
             },
             "hide": 0,
             "label": "UID",
             "name": "UID",
             "options": [
               {
-                "$$hashKey": "object:1963",
+                "$$hashKey": "object:155",
                 "selected": false,
                 "text": "*",
                 "value": "*"
               }
             ],
-            "query": "",
+            "query": "*",
             "skipUrlSync": false,
             "type": "textbox"
           },
