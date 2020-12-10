@@ -943,7 +943,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "#{LogWorkspaceEnv}# - Operational Logs por UID",
+      "title": "Operational Logs por UID",
       "uid": "1C6FjwXZk",
       "version": 4
     }
@@ -1446,7 +1446,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "#{LogWorkspaceEnv}# - Operational Logs por application y region",
+      "title": "Operational Logs por application y region",
       "uid": "iLe1XwXZz",
       "version": 10
     }
@@ -5465,7 +5465,7 @@ data:
           "pageSize": null,
           "showHeader": true,
           "sort": {
-            "col": 0,
+            "col": 2,
             "desc": true
           },
           "styles": [
@@ -5516,7 +5516,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n| where logType == 'END'\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\n | extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n | extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n | where logType == 'START'\n | project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n ) on uid\n| extend arr = split(uid,\"#\")\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\n| where runsOn in ($Infra)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\n| where $__timeFilter(TimeGenerated)\n| project uid, startTime, endTime, diff_seconds=datetime_diff('second', todatetime(endTime), todatetime(startTime)), runsOn, simpleUid\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(diff_seconds) by UID=simpleUid, INFRA=runsOn",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\n| extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n| extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n| where logType == 'END'\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\n | extend logType=tostring(parse_json(PAYLOAD_s).LOGTYPE)\n | extend runsOn=tostring(parse_json(PAYLOAD_s).RUNS_ON)\n | where logType == 'START'\n | project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n ) on uid\n| extend arr = split(uid,\"#\")\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\n| where runsOn in ($Infra)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) contains '$UID' or '*' == '$UID'\n| where $__timeFilter(TimeGenerated)\n| project uid, startTime, endTime, diff_seconds=datetime_diff('second', todatetime(endTime), todatetime(startTime)), runsOn, simpleUid\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(diff_seconds) by UID=simpleUid, INFRA=runsOn",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -5595,7 +5595,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"DATABRICKS\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"DATABRICKS\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) contains '$UID' or '*' == '$UID'\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -5711,7 +5711,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, payload\r\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"ADF\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) in ($UID)\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'END'\r\n| project endTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, FECHA_s\r\n| join kind = inner(CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\r\n| extend logType=tostring(payload.LOGTYPE)\r\n| extend runsOn=tostring(payload.RUNS_ON)\r\n| where logType == 'START'\r\n| project startTime=todatetime(FECHA_s), uid=UID_s, logType, runsOn, TimeGenerated, payload\r\n) on uid\r\n| extend arr = split(uid,\"#\")\r\n| extend simpleUid = strcat_delim(\"#\", arr[0], arr[1])\r\n| extend tdatadate = todatetime(extract(\"(\\\\d{4}-\\\\d{2}-\\\\d{2}).*\", 1, FECHA_s))\r\n| where runsOn == \"ADF\"\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, uid) contains '$UID' or '*' == '$UID'\r\n| where $__timeFilter(TimeGenerated)\r\n| summarize TIEMPO_ACUMULADO_EN_SEGUNDOS=sum(datetime_diff('second', todatetime(endTime), todatetime(startTime))) by UID=simpleUid, tdatadate, bin(tdatadate, $__interval)\r\n| order by tdatadate asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -5783,32 +5783,26 @@ data:
       "templating": {
         "list": [
           {
-            "allValue": null,
             "current": {
-              "text": "All",
-              "value": [
-                "$__all"
-              ]
+              "$$hashKey": "object:155",
+              "selected": false,
+              "text": "*",
+              "value": "*"
             },
-            "datasource": "azure-loganalytics-workspace",
-            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
             "hide": 0,
-            "includeAll": true,
-            "index": -1,
             "label": "UID",
-            "multi": true,
             "name": "UID",
-            "options": [],
-            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
-            "refresh": 1,
-            "regex": "",
+            "options": [
+              {
+                "$$hashKey": "object:155",
+                "selected": false,
+                "text": "*",
+                "value": "*"
+              }
+            ],
+            "query": "*",
             "skipUrlSync": false,
-            "sort": 1,
-            "tagValuesQuery": "",
-            "tags": [],
-            "tagsQuery": "",
-            "type": "query",
-            "useTags": false
+            "type": "textbox"
           },
           {
             "allValue": null,
