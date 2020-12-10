@@ -943,7 +943,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "#{LogWorkspaceEnv}# - Operational Logs por UID",
+      "title": "Operational Logs por UID",
       "uid": "1C6FjwXZk",
       "version": 4
     }
@@ -1446,7 +1446,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "#{LogWorkspaceEnv}# - Operational Logs por application y region",
+      "title": "Operational Logs por application y region",
       "uid": "iLe1XwXZz",
       "version": 10
     }
@@ -5465,7 +5465,7 @@ data:
           "pageSize": null,
           "showHeader": true,
           "sort": {
-            "col": 0,
+            "col": 2,
             "desc": true
           },
           "styles": [
