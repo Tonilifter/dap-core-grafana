@@ -3118,18 +3118,33 @@ data:
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fcoexpy",
-                "value": "#{Namespace}#fcoexpy"
+                "text": "#{Namespace}#fcoprpy",
+                "value": "#{Namespace}#fcoprpy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fcopipy",
-                "value": "#{Namespace}#fcopipy"
+                "text": "#{Namespace}#fiapipy",
+                "value": "#{Namespace}#fiapipy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fcorepy",
-                "value": "#{Namespace}#fcorepy"
+                "text": "#{Namespace}#fprcspy",
+                "value": "#{Namespace}#fprcspy"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fpricmx",
+                "value": "#{Namespace}#fpricm"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fvvddjv",
+                "value": "#{Namespace}#fvvddjv"
+              },
+              {
+                "selected": false,
+                "text": "#{Namespace}#fxapipy",
+                "value": "#{Namespace}#fxapipy"
               }
             ],
             "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
