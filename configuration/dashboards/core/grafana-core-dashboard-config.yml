@@ -3118,33 +3118,33 @@ data:
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fcoprpyai",
-                "value": "#{Namespace}#fcoprpyai"
+                "text": "#{Namespace}#fcoprpy",
+                "value": "#{Namespace}#fcoprpy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fiapipyai",
-                "value": "#{Namespace}#fiapipyai"
+                "text": "#{Namespace}#fiapipy",
+                "value": "#{Namespace}#fiapipy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fprcspyai",
-                "value": "#{Namespace}#fprcspyai"
+                "text": "#{Namespace}#fprcspy",
+                "value": "#{Namespace}#fprcspy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fpricmxai",
-                "value": "#{Namespace}#fpricmxai"
+                "text": "#{Namespace}#fpricmx",
+                "value": "#{Namespace}#fpricm"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fvvddjvai",
-                "value": "#{Namespace}#fvvddjvai"
+                "text": "#{Namespace}#fvvddjv",
+                "value": "#{Namespace}#fvvddjv"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fxapipyai",
-                "value": "#{Namespace}#fxapipyai"
+                "text": "#{Namespace}#fxapipy",
+                "value": "#{Namespace}#fxapipy"
               }
             ],
             "query": "union\napp('#{Namespace}#fcoprpyai').traces,\napp('#{Namespace}#fiapipyai').traces,\napp('#{Namespace}#fprcspyai').traces,\napp('#{Namespace}#fpricmxai').traces,\napp('#{Namespace}#fvvddjvai').traces,\napp('#{Namespace}#fxapipyai').traces\n| project cloud_RoleName",
@@ -3167,7 +3167,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| distinct name",
+            "definition": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "hide": 0,
             "includeAll": true,
             "index": -1,
@@ -3175,7 +3175,7 @@ data:
             "multi": true,
             "name": "name",
             "options": [],
-            "query": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| distinct name",
+            "query": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
