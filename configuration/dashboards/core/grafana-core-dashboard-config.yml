@@ -3103,7 +3103,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "definition": "union\napp('#{Namespace}#fcoprpyai').traces,\napp('#{Namespace}#fiapipyai').traces,\napp('#{Namespace}#fprcspyai').traces,\napp('#{Namespace}#fpricmxai').traces,\napp('#{Namespace}#fvvddjvai').traces,\napp('#{Namespace}#fxapipyai').traces\n| project cloud_RoleName",
             "hide": 0,
             "includeAll": true,
             "index": -1,
