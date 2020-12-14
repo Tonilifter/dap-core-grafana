@@ -3147,7 +3147,7 @@ data:
                 "value": "#{Namespace}#fxapipy"
               }
             ],
-            "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "query": "union\napp('#{Namespace}#fcoprpyai').traces,\napp('#{Namespace}#fiapipyai').traces,\napp('#{Namespace}#fprcspyai').traces,\napp('#{Namespace}#fpricmxai').traces,\napp('#{Namespace}#fvvddjvai').traces,\napp('#{Namespace}#fxapipyai').traces\n| project cloud_RoleName",
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
