@@ -2737,7 +2737,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('#{Namespace}#fcoprpy').requests,\napp('#{Namespace}#fiapipysp').requests,\napp('#{Namespace}#fprcspy').requests,\napp('#{Namespace}#fpricmx').requests,\napp('#{Namespace}#fvvddjv').requests,\napp('#{Namespace}#fxapipy').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by cloud_RoleName, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by cloud_RoleName, duration_in_seconds, timestamp\n| order by timestamp desc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2854,7 +2854,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('#{Namespace}#fcoprpy').requests,\napp('#{Namespace}#fiapipysp').requests,\napp('#{Namespace}#fprcspy').requests,\napp('#{Namespace}#fpricmx').requests,\napp('#{Namespace}#fvvddjv').requests,\napp('#{Namespace}#fxapipy').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| extend duration_in_seconds = duration/(1000)\n| summarize count() by name, duration_in_seconds, timestamp\n| order by timestamp desc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2982,7 +2982,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('#{Namespace}#fcoprpy').requests,\napp('#{Namespace}#fiapipysp').requests,\napp('#{Namespace}#fprcspy').requests,\napp('#{Namespace}#fpricmx').requests,\napp('#{Namespace}#fvvddjv').requests,\napp('#{Namespace}#fxapipy').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| where resultCode != 200\n| summarize count()",
+                "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where $__timeFilter(timestamp)\n| where name != \"\" and name in ($name) and name != \"adfError\"\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| where resultCode != 200\n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3061,7 +3061,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "union\napp('#{Namespace}#fcoprpy').traces,\napp('#{Namespace}#fiapipysp').traces,\napp('#{Namespace}#fprcspy').traces,\napp('#{Namespace}#fpricmx').traces,\napp('#{Namespace}#fvvddjv').traces,\napp('#{Namespace}#fxapipy').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
+                "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| where $__timeFilter(timestamp)\n| where operation_Name != \"\" and operation_Name in ($name)\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| project timestamp, message, cloud_RoleName, operation_Name\n| order by timestamp asc ",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -3103,7 +3103,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('#{Namespace}#fcoprpy').traces,\napp('#{Namespace}#fiapipysp').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "definition": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
             "hide": 0,
             "includeAll": true,
             "index": -1,
@@ -3118,36 +3118,21 @@ data:
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fcoprpy",
-                "value": "#{Namespace}#fcoprpy"
+                "text": "#{Namespace}#fcoexpy",
+                "value": "#{Namespace}#fcoexpy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fiapipysp",
-                "value": "#{Namespace}#fiapipysp"
+                "text": "#{Namespace}#fcopipy",
+                "value": "#{Namespace}#fcopipy"
               },
               {
                 "selected": false,
-                "text": "#{Namespace}#fprcspy",
-                "value": "#{Namespace}#fprcspy"
-              },
-              {
-                "selected": false,
-                "text": "#{Namespace}#fpricmx",
-                "value": "#{Namespace}#fpricmx"
-              },
-              {
-                "selected": false,
-                "text": "#{Namespace}#fvvddjv",
-                "value": "#{Namespace}#fvvddjv"
-              },
-              {
-                "selected": false,
-                "text": "#{Namespace}#fxapipy",
-                "value": "#{Namespace}#fxapipy"
+                "text": "#{Namespace}#fcorepy",
+                "value": "#{Namespace}#fcorepy"
               }
             ],
-            "query": "union\napp('#{Namespace}#fcoprpy').traces,\napp('#{Namespace}#fiapipysp').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
+            "query": "union\napp('#{Namespace}#fcorepyai').traces,\napp('#{Namespace}#fcoexpyai').traces,\napp('#{Namespace}#fcopipyai').traces\n| project cloud_RoleName",
             "refresh": 0,
             "regex": "",
             "skipUrlSync": false,
@@ -3167,7 +3152,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('#{Namespace}#fcoprpy').requests,\napp('#{Namespace}#fiapipysp').requests,\napp('#{Namespace}#fprcspy').requests,\napp('#{Namespace}#fpricmx').requests,\napp('#{Namespace}#fvvddjv').requests,\napp('#{Namespace}#fxapipy').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "definition": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "hide": 0,
             "includeAll": true,
             "index": -1,
@@ -3175,7 +3160,7 @@ data:
             "multi": true,
             "name": "name",
             "options": [],
-            "query": "union\napp('#{Namespace}#fcoprpy').requests,\napp('#{Namespace}#fiapipysp').requests,\napp('#{Namespace}#fprcspy').requests,\napp('#{Namespace}#fpricmx').requests,\napp('#{Namespace}#fvvddjv').requests,\napp('#{Namespace}#fxapipy').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
