@@ -3131,7 +3131,7 @@ data:
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "definition": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "hide": 0,
             "includeAll": true,
             "index": -1,
@@ -3139,7 +3139,7 @@ data:
             "multi": true,
             "name": "name",
             "options": [],
-            "query": "union\napp('#{Namespace}#fcoprpyai').requests,\napp('#{Namespace}#fiapipyai').requests,\napp('#{Namespace}#fprcspyai').requests,\napp('#{Namespace}#fpricmxai').requests,\napp('#{Namespace}#fvvddjvai').requests,\napp('#{Namespace}#fxapipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
+            "query": "union\napp('#{Namespace}#fcorepyai').requests,\napp('#{Namespace}#fcoexpyai').requests,\napp('#{Namespace}#fcopipyai').requests\n| where cloud_RoleName != \"\" and cloud_RoleName in ($RoleName)\n| distinct name",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
