@@ -32,6 +32,35 @@ data:
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
 
+  azure-mllab-loganalytics-workspace.yml: |-
+    apiVersion: 1
+
+    datasources:
+      - name: azure-mllab-loganalytics-workspace
+        type: grafana-azure-monitor-datasource
+        access: proxy
+        typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
+        orgId: 1
+        url: /api/datasources/proxy/2
+        isDefault: false
+        jsonData:
+          cloudName: azuremonitor
+          clientId: #{adapp-lacore-id}#
+          subscriptionId: #{log-analytics-subscription-id}#
+          tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsClientId: #{adapp-lacore-id}#
+          logAnalyticsSubscriptionId: #{log-analytics-subscription-id}#
+          logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
+          azureLogAnalyticsSameAs: true
+          keepCookies: []
+          appInsightsAppId: #{mllab-aml-appinsights-id}#
+        secureJsonData:
+          appInsightsApiKey: #{mllab-aml-appinsights-api-key}#
+          clientSecret: #{adsp-lacore-secret}#
+          logAnalyticsClientSecret: #{adsp-lacore-secret}#
+        editable: true
+
   microsoft-sql-server.yml: |-
     apiVersion: 1
 

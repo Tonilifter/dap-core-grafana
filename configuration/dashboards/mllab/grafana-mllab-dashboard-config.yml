@@ -5,6 +5,1445 @@ metadata:
   name: grafana-mllab-dashboards
   namespace: core-monitoring
 data:
+  compute-instance-monitoring-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:1388",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 28,
+      "iteration": 1608121231305,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": false,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 8,
+          "panels": [],
+          "title": "CPU & Quota",
+          "type": "row"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-mllab-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 1
+          },
+          "hiddenSeries": false,
+          "id": 12,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": true,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 30m;\r\nlet startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\nAmlComputeCpuGpuUtilization\r\n| where $__timeFilter()\r\n| where Type == 'AmlComputeCpuGpuUtilization'\r\n| where WorkspaceName == '#{Namespace}#mlmllab'\r\n| where DeviceType == 'CPU'\r\n| where RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeInstance') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.step_id))\r\n) or  RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeInstance') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.parent_run_id))\r\n)\r\n| project TimeGenerated, Utilization\r\n| summarize AggregatedValue = max(toreal(Utilization)) by bin(TimeGenerated, trendBinSize)\r\n| project-rename Date=TimeGenerated, CPUPercent=AggregatedValue \r\n| project-reorder Date desc, CPUPercent\r\n| order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Percent Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4044",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4045",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "azure-mllab-loganalytics-workspace",
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 1
+          },
+          "hiddenSeries": false,
+          "id": 13,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 30m;\r\nlet startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\nAmlComputeCpuGpuUtilization\r\n| where $__timeFilter()\r\n| where Type == 'AmlComputeCpuGpuUtilization'\r\n| where WorkspaceName == '#{Namespace}#mlmllab'\r\n| where DeviceType == 'GPU'\r\n| where RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeInstance') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.step_id))\r\n) or  RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeInstance') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.parent_run_id))\r\n)\r\n| project TimeGenerated, Utilization\r\n| summarize AggregatedValue = max(toreal(Utilization)) by bin(TimeGenerated, trendBinSize)\r\n| project-rename Date=TimeGenerated, GPUPercent=AggregatedValue \r\n| project-reorder Date desc, GPUPercent\r\n| order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "GPU Percent Usage",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 9
+          },
+          "hiddenSeries": false,
+          "id": 14,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "dataLinks": []
+          },
+          "percentage": false,
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "let trendBinSize = 30m;\r\n\r\nAmlComputeClusterEvent\r | where $__timeFilter()\n| where OperationName =='Cluster Quota Utilization'\r and ClusterName == '$ComputeInstance'\n| project  TimeGenerated, QuotaPercent = toreal(QuotaUtilized) * 100 / toreal(QuotaAllocated)\r\n| project-rename Date=TimeGenerated, QuotaUtiliziedPercent=QuotaPercent \n| project-reorder Date desc, QuotaUtiliziedPercent\n| order by Date asc",
+                "resultFormat": "time_series",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "Quota Utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "$$hashKey": "object:4218",
+              "decimals": 0,
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "$$hashKey": "object:4219",
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 17
+          },
+          "id": 6,
+          "panels": [
+            {
+              "columns": [],
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "description": "Log errors in compute instances",
+              "fontSize": "100%",
+              "gridPos": {
+                "h": 5,
+                "w": 24,
+                "x": 0,
+                "y": 2
+              },
+              "id": 2,
+              "pageSize": null,
+              "showHeader": true,
+              "sort": {
+                "col": 1,
+                "desc": false
+              },
+              "styles": [
+                {
+                  "$$hashKey": "object:4390",
+                  "alias": "Date",
+                  "align": "auto",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "pattern": "Date",
+                  "type": "date"
+                },
+                {
+                  "$$hashKey": "object:4391",
+                  "alias": "",
+                  "align": "right",
+                  "colorMode": "row",
+                  "colors": [
+                    "#F2495C",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "decimals": 0,
+                  "pattern": "/.*/",
+                  "thresholds": [],
+                  "type": "number",
+                  "unit": "short"
+                }
+              ],
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\r\napp('#{Namespace}#mlmllabai').traces\r\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n| where cloud_RoleInstance in ('$ComputeInstance') \r\n| where customDimensions['level'] == 'ERROR'\r\n| project timestamp, message, customDimensions, cloud_RoleName\r\n| extend Line = customDimensions['lineNumber']\r\n| extend StepName = customDimensions['step_name']\r\n| extend RunId = customDimensions['parent_run_id']\r\n| extend StepRunId = customDimensions['step_id']\r\n| extend RunType = customDimensions['run_type']\r\n| extend ExperimentName = customDimensions['experiment_name']\r\n| project-away customDimensions\r\n| project-rename Date=timestamp, LogError=message, Script=cloud_RoleName\r\n| project-reorder Date desc, RunId, LogError, StepName, Script, Line",
+                    "resultFormat": "table",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Errors",
+              "transform": "table",
+              "type": "table"
+            },
+            {
+              "columns": [],
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fontSize": "100%",
+              "gridPos": {
+                "h": 17,
+                "w": 24,
+                "x": 0,
+                "y": 7
+              },
+              "id": 4,
+              "pageSize": null,
+              "showHeader": true,
+              "sort": {
+                "col": 0,
+                "desc": true
+              },
+              "styles": [
+                {
+                  "$$hashKey": "object:2195",
+                  "alias": "Date",
+                  "align": "",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "pattern": "Date",
+                  "type": "date"
+                },
+                {
+                  "$$hashKey": "object:3849",
+                  "alias": "",
+                  "align": "center",
+                  "colorMode": null,
+                  "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "decimals": 0,
+                  "mappingType": 1,
+                  "pattern": "Line",
+                  "thresholds": [],
+                  "type": "number",
+                  "unit": "short"
+                },
+                {
+                  "$$hashKey": "object:2196",
+                  "alias": "",
+                  "align": "",
+                  "colorMode": "row",
+                  "colors": [
+                    "#F2495C",
+                    "rgba(237, 129, 40, 0.89)",
+                    "#5794F2"
+                  ],
+                  "decimals": 0,
+                  "mappingType": 1,
+                  "pattern": "State",
+                  "thresholds": [
+                    "1",
+                    "2"
+                  ],
+                  "type": "number",
+                  "unit": "short"
+                },
+                {
+                  "$$hashKey": "object:3409",
+                  "alias": "",
+                  "align": "auto",
+                  "colorMode": null,
+                  "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "decimals": 2,
+                  "mappingType": 1,
+                  "pattern": "State",
+                  "thresholds": [],
+                  "type": "hidden",
+                  "unit": "short"
+                }
+              ],
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\r\napp('#{Namespace}#mlmllabai').traces\r\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n| where cloud_RoleInstance in ('$ComputeInstance') \rand customDimensions['parent_run_id']\r == '$RunId'\n| project timestamp, message, customDimensions, cloud_RoleName\r\n| extend Line = customDimensions['lineNumber']\r | extend Level = customDimensions['level']\n| extend StepNameSplited = split(customDimensions['step_name'], \"__\") | extend StepName = iff (isempty(tostring(StepNameSplited[1])), customDimensions['step_name'], tostring(StepNameSplited[1]))\n| extend StepRunId = customDimensions['step_id']\r\n| extend RunType = customDimensions['run_type']\r\n| extend ExperimentName = customDimensions['experiment_name']\r\n| extend State=iif(customDimensions['level'] == 'ERROR', 0, iif(customDimensions['level'] == 'WARNING', 1, iif(customDimensions['level'] == 'INFO',2,3)))\n| project-away customDimensions\r, StepNameSplited \n| project-rename Date=timestamp, Trace=message, Script=cloud_RoleName\r\n| project-reorder Date asc, Trace, Level, StepName, Script, Line, StepRunId asc",
+                    "resultFormat": "table",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Run Traces",
+              "transform": "table",
+              "type": "table"
+            }
+          ],
+          "title": "Logs",
+          "type": "row"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "$$hashKey": "object:4809",
+              "selected": false,
+              "text": "daplatform0101lmllab3",
+              "value": "daplatform0101lmllab3"
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"daplatform0101lmlmllab\"\n| summarize by  ClusterName",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Compute Instance",
+            "multi": false,
+            "name": "ComputeInstance",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"daplatform0101lmlmllab\"\n| summarize by  ClusterName",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "Unusuable: DiskFull",
+              "value": "Unusuable: DiskFull"
+            },
+            "datasource": "azure-mllab-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeInstance'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes), iff(RunningNodeCount+IdleNodeCount > 0, \"Running\", \"Stopped\"), strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": null,
+            "multi": false,
+            "name": "Status",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeInstance'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes), iff(RunningNodeCount+IdleNodeCount > 0, \"Running\", \"Stopped\"), strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "isNone": true,
+              "selected": true,
+              "text": "None",
+              "value": ""
+            },
+            "datasource": "azure-mllab-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\n\napp('#{Namespace}#mlmllabai').traces\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n| where cloud_RoleInstance in ('$ComputeInstance') \n| project customDimensions\n| distinct tostring(customDimensions.parent_run_id)",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Pipeline Run Id",
+            "multi": false,
+            "name": "RunId",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\n\napp('#{Namespace}#mlmllabai').traces\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n| where cloud_RoleInstance in ('$ComputeInstance') \n| project customDimensions\n| distinct tostring(customDimensions.parent_run_id)",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-7d",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "Compute Instance Monitoring",
+      "uid": "s77Q810Mk",
+      "variables": {
+        "list": []
+      },
+      "version": 35
+    }
+  compute-cluster-monitoring-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "$$hashKey": "object:842",
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 29,
+      "iteration": 1608115411125,
+      "links": [],
+      "panels": [
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 8,
+          "panels": [
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 1
+              },
+              "hiddenSeries": false,
+              "id": 13,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": true,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let trendBinSize = 30m;\r\nlet startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\nAmlComputeCpuGpuUtilization\r\n| where $__timeFilter()\r\n| where Type == 'AmlComputeCpuGpuUtilization'\r\n| where WorkspaceName == '#{Namespace}#mlmllab'\r\n| where DeviceType == 'CPU'\r\n| where RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeCluster') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.step_id))\r\n) or  RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\n\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n    | where customDimensions.compute_target in ('$ComputeCluster') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.parent_run_id))\r\n)\r\n| project TimeGenerated, Utilization\r\n| summarize AggregatedValue = max(toreal(Utilization)) by bin(TimeGenerated, trendBinSize)\r\n| project-rename Date=TimeGenerated, CPUPercent=AggregatedValue \r\n| project-reorder Date desc, CPUPercent\r\n| order by Date asc",
+                    "resultFormat": "time_series",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "CPU Percent Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "$$hashKey": "object:5039",
+                  "decimals": null,
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "$$hashKey": "object:5040",
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 1
+              },
+              "hiddenSeries": false,
+              "id": 14,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": true,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let trendBinSize = 30m;\r\nlet startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\nAmlComputeCpuGpuUtilization\r\r\n| where $__timeFilter()\n| where Type == 'AmlComputeCpuGpuUtilization'\r\n| where WorkspaceName == '#{Namespace}#mlmllab'\r\n| where DeviceType == 'GPU'\r\n| where RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n    | where customDimensions.compute_target in ('$ComputeCluster') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.step_id))\r\n) or  RunId in (\r\n    (app('#{Namespace}#mlmllabai').traces\r\r\n    | where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n    | where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n    | where customDimensions.compute_target in ('$ComputeCluster') \r\n    | project customDimensions\r\n    | distinct tostring(customDimensions.parent_run_id))\r\n)\r\n| project TimeGenerated, Utilization\r\n| summarize AggregatedValue = max(toreal(Utilization)) by bin(TimeGenerated, trendBinSize)\r\n| project-rename Date=TimeGenerated, GPUPercent=AggregatedValue \r\n| project-reorder Date desc, GPUPercent\r\n| order by Date asc",
+                    "resultFormat": "time_series",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "GPU Percent Usage",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "$$hashKey": "object:5421",
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": "0",
+                  "show": true
+                },
+                {
+                  "$$hashKey": "object:5422",
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            },
+            {
+              "aliasColors": {},
+              "bars": false,
+              "dashLength": 10,
+              "dashes": false,
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fill": 1,
+              "fillGradient": 0,
+              "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 9
+              },
+              "hiddenSeries": false,
+              "id": 12,
+              "legend": {
+                "avg": false,
+                "current": false,
+                "max": false,
+                "min": false,
+                "show": true,
+                "total": false,
+                "values": false
+              },
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "null",
+              "options": {
+                "dataLinks": []
+              },
+              "percentage": false,
+              "pointradius": 2,
+              "points": false,
+              "renderer": "flot",
+              "seriesOverrides": [],
+              "spaceLength": 10,
+              "stack": false,
+              "steppedLine": false,
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let trendBinSize = 1m;\r\n\r\nAmlComputeClusterEvent\r | where $__timeFilter()\n| where OperationName =='Cluster Quota Utilization'\r and ClusterName == '$ComputeCluster'\n| project  TimeGenerated, QuotaPercent = toreal(QuotaUtilized) * 100 / toreal(QuotaAllocated)\r\n| project-rename Date=TimeGenerated, QuotaUtiliziedPercent=QuotaPercent \n| project-reorder Date desc, QuotaUtiliziedPercent\n| order by Date asc",
+                    "resultFormat": "time_series",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "thresholds": [],
+              "timeFrom": null,
+              "timeRegions": [],
+              "timeShift": null,
+              "title": "Quota Utilization",
+              "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+              },
+              "type": "graph",
+              "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+              },
+              "yaxes": [
+                {
+                  "$$hashKey": "object:4417",
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                },
+                {
+                  "$$hashKey": "object:4418",
+                  "format": "short",
+                  "label": null,
+                  "logBase": 1,
+                  "max": null,
+                  "min": null,
+                  "show": true
+                }
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
+            }
+          ],
+          "title": "CPU & QUOTA",
+          "type": "row"
+        },
+        {
+          "collapsed": true,
+          "datasource": null,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 1
+          },
+          "id": 6,
+          "panels": [
+            {
+              "columns": [],
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fontSize": "100%",
+              "gridPos": {
+                "h": 6,
+                "w": 24,
+                "x": 0,
+                "y": 2
+              },
+              "id": 2,
+              "pageSize": null,
+              "showHeader": true,
+              "sort": {
+                "col": 0,
+                "desc": true
+              },
+              "styles": [
+                {
+                  "$$hashKey": "object:970",
+                  "alias": "Date",
+                  "align": "auto",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "pattern": "Date",
+                  "type": "date"
+                },
+                {
+                  "$$hashKey": "object:1067",
+                  "alias": "",
+                  "align": "auto",
+                  "colorMode": "row",
+                  "colors": [
+                    "#F2495C",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "decimals": 0,
+                  "mappingType": 1,
+                  "pattern": "/.*/",
+                  "thresholds": [],
+                  "type": "number",
+                  "unit": "short"
+                },
+                {
+                  "$$hashKey": "object:971",
+                  "alias": "",
+                  "align": "right",
+                  "colorMode": null,
+                  "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "decimals": 2,
+                  "pattern": "customDimensions_lineNumber",
+                  "thresholds": [],
+                  "type": "string",
+                  "unit": "short"
+                }
+              ],
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\r\napp('#{Namespace}#mlmllabai').traces\r\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n| where customDimensions['compute_target'] in ('$ComputeCluster') \r\n| where customDimensions['level'] == 'ERROR'\r\n| project timestamp, message, customDimensions, cloud_RoleName\r\n| extend Line = customDimensions['lineNumber']\r\n| extend StepName = customDimensions['step_name']\r\n| extend RunId = customDimensions['parent_run_id']\r\n| extend StepRunId = customDimensions['step_id']\r\n| extend RunType = customDimensions['run_type']\r\n| extend ExperimentName = customDimensions['experiment_name']\r\n| project-away customDimensions\r\n| project-rename Date=timestamp, LogError=message, Script=cloud_RoleName\r\n| project-reorder Date desc, RunId, LogError, StepName, Script, Line",
+                    "resultFormat": "table",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Errors Monitorizing",
+              "transform": "table",
+              "type": "table"
+            },
+            {
+              "columns": [],
+              "datasource": "azure-mllab-loganalytics-workspace",
+              "fontSize": "100%",
+              "gridPos": {
+                "h": 14,
+                "w": 24,
+                "x": 0,
+                "y": 8
+              },
+              "id": 4,
+              "pageSize": null,
+              "showHeader": true,
+              "sort": {
+                "col": 0,
+                "desc": true
+              },
+              "styles": [
+                {
+                  "$$hashKey": "object:3325",
+                  "alias": "Date",
+                  "align": "auto",
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "pattern": "Date",
+                  "type": "date"
+                },
+                {
+                  "$$hashKey": "object:3631",
+                  "alias": "",
+                  "align": "auto",
+                  "colorMode": null,
+                  "colors": [
+                    "rgba(245, 54, 54, 0.9)",
+                    "rgba(237, 129, 40, 0.89)",
+                    "rgba(50, 172, 45, 0.97)"
+                  ],
+                  "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                  "decimals": 2,
+                  "mappingType": 1,
+                  "pattern": "",
+                  "thresholds": [],
+                  "type": "number",
+                  "unit": "short"
+                },
+                {
+                  "$$hashKey": "object:3326",
+                  "alias": "",
+                  "align": "center",
+                  "colorMode": "row",
+                  "colors": [
+                    "#F2495C",
+                    "#FF9830",
+                    "#5794F2"
+                  ],
+                  "decimals": 0,
+                  "pattern": "State",
+                  "thresholds": [
+                    "1",
+                    "2"
+                  ],
+                  "type": "number",
+                  "unit": "short"
+                }
+              ],
+              "targets": [
+                {
+                  "appInsights": {
+                    "dimension": "none",
+                    "metricName": "select",
+                    "rawQuery": false,
+                    "rawQueryString": "",
+                    "timeColumn": "timestamp",
+                    "timeGrain": "auto",
+                    "valueColumn": ""
+                  },
+                  "azureLogAnalytics": {
+                    "query": "let startDateTime = ${__from};\r\nlet endDateTime = ${__to};\r\n\r\napp('#{Namespace}#mlmllabai').traces\r\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\r\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \r\n| where customDimensions['compute_target'] in ('$ComputeCluster') \rand customDimensions['parent_run_id']\r == '$RunId'\n| project timestamp, message, customDimensions, cloud_RoleName\r\n| extend Line = customDimensions['lineNumber']\r | extend Level = customDimensions['level']\n| extend StepNameSplited = split(customDimensions['step_name'], \"__\") | extend StepName = iff (isempty(tostring(StepNameSplited[1])), customDimensions['step_name'], tostring(StepNameSplited[1]))\n| extend StepRunId = customDimensions['step_id']\r\n| extend RunType = customDimensions['run_type']\r\n| extend ExperimentName = customDimensions['experiment_name']\r\n| extend State=iif(customDimensions['level'] == 'ERROR', 0, iif(customDimensions['level'] == 'WARNING', 1, iif(customDimensions['level'] == 'INFO',2,3)))\n| project-away customDimensions\r, StepNameSplited \n| project-rename Date=timestamp, Trace=message, Script=cloud_RoleName\r\n| project-reorder Date asc, Trace, Level, StepName, Script, Line, StepRunId asc",
+                    "resultFormat": "table",
+                    "workspace": "#{log-analytics-workspace-id}#"
+                  },
+                  "azureMonitor": {
+                    "aggOptions": [],
+                    "dimensionFilter": "*",
+                    "metricDefinition": "select",
+                    "metricName": "select",
+                    "metricNamespace": "select",
+                    "resourceGroup": "select",
+                    "resourceName": "select",
+                    "timeGrain": "auto",
+                    "timeGrains": [],
+                    "top": "10"
+                  },
+                  "queryType": "Azure Log Analytics",
+                  "refId": "A",
+                  "subscription": "#{log-analytics-subscription-id}#"
+                }
+              ],
+              "timeFrom": null,
+              "timeShift": null,
+              "title": "Run Traces Errors Monitorizing",
+              "transform": "table",
+              "type": "table"
+            }
+          ],
+          "repeat": null,
+          "title": "Logs",
+          "type": "row"
+        }
+      ],
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "selected": true,
+              "text": "lcpucluster1",
+              "value": "lcpucluster1"
+            },
+            "datasource": "azure-mllab-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'AmlCompute'\n| where _ResourceId contains \"#{Namespace}#mlmllab\"\n| summarize by  ClusterName",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Compute Cluster",
+            "multi": false,
+            "name": "ComputeCluster",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'AmlCompute'\n| where _ResourceId contains \"#{Namespace}#mlmllab\"\n| summarize by  ClusterName",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "Running",
+              "value": "Running"
+            },
+            "datasource": "azure-mllab-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeCluster'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes),  \"Running\", strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": null,
+            "multi": false,
+            "name": "Status",
+            "options": [
+              {
+                "selected": true,
+                "text": "Running",
+                "value": "Running"
+              }
+            ],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeCluster'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes),  \"Running\", strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
+            "refresh": 0,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "efdc7ffa-3aad-42c2-8aea-923f6d79bc32",
+              "value": "efdc7ffa-3aad-42c2-8aea-923f6d79bc32"
+            },
+            "datasource": "azure-mllab-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\n\napp('#{Namespace}#mlmllabai').traces\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n| where customDimensions.compute_target in ('$ComputeCluster') \n| project customDimensions\n| distinct tostring(customDimensions.parent_run_id)",
+            "hide": 0,
+            "includeAll": false,
+            "index": -1,
+            "label": "Pipeline Run Id",
+            "multi": false,
+            "name": "RunId",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\n\napp('#{Namespace}#mlmllabai').traces\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n| where customDimensions.compute_target in ('$ComputeCluster') \n| project customDimensions\n| distinct tostring(customDimensions.parent_run_id)",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-24h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "Compute Cluster Monitoring",
+      "uid": "fiwo9YJMz",
+      "variables": {
+        "list": []
+      },
+      "version": 24
+    }
   mbs-logs-dashboard.json: |-
     {
       "annotations": {
