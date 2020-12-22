@@ -615,13 +615,12 @@ data:
           {
             "allValue": null,
             "current": {
-              "$$hashKey": "object:4809",
               "selected": false,
-              "text": "daplatform0101lmllab3",
-              "value": "daplatform0101lmllab3"
+              "text": "",
+              "value": ""
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"daplatform0101lmlmllab\"\n| summarize by  ClusterName",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"#{Namespace}#mlmllab\"\n| summarize by  ClusterName",
             "hide": 0,
             "includeAll": false,
             "index": -1,
@@ -629,7 +628,7 @@ data:
             "multi": false,
             "name": "ComputeInstance",
             "options": [],
-            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"daplatform0101lmlmllab\"\n| summarize by  ClusterName",
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'DSI'\n| where _ResourceId contains \"#{Namespace}#mlmllab\"\n| summarize by  ClusterName",
             "refresh": 2,
             "regex": "",
             "skipUrlSync": false,
@@ -643,8 +642,8 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "Unusuable: DiskFull",
-              "value": "Unusuable: DiskFull"
+              "text": "",
+              "value": ""
             },
             "datasource": "azure-mllab-loganalytics-workspace",
             "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeInstance'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes), iff(RunningNodeCount+IdleNodeCount > 0, \"Running\", \"Stopped\"), strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
@@ -1334,9 +1333,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "selected": true,
-              "text": "lcpucluster1",
-              "value": "lcpucluster1"
+              "selected": false,
+              "text": "",
+              "value": ""
             },
             "datasource": "azure-mllab-loganalytics-workspace",
             "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where ClusterType == 'AmlCompute'\n| where _ResourceId contains \"#{Namespace}#mlmllab\"\n| summarize by  ClusterName",
@@ -1361,8 +1360,8 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "Running",
-              "value": "Running"
+              "text": "",
+              "value": ""
             },
             "datasource": "azure-mllab-loganalytics-workspace",
             "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nAmlComputeClusterEvent\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where OperationName =='Cluster Quota Utilization' and ClusterName == '$ComputeCluster'\n| order by TimeGenerated desc\n| take 1\n| project ClusterErrorCodes, RunningNodeCount, IdleNodeCount\n| extend StatusFailed = iff(isempty(ClusterErrorCodes),  \"Running\", strcat(\"Unusuable: \",ClusterErrorCodes))\n| project-away ClusterErrorCodes, RunningNodeCount, IdleNodeCount",
@@ -1393,8 +1392,8 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "efdc7ffa-3aad-42c2-8aea-923f6d79bc32",
-              "value": "efdc7ffa-3aad-42c2-8aea-923f6d79bc32"
+              "text": "",
+              "value": ""
             },
             "datasource": "azure-mllab-loganalytics-workspace",
             "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\n\napp('#{Namespace}#mlmllabai').traces\n| where timestamp < unixtime_milliseconds_todatetime(endDateTime)\n| where timestamp >= unixtime_milliseconds_todatetime(startDateTime) \n| where customDimensions.compute_target in ('$ComputeCluster') \n| project customDimensions\n| distinct tostring(customDimensions.parent_run_id)",
