@@ -6352,4 +6352,210 @@ data:
       },
       "version": 6
     }
+  mib-serving-https-logs-dashboard.json: |-
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 30,
+      "iteration": 1610445590366,
+      "links": [],
+      "panels": [
+        {
+          "columns": [],
+          "datasource": "azure-loganalytics-workspace",
+          "fontSize": "100%",
+          "gridPos": {
+            "h": 16,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "pageSize": null,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "styles": [
+            {
+              "alias": "Time",
+              "align": "auto",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "alias": "",
+              "align": "",
+              "colorMode": "row",
+              "colors": [
+                "#F2495C",
+                "#FF9830",
+                "#5794F2"
+              ],
+              "decimals": 0,
+              "pattern": "State",
+              "thresholds": [
+                "1",
+                "2"
+              ],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "appInsights": {
+                "dimension": "none",
+                "metricName": "select",
+                "rawQuery": false,
+                "rawQueryString": "",
+                "timeColumn": "timestamp",
+                "timeGrain": "auto",
+                "valueColumn": ""
+              },
+              "azureLogAnalytics": {
+                "query": "KubePodInventory | where $__timeFilter() | project ClusterName, Namespace, Name, PodStatus, ContainerID, ServiceName | where Namespace == \"azureml-#{Namespace}#mlmllab\" | where ClusterName == \"#{Namespace}#akmlla2\" | where ServiceName in ($SERVICE_NAME) | join kind= innerunique ( ContainerLog | where $__timeFilter() | project LogEntry, format_datetime(TimeGenerated, 'yyyy-MM-dd hh:mm:ss.fff'), ContainerID, State=iif(LogEntry has \"| ERROR |\", 0, iif(LogEntry has \"| WARNING |\", 1, iif(LogEntry has \"| INFO |\",2,3))) ) on ContainerID | extend Log_Level = case(LogEntry has \"| ERROR |\", \"ERROR\", \n LogEntry has \"| WARNING |\", \"WARNING\", \n LogEntry has \"| INFO |\", \"INFO\", \n \"UNKNOWN\")\n| where Log_Level in ($Log_level) | project-rename Date=TimeGenerated, PodName = Name, Log=LogEntry | project-away ClusterName, Namespace, ContainerID, ContainerID1 | project-reorder Date desc, PodName, PodStatus, Log",
+                "resultFormat": "table",
+                "workspace": "#{log-analytics-workspace-id}#"
+              },
+              "azureMonitor": {
+                "aggOptions": [],
+                "dimensionFilter": "*",
+                "metricDefinition": "select",
+                "metricName": "select",
+                "metricNamespace": "select",
+                "resourceGroup": "select",
+                "resourceName": "select",
+                "timeGrain": "auto",
+                "timeGrains": [],
+                "top": "10"
+              },
+              "queryType": "Azure Log Analytics",
+              "refId": "A",
+              "subscription": "#{log-analytics-subscription-id}#"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "LOGS",
+          "transform": "table",
+          "transparent": true,
+          "type": "table"
+        }
+      ],
+      "refresh": false,
+      "schemaVersion": 22,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+              "text": "",
+              "value": [
+                ""
+              ]
+            },
+            "hide": 0,
+            "includeAll": true,
+            "label": "Log Level",
+            "multi": true,
+            "name": "Log_level",
+            "options": [
+              {
+                "selected": false,
+                "text": "All",
+                "value": "$__all"
+              },
+              {
+                "selected": false,
+                "text": "INFO",
+                "value": "INFO"
+              },
+              {
+                "selected": false,
+                "text": "WARNING",
+                "value": "WARNING"
+              },
+              {
+                "selected": false,
+                "text": "ERROR",
+                "value": "ERROR"
+              }
+            ],
+            "query": "INFO, WARNING, ERROR",
+            "skipUrlSync": false,
+            "type": "custom"
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "",
+              "value": ""
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nKubePodInventory \n| project ClusterName, Namespace, ServiceName, TimeGenerated\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where Namespace == \"azureml-#{Namespace}#mlmllab\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| summarize by ServiceName",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Service Name",
+            "multi": false,
+            "name": "SERVICE_NAME",
+            "options": [],
+            "query": "let startDateTime = ${__from};\nlet endDateTime = ${__to};\nKubePodInventory \n| project ClusterName, Namespace, ServiceName, TimeGenerated\n| where TimeGenerated < unixtime_milliseconds_todatetime(endDateTime)\n| where TimeGenerated >= unixtime_milliseconds_todatetime(startDateTime) \n| where Namespace == \"azureml-#{Namespace}#mlmllab\" \n| where ClusterName == \"#{Namespace}#akmlla2\" \n| summarize by ServiceName",
+            "refresh": 2,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          }
+        ]
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ]
+      },
+      "timezone": "",
+      "title": "MIB SERVING HTTPS LOGS",
+      "uid": "ttoLBC-Gz",
+      "variables": {
+        "list": []
+      },
+      "version": 8
+    }
 ---
