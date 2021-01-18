@@ -32,34 +32,6 @@ data:
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
 
-  azure-loganalytics-e2e.yml: |-
-    apiVersion: 1
-
-    datasources:
-      - name: azure-loganalytics-e2e
-        type: grafana-azure-monitor-datasource
-        access: proxy
-        typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
-        orgId: 1
-        url: /api/datasources/proxy/2
-        isDefault: true
-        jsonData:
-          cloudName: azuremonitor
-          clientId: #{log-lacore-id-test}#
-          subscriptionId: #{log-analytics-subscription-id-test}#
-          tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-          logAnalyticsClientId: #{log-lacore-id-test}#
-          logAnalyticsSubscriptionId: #{log-analytics-subscription-id-test}#
-          logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id-test}#
-          azureLogAnalyticsSameAs: true
-          keepCookies: []
-        secureJsonData:
-          clientSecret: #{log-lacore-secret-test}#
-          logAnalyticsClientSecret: #{log-lacore-secret-test}#
-        editable: true
-
-
   azure-mllab-loganalytics-workspace.yml: |-
     apiVersion: 1
 
@@ -85,6 +57,33 @@ data:
           appInsightsAppId: #{mllab-aml-appinsights-id}#
         secureJsonData:
           appInsightsApiKey: #{mllab-aml-appinsights-api-key}#
+          clientSecret: #{adsp-lacore-secret}#
+          logAnalyticsClientSecret: #{adsp-lacore-secret}#
+        editable: true
+
+  azure-loganalytics-e2e: |-
+    apiVersion: 1
+
+    datasources:
+      - name: azure-loganalytics-e2e
+        type: grafana-azure-monitor-datasource
+        access: proxy
+        typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
+        orgId: 1
+        url: /api/datasources/proxy/2
+        isDefault: true
+        jsonData:
+          cloudName: azuremonitor
+          clientId: #{adapp-lacore-id}#
+          subscriptionId: #{log-analytics-subscription-id-test}#
+          tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsClientId: #{adapp-lacore-id}#
+          logAnalyticsSubscriptionId: #{log-analytics-subscription-id-test}#
+          logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
+          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
+          azureLogAnalyticsSameAs: true
+          keepCookies: []
+        secureJsonData:
           clientSecret: #{adsp-lacore-secret}#
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
