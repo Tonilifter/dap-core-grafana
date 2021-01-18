@@ -61,11 +61,11 @@ data:
           logAnalyticsClientSecret: #{adsp-lacore-secret}#
         editable: true
 
-  azure-loganalytics-e2e: |-
+  azure-loganalytics-e2e-workspace: |-
     apiVersion: 1
 
     datasources:
-      - name: azure-loganalytics-e2e
+      - name: azure-loganalytics-e2e-workspace
         type: grafana-azure-monitor-datasource
         access: proxy
         typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg

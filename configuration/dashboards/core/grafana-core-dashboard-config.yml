@@ -5900,7 +5900,7 @@ data:
       "panels": [
       {
         "columns": [],
-        "datasource": "azure-loganalytics-e2e",
+        "datasource": "azure-loganalytics-e2e-workspace",
         "fontSize": "100%",
         "gridPos": {
           "h": 9,
@@ -5992,7 +5992,7 @@ data:
             "text": "OK",
             "value": "OK"
           },
-          "datasource": "azure-loganalytics-e2e",
+          "datasource": "azure-loganalytics-e2e-workspace",
           "definition": "CoreOperationLogTest_CL \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| distinct status",
           "hide": 0,
           "includeAll": false,
