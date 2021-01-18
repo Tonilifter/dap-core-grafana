@@ -70,7 +70,7 @@ data:
         access: proxy
         typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
         orgId: 1
-        url: /api/datasources/proxy/2
+        url: /api/datasources/proxy/6
         isDefault: true
         jsonData:
           cloudName: azuremonitor
