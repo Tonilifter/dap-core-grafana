@@ -5955,7 +5955,7 @@ data:
           "azureLogAnalytics": {
             "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE) ",
             "resultFormat": "table",
-            "workspace": "#{log-analytics-workspace-id-test}#"
+            "workspace": "#{log-analytics-workspace-id}#"
           },
           "azureMonitor": {
             "aggOptions": [],
@@ -5971,7 +5971,7 @@ data:
           },
           "queryType": "Azure Log Analytics",
           "refId": "A",
-          "subscription": "#{log-analytics-subscription-id-test}#"
+          "subscription": "#{log-analytics-subscription-id}#"
         }
         ],
         "timeFrom": null,
@@ -5992,7 +5992,7 @@ data:
             "text": "OK",
             "value": "OK"
           },
-          "datasource": "azure-loganalytics-e2e-workspace",
+          "datasource": "azure-e2e-loganalytics-workspace",
           "definition": "CoreOperationLogTest_CL \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| distinct status",
           "hide": 0,
           "includeAll": false,
@@ -6015,7 +6015,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-12h",
+        "from": "now-6h",
         "to": "now"
       },
       "timepicker": {
