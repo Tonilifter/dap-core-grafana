@@ -71,16 +71,16 @@ data:
         typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
         orgId: 1
         url: /api/datasources/proxy/2
-        isDefault: true
+        isDefault: false
         jsonData:
           cloudName: azuremonitor
           clientId: #{adapp-lacore-id}#
-          subscriptionId: #{log-analytics-subscription-id}#
+          subscriptionId: #{log-analytics-subscription-id-test}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
           logAnalyticsClientId: #{adapp-lacore-id}#
-          logAnalyticsSubscriptionId: #{log-analytics-subscription-id}#
+          logAnalyticsSubscriptionId: #{log-analytics-subscription-id-test}#
           logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id}#
+          logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id-test}#
           azureLogAnalyticsSameAs: true
           keepCookies: []
         secureJsonData:
