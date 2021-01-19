@@ -65,7 +65,7 @@ data:
     apiVersion: 1
 
     datasources:
-      - name: azure-loganalytics-e2e-workspace
+      - name: azure-e2e-loganalytics-workspace
         type: grafana-azure-monitor-datasource
         access: proxy
         typeLogoUrl: public/plugins/grafana-azure-monitor-datasource/img/logo.jpg
