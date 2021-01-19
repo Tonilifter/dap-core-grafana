@@ -5900,7 +5900,7 @@ data:
       "panels": [
       {
         "columns": [],
-        "datasource": "azure-e2e-loganalytics-workspace",
+        "datasource": "azure-e2e-loganalytics",
         "fontSize": "100%",
         "gridPos": {
           "h": 9,
@@ -5953,7 +5953,7 @@ data:
             "valueColumn": ""
           },
           "azureLogAnalytics": {
-            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE) ",
+            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where st in ($STATUS)\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
             "resultFormat": "table",
             "workspace": "#{log-analytics-workspace-id-test}#"
           },
@@ -5992,7 +5992,7 @@ data:
             "text": "OK",
             "value": "OK"
           },
-          "datasource": "azure-e2e-loganalytics-workspace",
+          "datasource": "azure-e2e-loganalytics",
           "definition": "CoreOperationLogTest_CL \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| distinct status",
           "hide": 0,
           "includeAll": false,
