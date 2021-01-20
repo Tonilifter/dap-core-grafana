@@ -5894,8 +5894,8 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 31,
-      "iteration": 1610986390057,
+      "id": 2,
+      "iteration": 1611077995973,
       "links": [],
       "panels": [
       {
@@ -5903,8 +5903,8 @@ data:
         "datasource": "azure-e2e-loganalytics",
         "fontSize": "100%",
         "gridPos": {
-          "h": 9,
-          "w": 12,
+          "h": 10,
+          "w": 24,
           "x": 0,
           "y": 0
         },
@@ -5953,7 +5953,7 @@ data:
             "valueColumn": ""
           },
           "azureLogAnalytics": {
-            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where st in ($STATUS)\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\"\r\n| where UID_s has_any ($COMPONENTE)\r\n| where st in ($STATUS)\r\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)\r\n",
             "resultFormat": "table",
             "workspace": "#{log-analytics-workspace-id-test}#"
           },
@@ -5979,23 +5979,400 @@ data:
         "title": "Listado de ejecuciones E2E",
         "transform": "table",
         "type": "table"
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "azure-e2e-loganalytics",
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 8,
+          "w": 18,
+          "x": 0,
+          "y": 10
+        },
+        "hiddenSeries": false,
+        "id": 8,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": false,
+          "hideEmpty": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "dataLinks": []
+        },
+        "percentage": false,
+        "pointradius": 2,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLogTest_CL \r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\"\n| where UID_s has_any ($COMPONENTE)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+              "resultFormat": "time_series",
+              "workspace": "#{log-analytics-workspace-id-test}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id-test}#"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Llamadas por módulo procesos E2E",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:4786",
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:4787",
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "cacheTimeout": null,
+        "datasource": "azure-e2e-loganalytics",
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 18,
+          "y": 10
+        },
+        "id": 4,
+        "links": [],
+        "options": {
+          "colorMode": "value",
+          "fieldOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "defaults": {
+              "mappings": [
+                {
+                  "$$hashKey": "object:2669",
+                  "id": 0,
+                  "op": "=",
+                  "text": "N/A",
+                  "type": 1,
+                  "value": "null"
+                }
+              ],
+              "nullValueMode": "connected",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [],
+            "values": false
+          },
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto"
+        },
+        "pluginVersion": "6.7.1",
+        "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" \r\n| where NIVEL_s == \"ERROR\"\n| where UID_s has_any ($COMPONENTE)\n| summarize count()\r",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id-test}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id-test}#"
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Errores ejecuciones E2E",
+        "type": "stat"
+      },
+      {
+        "columns": [],
+        "datasource": "azure-e2e-loganalytics",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 18,
+          "x": 0,
+          "y": 18
+        },
+        "id": 6,
+        "pageSize": null,
+        "showHeader": true,
+        "sort": {
+          "col": 0,
+          "desc": true
+        },
+        "styles": [
+          {
+            "$$hashKey": "object:3515",
+            "alias": "FECHA_EJECUCION",
+            "align": "auto",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "pattern": "FECHA_EJECUCION",
+            "type": "date"
+          },
+          {
+            "$$hashKey": "object:3516",
+            "alias": "",
+            "align": "right",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "string",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated)\r\n| where MODULO_s == \"TEST_E2E\"\r\n| where st in ($STATUS)\r\n| where UID_s has_any ($COMPONENTE)\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id-test}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id-test}#"
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Resultados validaciones E2E",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "datasource": "azure-e2e-loganalytics",
+        "gridPos": {
+          "h": 9,
+          "w": 6,
+          "x": 18,
+          "y": 18
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "fieldOptions": {
+            "calcs": [
+              "mean"
+            ],
+            "defaults": {
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [],
+            "values": false
+          },
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto"
+        },
+        "pluginVersion": "6.7.1",
+        "targets": [
+          {
+            "appInsights": {
+              "dimension": "none",
+              "metricName": "select",
+              "rawQuery": false,
+              "rawQueryString": "",
+              "timeColumn": "timestamp",
+              "timeGrain": "auto",
+              "valueColumn": ""
+            },
+            "azureLogAnalytics": {
+              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s == \"TEST_E2E\"                                            \r\n| where NIVEL_s == \"ERROR\"\r\n| where UID_s has_any ($COMPONENTE)\r\n| summarize count()",
+              "resultFormat": "table",
+              "workspace": "#{log-analytics-workspace-id-test}#"
+            },
+            "azureMonitor": {
+              "aggOptions": [],
+              "dimensionFilter": "*",
+              "metricDefinition": "select",
+              "metricName": "select",
+              "metricNamespace": "select",
+              "resourceGroup": "select",
+              "resourceName": "select",
+              "timeGrain": "auto",
+              "timeGrains": [],
+              "top": "10"
+            },
+            "queryType": "Azure Log Analytics",
+            "refId": "A",
+            "subscription": "#{log-analytics-subscription-id-test}#"
+          }
+        ],
+        "timeFrom": null,
+        "timeShift": null,
+        "title": "Errores validaciones E2E",
+        "type": "stat"
       }
-      ],
-      "schemaVersion": 22,
-      "style": "dark",
-      "tags": [],
-      "templating": {
-        "list": [
+    ],
+    "schemaVersion": 22,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
         {
           "allValue": null,
           "current": {
-            "text": "OK",
-            "value": "OK"
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
           },
           "datasource": "azure-e2e-loganalytics",
           "definition": "CoreOperationLogTest_CL \n| extend status=tostring(parse_json(PAYLOAD_s).STATUS)\n| distinct status",
           "hide": 0,
-          "includeAll": false,
+          "includeAll": true,
           "index": -1,
           "label": "STATUS",
           "multi": true,
@@ -6011,33 +6388,86 @@ data:
           "tagsQuery": "",
           "type": "query",
           "useTags": false
+        },
+        {
+          "allValue": null,
+          "current": {
+            "text": "All",
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": "azure-e2e-loganalytics",
+          "definition": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend componente = tostring(split(app_name, '_')[2])\n| distinct componente",
+          "hide": 0,
+          "includeAll": true,
+          "index": -1,
+          "label": "COMPONENTE",
+          "multi": true,
+          "name": "COMPONENTE",
+          "options": [
+            {
+              "$$hashKey": "object:1056",
+              "selected": true,
+              "text": "All",
+              "value": "$__all"
+            },
+            {
+              "$$hashKey": "object:1057",
+              "selected": false,
+              "text": "FTP",
+              "value": "FTP"
+            },
+            {
+              "$$hashKey": "object:1058",
+              "selected": false,
+              "text": "DUMPER",
+              "value": "DUMPER"
+            },
+            {
+              "$$hashKey": "object:1059",
+              "selected": false,
+              "text": "SQL",
+              "value": "SQL"
+            }
+          ],
+          "query": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend componente = tostring(split(app_name, '_')[2])\n| distinct componente",
+          "refresh": 0,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
         }
-        ]
-      },
-      "time": {
-        "from": "now-12h",
-        "to": "now"
-      },
-      "timepicker": {
-        "refresh_intervals": [
-          "5s",
-          "10s",
-          "30s",
-          "1m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "1d"
-        ]
-      },
-      "timezone": "",
-      "title": "Control de pruebas E2E",
-      "uid": "q9N-rpfGk",
-      "variables": {
-        "list": []
-      },
-      "version": 1
+      ]
+    },
+    "time": {
+      "from": "now-2d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "Control de pruebas E2E",
+    "uid": "q9N-rpfGk",
+    "variables": {
+      "list": []
+    },
+    "version": 1
     }
 ---
