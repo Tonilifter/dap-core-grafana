@@ -74,18 +74,18 @@ data:
         isDefault: false
         jsonData:
           cloudName: azuremonitor
-          clientId: #{adapp-lacore-id}#
+          clientId: #{log-lacore-id-test}#
           subscriptionId: #{log-analytics-subscription-id-test}#
           tenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
-          logAnalyticsClientId: #{adapp-lacore-id}#
+          logAnalyticsClientId: #{log-lacore-id-test}#
           logAnalyticsSubscriptionId: #{log-analytics-subscription-id-test}#
           logAnalyticsTenantId: 0a25214f-ee52-483c-b96b-dc79f3227a6f
           logAnalyticsDefaultWorkspace: #{log-analytics-workspace-id-test}#
           azureLogAnalyticsSameAs: true
           keepCookies: []
         secureJsonData:
-          clientSecret: #{adsp-lacore-secret}#
-          logAnalyticsClientSecret: #{adsp-lacore-secret}#
+          clientSecret: #{log-lacore-secret-test}#
+          logAnalyticsClientSecret: #{log-lacore-secret-test}#
         editable: true
 
   microsoft-sql-server.yml: |-
