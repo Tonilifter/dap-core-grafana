@@ -5953,7 +5953,7 @@ data:
             "valueColumn": ""
           },
           "azureLogAnalytics": {
-            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\"\r\n| where UID_s has_any ($COMPONENTE)\r\n| where st in ($STATUS)\r\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)\r\n",
+            "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\"\r and MODULO_s in ($MODULO)\n| where UID_s has_any ($PRUEBA)\r\n| where st in ($STATUS)\r\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)\r\n",
             "resultFormat": "table",
             "workspace": "#{log-analytics-workspace-id-test}#"
           },
@@ -6034,7 +6034,7 @@ data:
               "valueColumn": ""
             },
             "azureLogAnalytics": {
-              "query": "CoreOperationLogTest_CL \r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\"\n| where UID_s has_any ($COMPONENTE)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+              "query": "CoreOperationLogTest_CL \r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" and MODULO_s in ($MODULO)\n| where UID_s has_any ($PRUEBA)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
               "resultFormat": "time_series",
               "workspace": "#{log-analytics-workspace-id-test}#"
             },
@@ -6166,7 +6166,7 @@ data:
               "valueColumn": ""
             },
             "azureLogAnalytics": {
-              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" \r\n| where NIVEL_s == \"ERROR\"\n| where UID_s has_any ($COMPONENTE)\n| summarize count()\r",
+              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" \rand MODULO_s in ($MODULO)\n| where NIVEL_s == \"ERROR\"\n| where UID_s has_any ($PRUEBA)\n| summarize count()\r",
               "resultFormat": "table",
               "workspace": "#{log-analytics-workspace-id-test}#"
             },
@@ -6247,7 +6247,7 @@ data:
               "valueColumn": ""
             },
             "azureLogAnalytics": {
-              "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated)\r\n| where MODULO_s == \"TEST_E2E\"\r\n| where st in ($STATUS)\r\n| where UID_s has_any ($COMPONENTE)\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s",
+              "query": "CoreOperationLogTest_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend st=tostring(parse_json(PAYLOAD_s).STATUS)\r\n| where $__timeFilter(TimeGenerated)\r\n| where MODULO_s == \"TEST_E2E\"\r\n| where st in ($STATUS)\r\n| where UID_s has_any ($PRUEBA)\n| order by fecha, TimeGenerated desc\r\n| project FECHA_EJECUCION=TimeGenerated, STATUS=st, MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s",
               "resultFormat": "table",
               "workspace": "#{log-analytics-workspace-id-test}#"
             },
@@ -6329,7 +6329,7 @@ data:
               "valueColumn": ""
             },
             "azureLogAnalytics": {
-              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s == \"TEST_E2E\"                                            \r\n| where NIVEL_s == \"ERROR\"\r\n| where UID_s has_any ($COMPONENTE)\r\n| summarize count()",
+              "query": "CoreOperationLogTest_CL\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s == \"TEST_E2E\"\r\n| where NIVEL_s == \"ERROR\"\r\n| where UID_s has_any ($PRUEBA)\r\n| summarize count()",
               "resultFormat": "table",
               "workspace": "#{log-analytics-workspace-id-test}#"
             },
@@ -6398,40 +6398,15 @@ data:
             ]
           },
           "datasource": "azure-e2e-loganalytics",
-          "definition": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend componente = tostring(split(app_name, '_')[2])\n| distinct componente",
+          "definition": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend prueba = tostring(split(app_name, '_')[2])\n| distinct prueba",
           "hide": 0,
           "includeAll": true,
           "index": -1,
-          "label": "COMPONENTE",
+          "label": "PRUEBA",
           "multi": true,
-          "name": "COMPONENTE",
-          "options": [
-            {
-              "$$hashKey": "object:1056",
-              "selected": true,
-              "text": "All",
-              "value": "$__all"
-            },
-            {
-              "$$hashKey": "object:1057",
-              "selected": false,
-              "text": "FTP",
-              "value": "FTP"
-            },
-            {
-              "$$hashKey": "object:1058",
-              "selected": false,
-              "text": "DUMPER",
-              "value": "DUMPER"
-            },
-            {
-              "$$hashKey": "object:1059",
-              "selected": false,
-              "text": "SQL",
-              "value": "SQL"
-            }
-          ],
-          "query": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend componente = tostring(split(app_name, '_')[2])\n| distinct componente",
+          "name": "PRUEBA",
+          "options": [],
+          "query": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend prueba = tostring(split(app_name, '_')[2])\n| distinct prueba",
           "refresh": 0,
           "regex": "",
           "skipUrlSync": false,
@@ -6441,7 +6416,35 @@ data:
           "tagsQuery": "",
           "type": "query",
           "useTags": false
-        }
+        },
+         {
+           "allValue": null,
+           "current": {
+             "text": "All",
+             "value": [
+               "$__all"
+             ]
+           },
+           "datasource": "azure-e2e-loganalytics",
+           "definition": "CoreOperationLogTest_CL\n| where MODULO_s != 'TEST_E2E' \n| distinct MODULO_s",
+           "hide": 0,
+           "includeAll": true,
+           "index": -1,
+           "label": "MODULO",
+           "multi": true,
+           "name": "MODULO",
+           "options": [],
+           "query": "CoreOperationLogTest_CL\n| where MODULO_s != 'TEST_E2E' \n| distinct MODULO_s",
+           "refresh": 1,
+           "regex": "",
+           "skipUrlSync": false,
+           "sort": 0,
+           "tagValuesQuery": "",
+           "tags": [],
+           "tagsQuery": "",
+           "type": "query",
+           "useTags": false
+         }
       ]
     },
     "time": {
