@@ -6407,7 +6407,7 @@ data:
           "name": "PRUEBA",
           "options": [],
           "query": "CoreOperationLogTest_CL \n| extend app_name = extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| extend prueba = tostring(split(app_name, '_')[2])\n| distinct prueba",
-          "refresh": 0,
+          "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
           "sort": 0,
