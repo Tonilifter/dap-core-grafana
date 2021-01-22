@@ -6034,7 +6034,7 @@ data:
               "valueColumn": ""
             },
             "azureLogAnalytics": {
-              "query": "LogWorkspaceE2E \r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" and MODULO_s in ($MODULO)\n| where UID_s has_any ($PRUEBA)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+              "query": "CoreOperationLog#{LogWorkspaceE2E}#_CL\r\n| where $__timeFilter(TimeGenerated) \r\n| where UID_s contains \"E2E\"\r\n| where MODULO_s != \"TEST_E2E\" and MODULO_s in ($MODULO)\n| where UID_s has_any ($PRUEBA)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
               "resultFormat": "time_series",
               "workspace": "#{log-analytics-workspace-id-test}#"
             },
