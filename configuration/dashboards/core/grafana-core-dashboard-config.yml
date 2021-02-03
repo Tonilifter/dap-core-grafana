@@ -1428,21 +1428,21 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "",
+              "text": "All",
               "value": [
-                ""
+                "$__all"
               ]
             },
             "datasource": "azure-loganalytics-workspace",
-            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend data_date=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct data_date",
             "hide": 0,
             "includeAll": true,
             "index": -1,
-            "label": "DataDate",
+            "label": "Data_Date",
             "multi": true,
-            "name": "DataDate",
+            "name": "Data_Date",
             "options": [],
-            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend data_date=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct data_date",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
