@@ -1424,6 +1424,34 @@ data:
             "tagsQuery": "",
             "type": "query",
             "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "DataDate",
+            "multi": true,
+            "name": "DataDate",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
           }
         ]
       },
