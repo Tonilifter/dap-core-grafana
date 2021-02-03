@@ -1428,9 +1428,9 @@ data:
           {
             "allValue": null,
             "current": {
-              "text": "All",
+              "text": "",
               "value": [
-                "$__all"
+                ""
               ]
             },
             "datasource": "azure-loganalytics-workspace",
