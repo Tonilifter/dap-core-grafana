@@ -550,7 +550,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)                                      //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend fecha=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated) //this is a macro used to show the full chart’s time range, choose the datetime column here\r\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) and fecha in ($DataDate)\n| order by fecha, TimeGenerated desc\n| project FECHA_EJECUCION=TimeGenerated, FECHA_DATO=fecha, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), UID_s, LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -632,7 +632,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r                                                \n| where $__timeFilter(TimeGenerated)                                             \n| where NIVEL_s == \"ERROR\" and extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)  \r\n| where $__timeFilter(TimeGenerated)\n| where NIVEL_s == \"ERROR\" and extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) and datadate in ($DataDate)\n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -712,7 +712,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)  \r\n| where $__timeFilter(TimeGenerated) \n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) and datadate in ($DataDate)\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -827,7 +827,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| where $__timeFilter(TimeGenerated)                                      \n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)  \r\n| where $__timeFilter(TimeGenerated)\n| where extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s) in ($UID) and datadate in ($DataDate)\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -912,6 +912,34 @@ data:
             "name": "UID",
             "options": [],
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend uid=extract(\"^(.[^#]+)#([^#\\\\n]+)(#.*)*$\", 2, UID_s)\n| distinct uid",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "DataDate",
+            "multi": true,
+            "name": "DataDate",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
@@ -1023,7 +1051,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \r\n| where region in ($Region) and app in ($Application)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, APPLICATION=app, REGION=region, FECHA_DATO=tostring(parse_json(PAYLOAD_s).DATADATE), MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)\r\n| where region in ($Region) and app in ($Application) and datadate in ($DataDate)\r\n| order by TimeGenerated asc\r\n| project FECHA_EJECUCION=TimeGenerated, APPLICATION=app, REGION=region, FECHA_DATO=datadate, MODULO=MODULO_s, STATUS=tostring(parse_json(PAYLOAD_s).STATUS), MSG=tostring(parse_json(PAYLOAD_s).MSG), LOGTYPE=tostring(parse_json(PAYLOAD_s).LOGTYPE)",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1105,7 +1133,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL         \r\n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)        \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)                                                    \n| where $__timeFilter(TimeGenerated)   \n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"                                           \n| where region in ($Region) and app in ($Application) \n| summarize count()\r\n",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)  \r\n| where $__timeFilter(TimeGenerated)   \n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"\n| where region in ($Region) and app in ($Application) and datadate in ($DataDate)\n| summarize count()\r\n",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1185,7 +1213,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL                                                          \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| where $__timeFilter(TimeGenerated)                                      \n| where region in ($Region) and app in ($Application)\r\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL\r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| where $__timeFilter(TimeGenerated)\n| where region in ($Region) and app in ($Application) and datadate in ($DataDate)\r\n| summarize count() by NIVEL_s, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1300,7 +1328,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| where $__timeFilter(TimeGenerated)                                      \n| where region in ($Region) and app in ($Application) \r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)\r\n | extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE) \r\n| where $__timeFilter(TimeGenerated)\n| where region in ($Region) and app in ($Application) and datadate in ($DataDate)\r\n| summarize count() by MODULO_s, bin(TimeGenerated, $__interval)  \r\n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -1415,6 +1443,34 @@ data:
             "name": "Region",
             "options": [],
             "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend region=tostring(parse_json(PAYLOAD_s).REGION)\n| distinct region",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+              "text": "All",
+              "value": [
+                "$__all"
+              ]
+            },
+            "datasource": "azure-loganalytics-workspace",
+            "definition": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "DataDate",
+            "multi": true,
+            "name": "DataDate",
+            "options": [],
+            "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL  \n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\n| distinct datadate",
             "refresh": 1,
             "regex": "",
             "skipUrlSync": false,
