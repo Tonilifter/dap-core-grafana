@@ -5258,7 +5258,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL     \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype=tostring(payload.LOGTYPE)\n| extend status=tostring(payload.STATUS)                                                                       \n| where $__timeFilter(TimeGenerated)\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"                \n| summarize count() by logtype, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL     \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype=tostring(payload.LOGTYPE)\n| extend status=tostring(payload.STATUS)\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\n| where $__timeFilter(TimeGenerated)\n| where region in ($Region) and app in ($Application)\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\"\n| summarize count() by logtype, bin(TimeGenerated, $__interval) \n| order by TimeGenerated asc",
                 "resultFormat": "time_series",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -5383,7 +5383,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL        \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)                                                      //the table to query (e.g. Usage, Heartbeat, Perf)\n| where $__timeFilter(TimeGenerated)                                  //this is a macro used to show the full chart’s time range, choose the datetime column here\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| summarize count()",
+                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL        \n| extend payload = parse_json(PAYLOAD_s)\n| extend logtype = tostring(payload.LOGTYPE)\n| extend status = tostring(payload.STATUS)\n| extend region=tostring(payload.REGION)\r\n| extend app=tostring(payload.APPLICATION)\n| where $__timeFilter(TimeGenerated)\n| where region in ($Region) and app in ($Application)\n| where logtype in (\"ERROR\", \"END\") and status == \"KO\" \n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
