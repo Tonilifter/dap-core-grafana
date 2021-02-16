@@ -1565,7 +1565,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.azure_function_apis",
+              "rawSql": "SELECT * FROM dbo.azure_function_apis\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1616,7 +1616,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * from dbo.db",
+              "rawSql": "SELECT * from dbo.db\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1664,7 +1664,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.ddg_dwh",
+              "rawSql": "SELECT * FROM dbo.ddg_dwh\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1760,7 +1760,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.files",
+              "rawSql": "SELECT * FROM dbo.files\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1808,7 +1808,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.insecure",
+              "rawSql": "SELECT * FROM dbo.insecure\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1856,7 +1856,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.internal_apis",
+              "rawSql": "SELECT * FROM dbo.internal_apis\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -1904,7 +1904,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.manual_files",
+              "rawSql": "SELECT * FROM dbo.manual_files\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2151,7 +2151,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.processor",
+              "rawSql": "SELECT * FROM dbo.processor\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2247,7 +2247,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.salesforce",
+              "rawSql": "SELECT * FROM dbo.salesforce\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2295,7 +2295,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.schemas",
+              "rawSql": "SELECT * FROM dbo.schemas\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2344,7 +2344,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.servicenow",
+              "rawSql": "SELECT * FROM dbo.servicenow\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2392,7 +2392,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.streaming",
+              "rawSql": "SELECT * FROM dbo.streaming\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2442,7 +2442,7 @@ data:
             {
               "alias": "",
               "format": "table",
-              "rawSql": "SELECT * FROM dbo.teradata",
+              "rawSql": "SELECT * FROM dbo.teradata\nWHERE application_name in ($Application) and region in ($Region)",
               "refId": "A"
             }
           ],
@@ -2569,7 +2569,64 @@ data:
       "style": "dark",
       "tags": [],
       "templating": {
-        "list": []
+        "list": [
+          {
+            "allValue": null,
+            "current": {
+             "text": "All",
+             "value": [
+             "$__all"
+             ]
+            },
+            "datasource": "Microsoft SQL Server",
+            "definition": "SELECT application_name FROM [dbo].[azure_function_apis]\nUNION SELECT application_name FROM [dbo].[db]\nUNION SELECT application_name FROM [dbo].[ddg_dwh]\nUNION SELECT application_name FROM [dbo].[files]\nUNION SELECT application_name FROM [dbo].[insecure]\nUNION SELECT application_name FROM  [dbo].[internal_apis]\nUNION SELECT application_name FROM  [dbo].[manual_files]\nUNION SELECT application_name FROM  [dbo].[processor]\nUNION SELECT application_name FROM  [dbo].[salesforce]\nUNION SELECT application_name FROM  [dbo].[schemas]\nUNION SELECT application_name FROM  [dbo].[servicenow]\nUNION SELECT application_name FROM  [dbo].[streaming]\nUNION SELECT application_name FROM  [dbo].[teradata]",
+            "hide": 0,
+            "includeAll": true,
+            "index": -1,
+            "label": "Application",
+            "multi": true,
+            "name": "Application",
+            "options": [],
+            "query": "SELECT application_name FROM [dbo].[azure_function_apis]\nUNION SELECT application_name FROM [dbo].[db]\nUNION SELECT application_name FROM [dbo].[ddg_dwh]\nUNION SELECT application_name FROM [dbo].[files]\nUNION SELECT application_name FROM [dbo].[insecure]\nUNION SELECT application_name FROM  [dbo].[internal_apis]\nUNION SELECT application_name FROM  [dbo].[manual_files]\nUNION SELECT application_name FROM  [dbo].[processor]\nUNION SELECT application_name FROM  [dbo].[salesforce]\nUNION SELECT application_name FROM  [dbo].[schemas]\nUNION SELECT application_name FROM  [dbo].[servicenow]\nUNION SELECT application_name FROM  [dbo].[streaming]\nUNION SELECT application_name FROM  [dbo].[teradata]",
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 1,
+            "tagValuesQuery": "",
+            "tags": [],
+            "tagsQuery": "",
+            "type": "query",
+            "useTags": false
+          },
+          {
+            "allValue": null,
+            "current": {
+             "text": "All",
+             "value": [
+             "$__all"
+             ]
+            },
+             "datasource": "Microsoft SQL Server",
+             "definition": "SELECT region FROM [dbo].[azure_function_apis]\nUNION SELECT region FROM [dbo].[db]\nUNION SELECT region FROM [dbo].[ddg_dwh]\nUNION SELECT region FROM [dbo].[files]\nUNION SELECT region FROM [dbo].[insecure]\nUNION SELECT region FROM  [dbo].[internal_apis]\nUNION SELECT region FROM  [dbo].[manual_files]\nUNION SELECT region FROM  [dbo].[processor]\nUNION SELECT region FROM  [dbo].[salesforce]\nUNION SELECT region FROM  [dbo].[schemas]\nUNION SELECT region FROM  [dbo].[servicenow]\nUNION SELECT region FROM  [dbo].[streaming]\nUNION SELECT region FROM  [dbo].[teradata]",
+             "hide": 0,
+             "includeAll": true,
+             "index": -1,
+             "label": "Region",
+             "multi": true,
+             "name": "Region",
+             "options": [],
+             "query": "SELECT region FROM [dbo].[azure_function_apis]\nUNION SELECT region FROM [dbo].[db]\nUNION SELECT region FROM [dbo].[ddg_dwh]\nUNION SELECT region FROM [dbo].[files]\nUNION SELECT region FROM [dbo].[insecure]\nUNION SELECT region FROM  [dbo].[internal_apis]\nUNION SELECT region FROM  [dbo].[manual_files]\nUNION SELECT region FROM  [dbo].[processor]\nUNION SELECT region FROM  [dbo].[salesforce]\nUNION SELECT region FROM  [dbo].[schemas]\nUNION SELECT region FROM  [dbo].[servicenow]\nUNION SELECT region FROM  [dbo].[streaming]\nUNION SELECT region FROM  [dbo].[teradata]",
+             "refresh": 1,
+             "regex": "",
+             "skipUrlSync": false,
+             "sort": 1,
+             "tagValuesQuery": "",
+             "tags": [],
+             "tagsQuery": "",
+             "type": "query",
+             "useTags": false
+          }
+        ]
       },
       "time": {
         "from": "now-6h",
