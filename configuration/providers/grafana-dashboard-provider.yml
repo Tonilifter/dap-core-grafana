@@ -1,3 +1,4 @@
+---
 apiVersion: 1
 
 providers:
@@ -25,3 +26,11 @@ providers:
   updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
   options:
     path: /var/lib/grafana/dashboards/mllab
+- name: 'infra'
+  orgId: 1
+  folder: 'infra'
+  type: file
+  disableDeletion: false
+  updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
+  options:
+    path: /var/lib/grafana/dashboards/infra

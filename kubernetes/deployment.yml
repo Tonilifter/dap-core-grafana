@@ -61,6 +61,9 @@ spec:
             - mountPath: /var/lib/grafana/dashboards/mllab
               name: grafana-mllab-dashboards
               readOnly: false
+            - mountPath: /var/lib/grafana/dashboards/infra
+              name: grafana-infra-dashboards
+              readOnly: false
           env:
             - name: GET_HOSTS_FROM
               value: dns
@@ -107,4 +110,8 @@ spec:
           configMap:
             defaultMode: 420
             name: grafana-mllab-dashboards
+        - name: grafana-infra-dashboards
+          configMap:
+            defaultMode: 420
+            name: grafana-infra-dashboards
 ---
