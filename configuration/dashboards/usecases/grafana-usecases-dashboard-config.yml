@@ -288,7 +288,7 @@ data:
             ],
             "datasource": null,
             "decimals": 0,
-            "description": "Static Filter - Application contains \"IA_EYP_ENVIRONMENTAL_\" or Application contains \"IA_EYP_PMER_\"\n\nAvailable Filter: Time",
+            "description": "Static Filter - Application contains \"IA_EYP_ENVIRONMENTAL_\" or Application contains \"IA_EYP_PMER_\" or Application in ('IA_EYP_SAFETY_HSE_DATA','IA_EYP_PE_DATA')\n\nAvailable Filter: Time",
             "format": "none",
             "gauge": {
               "maxValue": 100,
@@ -354,7 +354,7 @@ data:
                 "valueColumn": ""
               },
               "azureLogAnalytics": {
-                "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\" and app != \"IA_EYP_ENVIRONMENTAL_ENVIROSOFT\" and ( app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" )\r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
+              "query": "CoreOperationLog#{LogWorkspaceEnv}#_CL \r\n| extend dataset=tostring(parse_json(PAYLOAD_s).DATASET)\r\n| extend datadate=tostring(parse_json(PAYLOAD_s).DATADATE)\r\n| extend app=tostring(parse_json(PAYLOAD_s).APPLICATION)  \r\n| extend status= tostring(parse_json(PAYLOAD_s).STATUS) \r\n| where status  == \"KO\" and app != \"IA_EYP_ENVIRONMENTAL_ENVIROSOFT\" and ( app contains \"IA_EYP_ENVIRONMENTAL_\" or app contains \"IA_EYP_PMER_\" or app==\"IA_EYP_SAFETY_HSE_DATA\" or app==\"IA_EYP_PE_DATA\") \r\n| where $__timeFilter(TimeGenerated)    \r\n| summarize count()",
                 "resultFormat": "table",
                 "workspace": "#{log-analytics-workspace-id}#"
               },
@@ -2327,17 +2327,17 @@ data:
                  {
                    "$$hashKey": "object:295",
                    "selected": false,
-                   "text": "IA_EYP_HSE_PARAM",
-                   "value": "IA_EYP_HSE_PARAM"
+                   "text": "IA_EYP_SAFETY_HSE_DATA",
+                   "value": "IA_EYP_SAFETY_HSE_DATA"
                  },
                  {
                    "$$hashKey": "object:296",
                    "selected": false,
-                   "text": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
-                   "value": "IA_EYP_ENVIRONMENTAL_INTEG_PARAM"
+                   "text": "IA_EYP_PE_DATA",
+                   "value": "IA_EYP_PE_DATA"
                  }
                ],
-               "query": "AP_CORP_SYNERGI_LIFE, AP_CORP_SYNERGI_LIFE_WBS, AP_EYP_OPENWELLS,  AP_EYP_PMS, IA_EYP_GESTION_MANTENIMIENTO_OPENHUB, ID_CORP_TERADATA_IAMS,  IA_EYP_ENVIRONMENTAL_EMISSIONS,  IA_EYP_ENVIRONMENTAL_ENVIROSOFT,   IA_EYP_ENVIRONMENTAL_SITUATIONS, IA_EYP_ENVIRONMENTAL_WASTE, IA_EYP_ENVIRONMENTAL_WATER,  IA_EYP_PMER_DEV, IA_EYP_PMER_DECOM,IA_EYP_HSE_PARAM, IA_EYP_ENVIRONMENTAL_INTEG_PARAM",
+               "query": "AP_CORP_SYNERGI_LIFE, AP_CORP_SYNERGI_LIFE_WBS, AP_EYP_OPENWELLS,  AP_EYP_PMS, IA_EYP_GESTION_MANTENIMIENTO_OPENHUB, ID_CORP_TERADATA_IAMS,  IA_EYP_ENVIRONMENTAL_EMISSIONS,  IA_EYP_ENVIRONMENTAL_ENVIROSOFT,   IA_EYP_ENVIRONMENTAL_SITUATIONS, IA_EYP_ENVIRONMENTAL_WASTE, IA_EYP_ENVIRONMENTAL_WATER,  IA_EYP_PMER_DEV, IA_EYP_PMER_DECOM,IA_EYP_SAFETY_HSE_DATA, IA_EYP_PE_DATA",
                "skipUrlSync": false,
                "type": "custom"
               },
