@@ -22,7 +22,7 @@ from dap_excelpreprocessor_lib.config.validate_config import ValidateConfig
 
 import dap_core_scc.utils.constants.varenv_constants as VarenvConstants
 import dap_core_scc.utils.constants.swagger_constants as SwaggerConstants
-import dap_core_scc.config.landing_config as SccConfig
+import dap_core_scc.config.scc_config as SccConfig
 
 
 app = Flask(__name__)
