@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: landing
+  name: scc
   labels:
-    name: landing
+    name: scc
     azure-key-vault-env-injection: disabled
 ---

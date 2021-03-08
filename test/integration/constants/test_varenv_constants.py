@@ -1,6 +1,6 @@
 """Varenv constants unit test"""
 import unittest
-import dap_core_landing.utils.constants.varenv_constants as varenv_constants
+import dap_core_scc.utils.constants.varenv_constants as varenv_constants
 
 
 class VarenvConstantsIntTest(unittest.TestCase):

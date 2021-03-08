@@ -2,8 +2,8 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: landing
-  name: dap-core-landing-api
+  namespace: scc
+  name: dap-core-scc-api
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -17,8 +17,8 @@ spec:
     - host: #{aks-api-domain}#.cloudapp.repsol.com
       http:
         paths:
-        - path: /dap-core-landing-api/(.*)
+        - path: /dap-core-scc-api/(.*)
           backend:
-            serviceName: dap-core-landing-api
+            serviceName: dap-core-scc-api
             servicePort: 80
 ---

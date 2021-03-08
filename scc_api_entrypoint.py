@@ -1,5 +1,4 @@
-"""Landing Back API Entrypoint"""
-import json
+"""Service Component Catalog Back API Entrypoint"""
 import requests
 
 from dap_core_commons.azure.active_directory_utils import get_token_from_service_principal
@@ -28,7 +27,7 @@ import dap_core_scc.config.scc_config as SccConfig
 app = Flask(__name__)
 CORS(app)
 
-_LOGGER = get_logger(SccConfig.SSC_API_NAME)
+_LOGGER = get_logger(SccConfig.SCC_API_NAME)
 
 _PROPERTY_READER = PropertyReader(SccConfig.PROPERTY_READER)
 _API_PREFIX = _PROPERTY_READER.get_property(VarenvConstants.API_PREFIX)
@@ -58,47 +57,19 @@ authorization = {
 
 app_server = CustomSwaggerApi(app, version="1.0.0",
                               title="Core Scc Web Back API",
-                              description="Core Ssc Web Back API",
+                              description="Core Scc Web Back API",
                               validate=True,
                               authorizations=authorization)
 
-apps_ns = app_server.namespace("applications", description="Service Components Catalog Applications endpoint")
 status_ns = app_server.namespace("status", description="API Status")
 metrics_ns = app_server.namespace("metrics", description="API Metrics")
 
-app_model = app_server.model(SwaggerConstants.APPLICATIONS_SWAGGER_MODEL_NAME,
-                             SwaggerConstants.APPLICATIONS_SWAGGER_MODEL_DOC)
 err_model = app_server.model(SwaggerConstants.ERROR_SWAGGER_MODEL_NAME,
                              SwaggerConstants.ERROR_SWAGGER_MODEL_DOC)
 status_model = app_server.model(SwaggerConstants.STATUS_SWAGGER_MODEL_NAME,
                                 SwaggerConstants.STATUS_SWAGGER_MODEL_DOC)
-loganalytics_response_model = app_server.model(SwaggerConstants.LOGANALYTICS_SWAGGER_MODEL_NAME,
-                                               SwaggerConstants.LOGANALYTICS_SWAGGER_MODEL_DOC)
-governance_response_model = app_server.model(SwaggerConstants.GOVERNANCE_SWAGGER_MODEL_NAME,
-                                             SwaggerConstants.GOVERNANCE_SWAGGER_MODEL_DOC)
-devops_columns_model = app_server.model(SwaggerConstants.DEVOPS_COLUMNS_SWAGGER_MODEL_NAME,
-                                        SwaggerConstants.DEVOPS_COLUMNS_SWAGGER_MODEL_DOC)
-devops_workitems_model = app_server.model(SwaggerConstants.DEVOPS_WORKITEMS_SWAGGER_MODEL_NAME,
-                                          SwaggerConstants.DEVOPS_WORKITEMS_SWAGGER_MODEL_DOC)
-devops_features_model = app_server.model(SwaggerConstants.DEVOPS_FEATURES_SWAGGER_MODEL_NAME,
-                                         SwaggerConstants.DEVOPS_FEATURES_SWAGGER_MODEL_DOC)
-devops_response_model = app_server.model("DevOps Response",
-                                    {
-                                        'queryType': fields.String(
-                                            title='queryType',
-                                            description=f"queryType",
-                                            example='flat'),
-                                        'queryResultType': fields.String(
-                                            title='queryResultType',
-                                            description=f"queryResultType",
-                                            example='workItem'),
-                                        'asOf': fields.String(
-                                            title='asOf',
-                                            description=f"asOf",
-                                            example='2020-01-01T00:00:00.000Z'),
-                                        'columns': fields.Nested(devops_columns_model, as_list=True),
-                                        'workItems': fields.Nested(devops_workitems_model, as_list=True),
-                                    })
+count_model = app_server.model(SwaggerConstants.COUNT_SWAGGER_MODEL_NAME,
+                               SwaggerConstants.COUNT_SWAGGER_MODEL_DOC)
 
 headers_parser = app_server.parser()
 headers_parser.add_argument('Authorization', location='headers')
@@ -148,27 +119,27 @@ class StatusEndpoint(Resource):
                 500, error_detail)
 
 
-@metrics_ns.route("/devops/featuredetails")
-class FeatureDetailsEndpoint(Resource):
+@metrics_ns.route("/devops/features")
+class FeaturesEndpoint(Resource):
 
     @token_required(ad_client_id=_AD_CLIENT_ID)
-    @apps_ns.doc('Get details from a specific feature', security='bearerToken')
-    @app_server.response(200, 'Success', app_model)
+    @metrics_ns.doc('Get a list of features', security='bearerToken')
+    @app_server.response(200, 'Success', count_model)
     @app_server.response(400, 'Error on request body')
     @app_server.response(403, 'Authorization header is wrong/expired')
     @app_server.response(404, 'Application not found', err_model)
     @app_server.response(500, 'General error modifying application', err_model)
     def get(self):
         """
-        Return details about a feature through query to DevOps API
-        :return: Details about a feature
+        Return a list o features through query to DevOps API
+        :return: A list of features with specific details
         """
-        _LOGGER.info(f"{request.path} - {request.method} - Querying feature details")
+        _LOGGER.info(f"{request.path} - {request.method} - Querying features")
         tenant_id = CoreUtils.get_tenant_id(SccConfig.PROPERTY_READER)
         sp_service = ServicePrincipalService(SccConfig.PROPERTY_READER)
         sp = sp_service.get_service_principal_for_sp_name(tenant_id, _SP_EXTRACT)
         url = f"https://coreutils{_NAMESPACE}akcore.cloudapp.repsol.com/" \
-              f"dap-core-extraction-utils/metrics/devops/featuredetails"
+              f"dap-core-extraction-utils/metrics/devops/features"
         token = get_token_from_service_principal(service_principal=sp)
         headers = {
             'Authorization': f"Bearer {token}"

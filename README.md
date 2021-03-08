@@ -1,6 +1,6 @@
-# Repsol Core API for Landing Back functions 
+# Repsol Core API for Service Component Catalog Back functions 
 
-This is landing web back api.
+This is service component catalog web back api.
 
 The methods are implemented and exposed as a REST API using Flask.
 

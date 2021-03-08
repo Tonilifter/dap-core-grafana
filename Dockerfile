@@ -14,4 +14,4 @@ RUN rm pip.conf
 
 EXPOSE 80
 
-CMD ["python", "landing_api_entrypoint.py"]
+CMD ["python", "scc_api_entrypoint.py"]
