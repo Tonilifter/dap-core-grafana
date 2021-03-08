@@ -1,0 +1,82 @@
+trigger:
+  branches:
+    include:
+      - feature/*
+      - develop
+      - master
+      - hotfix/*
+
+  paths:
+    exclude:
+      - setup.py
+
+resources:
+  repositories:
+    - repository: ci-tools
+      type: git
+      name: DAPlatform01/dap-core-ci-tools
+      ref: refs/heads/master
+
+pool:
+  vmImage: ubuntu-18.04
+  #name: RDT Repsol Linux EU - Datahub
+
+strategy:
+  matrix:
+    Python36:
+      PYTHON_VERSION: '3.6'
+
+variables:
+  - group: CIToken
+  - group: "sonar8-pro"
+  - name: python_version
+    value: $(python.version)
+
+steps:
+
+  - template: twine-authenticate.yml@ci-tools
+
+  - template: pip-authenticate.yml@ci-tools
+
+  - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+    displayName: 'Replace tokens in **/*.yml'
+    inputs:
+      rootDirectory: kubernetes
+      targetFiles: '**/*.yml'
+      verbosity: detailed
+      keepToken: true
+
+  - template: update-repo-version-python.yml@ci-tools
+    parameters:
+      repository: $(Build.Repository.Name)
+      branch: $(Build.SourceBranch)
+      build: $(Build.BuildId)
+      token: $(service-token)
+      buildLibrary: true
+      namespace: $(Namespace)
+
+  - task: Docker@1
+    displayName: 'Build an image LAB'
+    inputs:
+      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
+      azureContainerRegistry: daplatform0101pcr.azurecr.io
+      dockerFile: Dockerfile
+      #arguments: --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080 --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080
+
+  - task: Docker@1
+    displayName: 'Push an image LAB'
+    inputs:
+      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
+      azureContainerRegistry: daplatform0101pcr.azurecr.io
+      command: 'Push an image'
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: kubernetes
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+      OverWrite: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
