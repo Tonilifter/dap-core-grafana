@@ -64,10 +64,10 @@ app_server = CustomSwaggerApi(app, version="1.0.0",
 status_ns = app_server.namespace("status", description="API Status")
 metrics_ns = app_server.namespace("metrics", description="API Metrics")
 
-err_model = app_server.model(SwaggerConstants.ERROR_SWAGGER_MODEL_NAME,
-                             SwaggerConstants.ERROR_SWAGGER_MODEL_DOC)
 status_model = app_server.model(SwaggerConstants.STATUS_SWAGGER_MODEL_NAME,
                                 SwaggerConstants.STATUS_SWAGGER_MODEL_DOC)
+err_model = app_server.model(SwaggerConstants.ERROR_SWAGGER_MODEL_NAME,
+                             SwaggerConstants.ERROR_SWAGGER_MODEL_DOC)
 count_model = app_server.model(SwaggerConstants.COUNT_SWAGGER_MODEL_NAME,
                                SwaggerConstants.COUNT_SWAGGER_MODEL_DOC)
 
