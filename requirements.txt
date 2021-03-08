@@ -1,0 +1,7 @@
+pyjwt==1.7.1
+cryptography==2.9.2
+requests==2.22.0
+flask-cors==3.0.8
+Flask==1.1.1
+werkzeug==0.16.1
+dap-core-excelpreprocessor-lib==1.96.0
