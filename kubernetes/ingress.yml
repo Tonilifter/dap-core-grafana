@@ -21,4 +21,11 @@ spec:
           backend:
             serviceName: dap-core-grafana
             servicePort: 80
+    - host: #{aks-api-friendly-domain}#.cloudapp.repsol.com
+      http:
+        paths:
+          - path: /(.*)
+            backend:
+              serviceName: dap-core-grafana
+              servicePort: 80
 ---
