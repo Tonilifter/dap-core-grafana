@@ -34,6 +34,13 @@ variables:
 
 steps:
 
+  - task: UsePythonVersion@0
+    displayName: 'Use Python 3.6'
+    inputs:
+      versionSpec: "3.6"
+  - bash: |
+      pip install twine==3.3.0
+
   - template: twine-authenticate.yml@ci-tools
 
   - template: pip-authenticate.yml@ci-tools
