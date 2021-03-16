@@ -81,8 +81,8 @@ def _get_kv_secret(kv_name, secret_name):
     return kv_service.get_secret_value(secret_name)
 
 
-_LANDING_SP_SECRET_NAME = ServicePrincipalUtils.get_id_kv_secret_name("landing")
-_AD_CLIENT_ID = _get_kv_secret(f"{_NAMESPACE}corekv", _LANDING_SP_SECRET_NAME)
+_SCC_SP_SECRET_NAME = ServicePrincipalUtils.get_id_kv_secret_name("scc")
+_AD_CLIENT_ID = _get_kv_secret(f"{_NAMESPACE}corekv", _SCC_SP_SECRET_NAME)
 
 
 @status_ns.route("")
@@ -102,7 +102,7 @@ class StatusEndpoint(Resource):
         """
         _LOGGER.info(f"{request.path} - {request.method}")
         property_list = [VarenvConstants.NAMESPACE]
-        secret_list = [_LANDING_SP_SECRET_NAME]
+        secret_list = [_SCC_SP_SECRET_NAME]
         try:
             ValidateConfig().validate(property_list=property_list, secret_names=secret_list,
                                       check_metadata_db=True)
