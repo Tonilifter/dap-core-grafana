@@ -3,7 +3,7 @@ import unittest
 import dap_core_scc.config.scc_config as SccConfig
 
 
-class LandingConfigIntTest(unittest.TestCase):
+class SccConfigIntTest(unittest.TestCase):
 
     def test_constants(self):
         self.assertIsNotNone(SccConfig.PROPERTY_READER)
