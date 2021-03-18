@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
         - name: dap-core-grafana-container
-          image: daplatform0101pcr.azurecr.io/dap-core-grafana:#{Build.BuildId}#
+          image: #{container-registry}#.azurecr.io/dap-core-grafana:#{Build.BuildId}#
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 3000

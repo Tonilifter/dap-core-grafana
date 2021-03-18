@@ -6,10 +6,19 @@ trigger:
       - develop
       - master
 
+resources:
+  repositories:
+    - repository: ci-tools
+      type: git
+      name: DAPlatform01/dap-core-ci-tools
+      ref: refs/heads/master
+
 pool:
-  name: RDT Repsol Linux EU - External
+  vmImage: ubuntu-18.04
+  #name: RDT Repsol Linux EU - Datahub
 
 steps:
+
   - task: qetza.replacetokens.replacetokens-task.replacetokens@3
     displayName: 'Replace tokens in **/*.yml'
     inputs:
@@ -18,23 +27,7 @@ steps:
       verbosity: detailed
       keepToken: true
 
-  - task: Docker@1
-    displayName: 'Build an image'
-    inputs:
-      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
-      azureContainerRegistry: daplatform0101pcr.azurecr.io
-      dockerFile: Dockerfile
-      arguments: 
-#        --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080
-#        --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080
-
-
-  - task: Docker@1
-    displayName: 'Push an image'
-    inputs:
-      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
-      azureContainerRegistry: daplatform0101pcr.azurecr.io
-      command: 'Push an image'
+  - template: build-push-docker-image.yml@ci-tools
 
   - task: CopyFiles@2
     displayName: 'Copy Files (kubernetes manifests) to: $(Build.ArtifactStagingDirectory)'
