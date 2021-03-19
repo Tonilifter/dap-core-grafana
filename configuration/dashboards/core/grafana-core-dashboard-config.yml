@@ -6966,7 +6966,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Total Processes",
+          "title": "Running Processes",
           "transparent": true,
           "type": "stat"
         },
