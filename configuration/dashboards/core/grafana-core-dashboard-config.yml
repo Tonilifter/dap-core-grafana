@@ -6821,9 +6821,10 @@ data:
             "colorMode": "value",
             "fieldOptions": {
               "calcs": [
-                "mean"
+                "sum"
               ],
               "defaults": {
+                "decimals": 2,
                 "mappings": [],
                 "thresholds": {
                   "mode": "absolute",
@@ -6834,7 +6835,7 @@ data:
                     }
                   ]
                 },
-                "unit": "tbytes"
+                "unit": "dectbytes"
               },
               "overrides": [],
               "values": false
@@ -6965,7 +6966,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Total Processes",
+          "title": "Running Processes",
           "transparent": true,
           "type": "stat"
         },
@@ -7237,7 +7238,7 @@ data:
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Infrastuctured",
+          "title": "Infrastucture",
           "type": "text"
         },
         {
