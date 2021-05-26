@@ -18,7 +18,7 @@ resources:
       ref: refs/heads/master
 
 pool:
-  name: RDT Repsol Linux EU
+  name: RDT Repsol Linux EU - Datahub
 
 strategy:
   matrix:
