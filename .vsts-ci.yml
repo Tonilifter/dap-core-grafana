@@ -63,5 +63,13 @@ steps:
 
   - template: build-push-docker-image-proxy.yml@ci-tools
 
+  - task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    SourceFolder: kubernetes
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
