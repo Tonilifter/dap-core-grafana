@@ -18,7 +18,7 @@ resources:
       ref: refs/heads/master
 
 pool:
-  name: RDT Repsol Linux EU - Datahub
+  name: RDT Repsol Linux EU
 
 strategy:
   matrix:
@@ -61,28 +61,7 @@ steps:
       buildLibrary: true
       namespace: $(Namespace)
 
-  - task: Docker@1
-    displayName: 'Build an image LAB'
-    inputs:
-      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
-      azureContainerRegistry: daplatform0101pcr.azurecr.io
-      dockerFile: Dockerfile
-      #arguments: --build-arg http_proxy=http://prxmadrid.rg.repsol.com:8080 --build-arg https_proxy=http://prxmadrid.rg.repsol.com:8080
-
-  - task: Docker@1
-    displayName: 'Push an image LAB'
-    inputs:
-      azureSubscriptionEndpoint: 'Production (IT.EU.Production Common Services)'
-      azureContainerRegistry: daplatform0101pcr.azurecr.io
-      command: 'Push an image'
-
-  - task: CopyFiles@2
-    displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
-    inputs:
-      SourceFolder: kubernetes
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-      CleanTargetFolder: true
-      OverWrite: true
+  - template: build-push-docker-image-proxy.yml@ci-tools
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
