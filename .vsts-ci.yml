@@ -18,8 +18,7 @@ resources:
       ref: refs/heads/master
 
 pool:
-  vmImage: ubuntu-18.04
-  #name: RDT Repsol Linux EU - Datahub
+  name: RDT Repsol Linux EU - Datahub
 
 strategy:
   matrix:
