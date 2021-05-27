@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="dap-core-scc-api",
-    version="1.13.3",
+    version="1.13.4",
     author="Repsol Data Analytics Platform",
     description="Platform SCC API",
     long_description=long_description,
