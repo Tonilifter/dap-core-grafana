@@ -119,11 +119,11 @@ class StatusEndpoint(Resource):
                 500, error_detail)
 
 
-@metrics_ns.route("/devops/features")
+@metrics_ns.route("/devops/featuredeveloping")
 class FeaturesEndpoint(Resource):
 
     @token_required(ad_client_id=_AD_CLIENT_ID)
-    @metrics_ns.doc('Get a list of features', security='bearerToken')
+    @metrics_ns.doc('Get a list of developing features', security='bearerToken')
     @app_server.response(200, 'Success', count_model)
     @app_server.response(400, 'Error on request body')
     @app_server.response(403, 'Authorization header is wrong/expired')
@@ -139,7 +139,106 @@ class FeaturesEndpoint(Resource):
         sp_service = ServicePrincipalService(SccConfig.PROPERTY_READER)
         sp = sp_service.get_service_principal_for_sp_name(tenant_id, _SP_EXTRACT)
         url = f"https://coreutils{_NAMESPACE}akcore.cloudapp.repsol.com/" \
-              f"dap-core-extraction-utils/metrics/devops/features"
+              f"dap-core-extraction-utils/metrics/devops/featuredeveloping"
+        token = get_token_from_service_principal(service_principal=sp)
+        headers = {
+            'Authorization': f"Bearer {token}"
+        }
+
+        result = requests.get(url, headers=headers)
+
+        return Response(response=result,
+                        status=result.status_code,
+                        mimetype=_MIMETYPE)
+
+
+@metrics_ns.route("/devops/featureprod")
+class FeaturesEndpoint(Resource):
+
+    @token_required(ad_client_id=_AD_CLIENT_ID)
+    @metrics_ns.doc('Get a list of production features', security='bearerToken')
+    @app_server.response(200, 'Success', count_model)
+    @app_server.response(400, 'Error on request body')
+    @app_server.response(403, 'Authorization header is wrong/expired')
+    @app_server.response(404, 'Application not found', err_model)
+    @app_server.response(500, 'General error modifying application', err_model)
+    def get(self):
+        """
+        Return a list o features through query to DevOps API
+        :return: A list of features with specific details
+        """
+        _LOGGER.info(f"{request.path} - {request.method} - Querying features")
+        tenant_id = CoreUtils.get_tenant_id(SccConfig.PROPERTY_READER)
+        sp_service = ServicePrincipalService(SccConfig.PROPERTY_READER)
+        sp = sp_service.get_service_principal_for_sp_name(tenant_id, _SP_EXTRACT)
+        url = f"https://coreutils{_NAMESPACE}akcore.cloudapp.repsol.com/" \
+              f"dap-core-extraction-utils/metrics/devops/featureprod"
+        token = get_token_from_service_principal(service_principal=sp)
+        headers = {
+            'Authorization': f"Bearer {token}"
+        }
+
+        result = requests.get(url, headers=headers)
+
+        return Response(response=result,
+                        status=result.status_code,
+                        mimetype=_MIMETYPE)
+
+
+@metrics_ns.route("/devops/featureimproved")
+class FeaturesEndpoint(Resource):
+
+    @token_required(ad_client_id=_AD_CLIENT_ID)
+    @metrics_ns.doc('Get a list of improved features', security='bearerToken')
+    @app_server.response(200, 'Success', count_model)
+    @app_server.response(400, 'Error on request body')
+    @app_server.response(403, 'Authorization header is wrong/expired')
+    @app_server.response(404, 'Application not found', err_model)
+    @app_server.response(500, 'General error modifying application', err_model)
+    def get(self):
+        """
+        Return a list o features through query to DevOps API
+        :return: A list of features with specific details
+        """
+        _LOGGER.info(f"{request.path} - {request.method} - Querying features")
+        tenant_id = CoreUtils.get_tenant_id(SccConfig.PROPERTY_READER)
+        sp_service = ServicePrincipalService(SccConfig.PROPERTY_READER)
+        sp = sp_service.get_service_principal_for_sp_name(tenant_id, _SP_EXTRACT)
+        url = f"https://coreutils{_NAMESPACE}akcore.cloudapp.repsol.com/" \
+              f"dap-core-extraction-utils/metrics/devops/featureimproved"
+        token = get_token_from_service_principal(service_principal=sp)
+        headers = {
+            'Authorization': f"Bearer {token}"
+        }
+
+        result = requests.get(url, headers=headers)
+
+        return Response(response=result,
+                        status=result.status_code,
+                        mimetype=_MIMETYPE)
+
+
+@metrics_ns.route("/devops/featureimproving")
+class FeaturesEndpoint(Resource):
+
+    @token_required(ad_client_id=_AD_CLIENT_ID)
+    @metrics_ns.doc('Get a list of improving features', security='bearerToken')
+    @app_server.response(200, 'Success', count_model)
+    @app_server.response(400, 'Error on request body')
+    @app_server.response(403, 'Authorization header is wrong/expired')
+    @app_server.response(404, 'Application not found', err_model)
+    @app_server.response(500, 'General error modifying application', err_model)
+    def get(self):
+        """
+        Return a list o features through query to DevOps API
+        :return: A list of features with specific details
+        """
+        _LOGGER.info(f"{request.path} - {request.method} - Querying features")
+        tenant_id = CoreUtils.get_tenant_id(SccConfig.PROPERTY_READER)
+        sp_service = ServicePrincipalService(SccConfig.PROPERTY_READER)
+        sp = sp_service.get_service_principal_for_sp_name(tenant_id, _SP_EXTRACT)
+        url = f"https://coreutils{_NAMESPACE}akcore.cloudapp.repsol.com/" \
+              f"dap-core-extraction-utils/metrics/devops/featureimproving"
         token = get_token_from_service_principal(service_principal=sp)
         headers = {
             'Authorization': f"Bearer {token}"
